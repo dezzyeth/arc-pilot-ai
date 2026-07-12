@@ -141,8 +141,16 @@ function StakePage() {
   const canStake =
     isConnected && !wrongNetwork && value !== null && value > 0n && !notEnough;
 
-  function stake() {
+  async function stake() {
     if (!value || !address) return;
+    try {
+      if (chainId !== ARC_CHAIN_ID) {
+        await switchChainAsync({ chainId: ARC_CHAIN_ID });
+      }
+    } catch {
+      toast.error("Please switch MetaMask to Arc Testnet (chain 5042002).");
+      return;
+    }
     writeContract(
       {
         address: ARCPILOT_ADDRESS,
