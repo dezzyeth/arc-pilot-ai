@@ -27,6 +27,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ARC_CHAIN_ID, arcTestnet } from "@/lib/chains";
 import { ARCPILOT_ABI, ARCPILOT_ADDRESS } from "@/lib/contracts";
+import { ensureArcChain } from "@/lib/ensure-arc-chain";
 import { cn } from "@/lib/utils";
 import { ARC_CHAT_SUGGESTIONS } from "@/lib/arc-knowledge";
 
@@ -153,11 +154,11 @@ function ChatPage() {
   async function payChatFee() {
     if (!address) return;
     try {
-      if (chainId !== ARC_CHAIN_ID) {
-        await switchChainAsync({ chainId: ARC_CHAIN_ID });
-      }
-    } catch {
-      toast.error("Please switch MetaMask to Arc Testnet (chain 5042002).");
+      await ensureArcChain();
+    } catch (e: any) {
+      toast.error(
+        e?.message ?? "Please switch MetaMask to Arc Testnet (chain 5042002).",
+      );
       return;
     }
     payFee(
