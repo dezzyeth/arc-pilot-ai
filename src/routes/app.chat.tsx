@@ -28,6 +28,7 @@ import { Input } from "@/components/ui/input";
 import { ARC_CHAIN_ID, arcTestnet } from "@/lib/chains";
 import { ARCPILOT_ABI, ARCPILOT_ADDRESS } from "@/lib/contracts";
 import { cn } from "@/lib/utils";
+import { ARC_CHAT_SUGGESTIONS } from "@/lib/arc-knowledge";
 
 const FREE_MESSAGES = 5;
 const FEE_USDC = "0.01";
