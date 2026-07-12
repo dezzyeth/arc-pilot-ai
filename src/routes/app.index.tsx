@@ -40,7 +40,7 @@ function Dashboard() {
     query: { enabled: mounted && !!address && !wrongNetwork },
   });
 
-  const balanceStr = balance ? Number(formatEther(balance.value)).toFixed(4) : "0.0000";
+  const balanceStr = balance ? Number(formatUnits(balance.value, 6)).toFixed(4) : "0.0000";
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-8">
