@@ -145,11 +145,11 @@ function StakePage() {
   async function stake() {
     if (!value || !address) return;
     try {
-      if (chainId !== ARC_CHAIN_ID) {
-        await switchChainAsync({ chainId: ARC_CHAIN_ID });
-      }
-    } catch {
-      toast.error("Please switch MetaMask to Arc Testnet (chain 5042002).");
+      await ensureArcChain();
+    } catch (e: any) {
+      toast.error(
+        e?.message ?? "Please switch MetaMask to Arc Testnet (chain 5042002).",
+      );
       return;
     }
     writeContract(
