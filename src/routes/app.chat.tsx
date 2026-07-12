@@ -358,7 +358,7 @@ function ChatPage() {
               onChange={(e) => setInput(e.target.value)}
               placeholder={
                 needsPayment
-                  ? "Pay the fee above to keep chatting…"
+                  ? "Deposit 0.01 USDC above to start chatting…"
                   : "Ask ArcPilot or type: send 0.01 USDC to 0x…"
               }
               className="border-0 bg-transparent focus-visible:ring-0"
