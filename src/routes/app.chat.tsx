@@ -304,14 +304,17 @@ function ChatPage() {
           </AnimatePresence>
 
           {messages.length <= 1 && (
-            <div className="mt-2 grid gap-2 sm:grid-cols-3">
+            <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {suggestions.map((s) => (
                 <button
-                  key={s}
-                  onClick={() => setInput(s)}
-                  className="glass rounded-2xl px-3 py-3 text-left text-xs text-muted-foreground transition-colors hover:text-foreground"
+                  key={s.label}
+                  onClick={() => setInput(s.prompt)}
+                  className="glass rounded-2xl px-3 py-3 text-left text-xs transition-colors hover:text-foreground"
                 >
-                  {s}
+                  <div className="font-medium text-foreground">{s.label}</div>
+                  <div className="mt-1 line-clamp-2 text-[11px] text-muted-foreground">
+                    {s.prompt}
+                  </div>
                 </button>
               ))}
             </div>
