@@ -100,6 +100,7 @@ function ChatPage() {
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
   const wrongNetwork = mounted && isConnected && chainId !== ARC_CHAIN_ID;
+  const { switchChainAsync } = useSwitchChain();
 
   // Message quota — every FREE_MESSAGES prompts requires a small on-chain fee.
   const quotaKey = address ? `arcpilot:chat-quota:${address.toLowerCase()}` : null;
@@ -149,7 +150,15 @@ function ChatPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [feeReceipt]);
 
-  function payChatFee() {
+  async function payChatFee() {
+    try {
+      if (chainId !== ARC_CHAIN_ID) {
+        await switchChainAsync({ chainId: ARC_CHAIN_ID });
+      }
+    } catch {
+      toast.error("Please switch MetaMask to Arc Testnet (chain 5042002).");
+      return;
+    }
     payFee(
       {
         address: ARCPILOT_ADDRESS,
