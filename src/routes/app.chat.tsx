@@ -203,7 +203,7 @@ function ChatPage() {
                 )}
                 <div
                   className={cn(
-                    "max-w-[85%] rounded-2xl px-4 py-3 text-sm",
+                    "max-w-[85%] min-w-0 break-words [overflow-wrap:anywhere] rounded-2xl px-4 py-3 text-sm",
                     m.role === "user"
                       ? "rounded-tr-md bg-[image:var(--gradient-brand)] text-primary-foreground"
                       : "glass rounded-tl-md",
