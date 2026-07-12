@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
-import { Web3Providers, rainbowKitStylesHref } from "../components/providers";
+import { Web3Providers } from "../components/providers";
 import { LiquidBackground } from "../components/liquid-background";
 import { CustomCursor } from "../components/custom-cursor";
 import { Toaster } from "../components/ui/sonner";
@@ -98,7 +98,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "stylesheet", href: rainbowKitStylesHref },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),

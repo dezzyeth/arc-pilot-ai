@@ -1,17 +1,21 @@
-import { getDefaultConfig } from "@rainbow-me/rainbowkit";
-import { http } from "wagmi";
+import { createConfig, http } from "wagmi";
+import { injected } from "wagmi/connectors";
 
 import { arcTestnet } from "./chains";
 
 /**
- * Wagmi config — Arc Testnet ONLY.
- * We intentionally restrict `chains` to `[arcTestnet]` so wagmi/RainbowKit
- * can never propose a switch to any other network.
+ * Wagmi config — MetaMask ONLY, Arc Testnet ONLY.
+ * No WalletConnect, no RainbowKit modal. A single injected connector
+ * targeted at MetaMask keeps the connect flow simple and reliable.
  */
-export const wagmiConfig = getDefaultConfig({
-  appName: "ArcPilot AI",
-  projectId: "arcpilot-ai-demo", // WalletConnect Cloud project id placeholder — user can replace.
+export const wagmiConfig = createConfig({
   chains: [arcTestnet],
+  connectors: [
+    injected({
+      target: "metaMask",
+      shimDisconnect: true,
+    }),
+  ],
   transports: {
     [arcTestnet.id]: http(),
   },
