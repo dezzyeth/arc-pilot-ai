@@ -96,6 +96,76 @@ function ChatPage() {
   const [sending, setSending] = useState(false);
   const scroller = useRef<HTMLDivElement>(null);
 
+  const { address, isConnected } = useAccount();
+  const chainId = useChainId();
+  const wrongNetwork = mounted && isConnected && chainId !== ARC_CHAIN_ID;
+
+  // Message quota — every FREE_MESSAGES prompts requires a small on-chain fee.
+  const quotaKey = address ? `arcpilot:chat-quota:${address.toLowerCase()}` : null;
+  const [used, setUsed] = useState(0);
+  const [quota, setQuota] = useState(FREE_MESSAGES);
+
+  useEffect(() => {
+    if (!quotaKey) return;
+    try {
+      const raw = localStorage.getItem(quotaKey);
+      if (raw) {
+        const p = JSON.parse(raw) as { used: number; quota: number };
+        setUsed(p.used ?? 0);
+        setQuota(p.quota ?? FREE_MESSAGES);
+      }
+    } catch {
+      /* noop */
+    }
+  }, [quotaKey]);
+
+  useEffect(() => {
+    if (!quotaKey) return;
+    localStorage.setItem(quotaKey, JSON.stringify({ used, quota }));
+  }, [quotaKey, used, quota]);
+
+  const remaining = Math.max(0, quota - used);
+  const needsPayment = mounted && isConnected && !wrongNetwork && remaining === 0;
+
+  const {
+    writeContract: payFee,
+    data: feeTxHash,
+    isPending: feeSigning,
+    reset: resetFee,
+  } = useWriteContract();
+  const { data: feeReceipt, isLoading: feeWaiting } = useWaitForTransactionReceipt({
+    hash: feeTxHash,
+    chainId: ARC_CHAIN_ID,
+    query: { enabled: !!feeTxHash },
+  });
+
+  useEffect(() => {
+    if (feeReceipt && feeTxHash) {
+      setQuota((q) => q + FEE_UNLOCKS);
+      toast.success(`Unlocked ${FEE_UNLOCKS} more messages`);
+      resetFee();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [feeReceipt]);
+
+  function payChatFee() {
+    payFee(
+      {
+        address: ARCPILOT_ADDRESS,
+        abi: ARCPILOT_ABI,
+        functionName: "pay",
+        args: [
+          ARCPILOT_ADDRESS,
+          stringToHex("CHATFEE", { size: 32 }),
+          `chat:${FEE_UNLOCKS}`,
+        ],
+        value: parseUnits(FEE_USDC, 18),
+        chainId: ARC_CHAIN_ID,
+      },
+      { onError: (e) => toast.error(e.message) },
+    );
+  }
+
   useEffect(() => {
     scroller.current?.scrollTo({
       top: scroller.current.scrollHeight,
