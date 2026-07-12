@@ -74,7 +74,7 @@ function StakePage() {
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
   const wrongNetwork = mounted && isConnected && chainId !== ARC_CHAIN_ID;
-  const { switchChain, isPending: switching } = useSwitchChain();
+  const { switchChain, switchChainAsync, isPending: switching } = useSwitchChain();
 
   const { data: balance } = useBalance({
     address,
