@@ -173,14 +173,8 @@ function ChatPage() {
     });
   }, [messages]);
 
-  const suggestions = useMemo(
-    () => [
-      "What can you help me do on Arc Testnet?",
-      "Send 0.01 USDC to 0x0000000000000000000000000000000000000000",
-      "Explain gas on Arc Testnet",
-    ],
-    [],
-  );
+  const suggestions = ARC_CHAT_SUGGESTIONS;
+
 
   async function handleSubmit(e?: FormEvent) {
     e?.preventDefault();
