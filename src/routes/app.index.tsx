@@ -183,11 +183,11 @@ function StatCard({
         highlight && "bg-[image:var(--gradient-brand)]/10 shadow-glow",
       )}
     >
-      <div className="flex items-center justify-between">
-        <span className="text-xs text-muted-foreground">{label}</span>
-        <Icon className="h-4 w-4 text-muted-foreground" />
+      <div className="flex items-center justify-between gap-2">
+        <span className="truncate text-xs text-muted-foreground">{label}</span>
+        <Icon className="h-4 w-4 shrink-0 text-muted-foreground" />
       </div>
-      <div className="mt-2 text-2xl font-semibold tracking-tight">{value}</div>
+      <div className="mt-2 text-2xl font-semibold tracking-tight [overflow-wrap:anywhere] break-words">{value}</div>
     </motion.div>
   );
 }
