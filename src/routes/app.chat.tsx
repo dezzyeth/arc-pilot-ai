@@ -186,10 +186,15 @@ function ChatPage() {
     e?.preventDefault();
     const text = input.trim();
     if (!text || sending) return;
+    if (needsPayment) {
+      toast.error("Message quota reached — pay a small fee to continue.");
+      return;
+    }
 
     const plan = parseSendIntent(text);
     const userMsg: Message = { id: uid(), role: "user", content: text };
     setInput("");
+    setUsed((u) => u + 1);
 
     if (plan) {
       const assistant: Message = {
