@@ -107,7 +107,7 @@ function Dashboard() {
                 </button>
               </div>
               <div className="mt-6 text-4xl font-semibold tracking-tight">
-                {balanceStr} <span className="text-lg text-muted-foreground">ARC</span>
+                {balanceStr} <span className="text-lg text-muted-foreground">USDC</span>
               </div>
               <div className="mt-6 flex flex-wrap gap-2">
                 <Button asChild className="rounded-full shadow-glow">
