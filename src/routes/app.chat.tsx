@@ -99,7 +99,7 @@ function ChatPage() {
   const suggestions = useMemo(
     () => [
       "What can you help me do on Arc Testnet?",
-      "Send 0.01 ARC to 0x0000000000000000000000000000000000000000",
+      "Send 0.01 USDC to 0x0000000000000000000000000000000000000000",
       "Explain gas on Arc Testnet",
     ],
     [],
