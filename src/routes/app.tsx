@@ -18,6 +18,7 @@ const nav = [
   { to: "/app", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/app/chat", label: "AI Chat", icon: MessageSquare, exact: false },
   { to: "/app/stake", label: "Stake", icon: Lock, exact: false },
+  { to: "/app/docs", label: "Arc Docs", icon: BookOpen, exact: false },
 ];
 
 function AppLayout() {
