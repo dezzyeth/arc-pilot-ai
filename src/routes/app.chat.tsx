@@ -63,7 +63,7 @@ const uid = () => Math.random().toString(36).slice(2);
  */
 function parseSendIntent(text: string): TxPlan | null {
   const re =
-    /send\s+([\d.]+)\s*(?:arc)?\s+to\s+(0x[a-fA-F0-9]{40})/i;
+    /send\s+([\d.]+)\s*(?:usdc|arc)?\s+to\s+(0x[a-fA-F0-9]{40})/i;
   const m = text.match(re);
   if (!m) return null;
   const amount = m[1];
