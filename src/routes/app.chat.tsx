@@ -118,7 +118,7 @@ function ChatPage() {
       const assistant: Message = {
         id: uid(),
         role: "assistant",
-        content: `I'll help you send **${plan.amountArc} ARC** to \`${plan.to}\` on **Arc Testnet**. Review the simulation below and confirm to sign.`,
+        content: `I'll help you send **${plan.amountArc} USDC** to \`${plan.to}\` on **Arc Testnet**. Review the simulation below and confirm to sign.`,
         plan,
       };
       setMessages((m) => [...m, userMsg, assistant]);
