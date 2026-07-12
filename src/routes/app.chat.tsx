@@ -82,7 +82,7 @@ function ChatPage() {
       id: uid(),
       role: "assistant",
       content:
-        "Hi — I'm **ArcPilot**. I can help you send ARC, explain transactions, and analyze risk on **Arc Testnet only**. Try: `Send 0.01 ARC to 0x0000000000000000000000000000000000000000`.",
+        "Hi — I'm **ArcPilot**. I can help you send USDC, explain transactions, and analyze risk on **Arc Testnet only**. Try: `Send 0.01 USDC to 0x0000000000000000000000000000000000000000`.",
     },
   ]);
   const [input, setInput] = useState("");
