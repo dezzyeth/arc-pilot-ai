@@ -235,7 +235,9 @@ function StakePage() {
       >
         <h1 className="text-2xl font-semibold tracking-tight">Stake</h1>
         <p className="text-sm text-muted-foreground">
-          Lock USDC for 24 hours. Funds unlock automatically after the timer.
+          Commit USDC with a 24-hour timer. Testnet demo: funds are routed to a
+          treasury sink, so the balance drops for real. A refundable stake
+          requires deploying ArcPilotVault.sol.
         </p>
       </motion.div>
 
