@@ -1,27 +1,27 @@
 import { defineChain } from "viem";
 
 /**
- * Arc Testnet (Circle Arc Sepolia).
+ * Arc Testnet — Circle's Arc network testnet.
  *
- * These values follow the user's confirmed "421614-like" configuration.
- * When official Arc Sepolia parameters change, update ONLY this file — every
+ * USDC is the native gas token on Arc (6 decimals).
+ * Update ONLY this file when Arc network parameters change — every
  * other module in the app reads Arc network info from here.
  */
-export const ARC_CHAIN_ID = 421614 as const;
+export const ARC_CHAIN_ID = 5042002 as const;
 
 export const arcTestnet = defineChain({
   id: ARC_CHAIN_ID,
-  name: "Arc Sepolia",
-  nativeCurrency: { name: "Arc", symbol: "ARC", decimals: 18 },
+  name: "Arc Testnet",
+  nativeCurrency: { name: "USD Coin", symbol: "USDC", decimals: 6 },
   rpcUrls: {
     default: {
-      http: ["https://sepolia-rollup.arbitrum.io/rpc"],
+      http: ["https://rpc.testnet.arc.network"],
     },
   },
   blockExplorers: {
     default: {
-      name: "Arc Explorer",
-      url: "https://sepolia.arbiscan.io",
+      name: "Arc Testnet Explorer",
+      url: "https://explorer.testnet.arc.network",
     },
   },
   testnet: true,

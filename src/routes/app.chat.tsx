@@ -6,9 +6,9 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { toast } from "sonner";
 import {
-  formatEther,
+  formatUnits,
   isAddress,
-  parseEther,
+  parseUnits,
   type Address,
 } from "viem";
 import {
@@ -63,7 +63,7 @@ const uid = () => Math.random().toString(36).slice(2);
  */
 function parseSendIntent(text: string): TxPlan | null {
   const re =
-    /send\s+([\d.]+)\s*(?:arc)?\s+to\s+(0x[a-fA-F0-9]{40})/i;
+    /send\s+([\d.]+)\s*(?:usdc|arc)?\s+to\s+(0x[a-fA-F0-9]{40})/i;
   const m = text.match(re);
   if (!m) return null;
   const amount = m[1];
@@ -82,7 +82,7 @@ function ChatPage() {
       id: uid(),
       role: "assistant",
       content:
-        "Hi — I'm **ArcPilot**. I can help you send ARC, explain transactions, and analyze risk on **Arc Testnet only**. Try: `Send 0.01 ARC to 0x0000000000000000000000000000000000000000`.",
+        "Hi — I'm **ArcPilot**. I can help you send USDC, explain transactions, and analyze risk on **Arc Testnet only**. Try: `Send 0.01 USDC to 0x0000000000000000000000000000000000000000`.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -99,7 +99,7 @@ function ChatPage() {
   const suggestions = useMemo(
     () => [
       "What can you help me do on Arc Testnet?",
-      "Send 0.01 ARC to 0x0000000000000000000000000000000000000000",
+      "Send 0.01 USDC to 0x0000000000000000000000000000000000000000",
       "Explain gas on Arc Testnet",
     ],
     [],
@@ -118,7 +118,7 @@ function ChatPage() {
       const assistant: Message = {
         id: uid(),
         role: "assistant",
-        content: `I'll help you send **${plan.amountArc} ARC** to \`${plan.to}\` on **Arc Testnet**. Review the simulation below and confirm to sign.`,
+        content: `I'll help you send **${plan.amountArc} USDC** to \`${plan.to}\` on **Arc Testnet**. Review the simulation below and confirm to sign.`,
         plan,
       };
       setMessages((m) => [...m, userMsg, assistant]);
@@ -251,7 +251,7 @@ function ChatPage() {
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask ArcPilot or type: send 0.01 ARC to 0x…"
+              placeholder="Ask ArcPilot or type: send 0.01 USDC to 0x…"
               className="border-0 bg-transparent focus-visible:ring-0"
               disabled={sending}
             />
@@ -299,7 +299,7 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
 
   const value = useMemo(() => {
     try {
-      return parseEther(plan.amountArc);
+      return parseUnits(plan.amountArc, 6);
     } catch {
       return null;
     }
@@ -349,8 +349,8 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
     risks.push({ level: "danger", text: "Insufficient balance for value + gas." });
   if (plan.to.toLowerCase() === "0x0000000000000000000000000000000000000000")
     risks.push({ level: "warn", text: "Recipient is the zero address (burn)." });
-  if (value && value > parseEther("1"))
-    risks.push({ level: "warn", text: "Amount is larger than 1 ARC — double-check." });
+  if (value && value > parseUnits("1", 6))
+    risks.push({ level: "warn", text: "Amount is larger than 1 USDC — double-check." });
 
   const canSign = isConnected && !wrongNetwork && value !== null && !notEnough;
 
@@ -379,8 +379,8 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
       </div>
 
       <div className="mt-3 grid gap-2">
-        <Row label="Type" value="Send native ARC" />
-        <Row label="Amount" value={`${plan.amountArc} ARC`} />
+        <Row label="Type" value="Send USDC (native gas)" />
+        <Row label="Amount" value={`${plan.amountArc} USDC`} />
         <Row label="To" value={<code className="font-mono text-xs">{plan.to}</code>} />
         <Row
           label="Est. gas"
@@ -388,13 +388,13 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
             gasFetching
               ? "estimating…"
               : gas
-                ? `${Number(formatEther(gas)).toFixed(6)} ARC (units: ${gas.toString()})`
+                ? `${Number(formatUnits(gas, 6)).toFixed(6)} USDC (units: ${gas.toString()})`
                 : "—"
           }
         />
         <Row
           label="Your balance"
-          value={balance ? `${Number(formatEther(balance.value)).toFixed(4)} ARC` : "—"}
+          value={balance ? `${Number(formatUnits(balance.value, 6)).toFixed(4)} USDC` : "—"}
         />
       </div>
 

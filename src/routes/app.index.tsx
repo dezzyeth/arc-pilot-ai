@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { formatEther } from "viem";
+import { formatUnits } from "viem";
 import { useAccount, useBalance, useChainId } from "wagmi";
 
 import { Button } from "@/components/ui/button";
@@ -40,7 +40,7 @@ function Dashboard() {
     query: { enabled: mounted && !!address && !wrongNetwork },
   });
 
-  const balanceStr = balance ? Number(formatEther(balance.value)).toFixed(4) : "0.0000";
+  const balanceStr = balance ? Number(formatUnits(balance.value, 6)).toFixed(4) : "0.0000";
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-8">
@@ -64,7 +64,7 @@ function Dashboard() {
           <div className="grid gap-4 md:grid-cols-3">
             <StatCard
               label="Wallet balance"
-              value={`${balanceStr} ARC`}
+              value={`${balanceStr} USDC`}
               icon={Wallet}
               highlight
             />
@@ -107,7 +107,7 @@ function Dashboard() {
                 </button>
               </div>
               <div className="mt-6 text-4xl font-semibold tracking-tight">
-                {balanceStr} <span className="text-lg text-muted-foreground">ARC</span>
+                {balanceStr} <span className="text-lg text-muted-foreground">USDC</span>
               </div>
               <div className="mt-6 flex flex-wrap gap-2">
                 <Button asChild className="rounded-full shadow-glow">
@@ -119,7 +119,7 @@ function Dashboard() {
                 <Button asChild variant="secondary" className="rounded-full">
                   <Link to="/app/chat" search={{}}>
                     <ArrowUpRight className="mr-2 h-4 w-4" />
-                    Send ARC
+                    Send USDC
                   </Link>
                 </Button>
               </div>
@@ -136,7 +136,7 @@ function Dashboard() {
                 <Insight>
                   You're only connected to Arc Testnet — great, ArcPilot only signs here.
                 </Insight>
-                <Insight>Try: “send 0.1 ARC to 0x… and warn me if it's new”.</Insight>
+                <Insight>Try: “send 0.1 USDC to 0x… and warn me if it's new”.</Insight>
                 <Insight>Every transaction is simulated before you sign.</Insight>
               </ul>
             </motion.div>
@@ -154,7 +154,7 @@ function Dashboard() {
               <Link to="/app/chat" className="underline hover:text-foreground">
                 AI Chat
               </Link>{" "}
-              to send your first ARC.
+              to send your first USDC.
             </div>
           </motion.div>
         </>

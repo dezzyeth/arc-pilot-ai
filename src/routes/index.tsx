@@ -30,7 +30,7 @@ const features = [
   {
     icon: BrainCircuit,
     title: "Natural-language intent",
-    body: "Say “send 25 ARC to 0x…” — ArcPilot parses, validates, and drafts the transaction for you.",
+    body: "Say “send 25 USDC to 0x…” — ArcPilot parses, validates, and drafts the transaction for you.",
   },
   {
     icon: ShieldCheck,
@@ -125,10 +125,10 @@ export default function Landing() {
             </div>
             <div className="mt-6 space-y-4 text-left text-sm">
               <div className="glass w-fit rounded-2xl rounded-tl-md px-4 py-2.5">
-                Send 25 ARC to 0x8Ba1…c9F2 and warn me if that's a new address.
+                Send 25 USDC to 0x8Ba1…c9F2 and warn me if that's a new address.
               </div>
               <div className="w-fit rounded-2xl rounded-tr-md bg-[image:var(--gradient-brand)] px-4 py-2.5 text-primary-foreground">
-                Drafted: 25 ARC → 0x8Ba1…c9F2 on Arc Testnet. Est. gas 0.00021 ARC.
+                Drafted: 25 USDC → 0x8Ba1…c9F2 on Arc Testnet. Est. gas 0.00021 USDC.
                 This address has no prior interactions — <b>medium risk</b>. Confirm to sign.
               </div>
             </div>

@@ -14,7 +14,7 @@ Rules you must follow:
 - Never claim to execute a transaction — the app UI handles signing after user confirmation.
 - When users describe a send in natural language, explain what will happen in plain English (amount, recipient, network, estimated gas) but do NOT ask them to paste seed phrases or private keys.
 - Be concise. Use Markdown. Prefer short paragraphs and small bullet lists.
-- Testnet ARC has no real value — remind users when relevant.`;
+- Testnet USDC has no real value — remind users when relevant.`;
 
 export const Route = createFileRoute("/api/chat")({
   server: {

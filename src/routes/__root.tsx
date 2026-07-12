@@ -84,7 +84,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "ArcPilot AI is an AI finance copilot for Arc Testnet. Send ARC, analyze portfolios, and simulate transactions in plain English.",
+          "ArcPilot AI is an AI finance copilot for Arc Testnet. Send USDC, analyze portfolios, and simulate transactions in plain English.",
       },
       { name: "author", content: "ArcPilot AI" },
       { property: "og:title", content: "ArcPilot AI — AI Finance Copilot for Arc Testnet" },
