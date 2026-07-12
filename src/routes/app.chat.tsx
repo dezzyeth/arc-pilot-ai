@@ -379,8 +379,8 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
       </div>
 
       <div className="mt-3 grid gap-2">
-        <Row label="Type" value="Send native ARC" />
-        <Row label="Amount" value={`${plan.amountArc} ARC`} />
+        <Row label="Type" value="Send USDC (native gas)" />
+        <Row label="Amount" value={`${plan.amountArc} USDC`} />
         <Row label="To" value={<code className="font-mono text-xs">{plan.to}</code>} />
         <Row
           label="Est. gas"
@@ -388,13 +388,13 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
             gasFetching
               ? "estimating…"
               : gas
-                ? `${Number(formatEther(gas)).toFixed(6)} ARC (units: ${gas.toString()})`
+                ? `${Number(formatUnits(gas, 6)).toFixed(6)} USDC (units: ${gas.toString()})`
                 : "—"
           }
         />
         <Row
           label="Your balance"
-          value={balance ? `${Number(formatEther(balance.value)).toFixed(4)} ARC` : "—"}
+          value={balance ? `${Number(formatUnits(balance.value, 6)).toFixed(4)} USDC` : "—"}
         />
       </div>
 
