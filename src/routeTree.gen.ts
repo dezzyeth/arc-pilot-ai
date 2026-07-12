@@ -13,6 +13,7 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppStakeRouteImport } from './routes/app.stake'
+import { Route as AppDocsRouteImport } from './routes/app.docs'
 import { Route as AppChatRouteImport } from './routes/app.chat'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
@@ -36,6 +37,11 @@ const AppStakeRoute = AppStakeRouteImport.update({
   path: '/stake',
   getParentRoute: () => AppRoute,
 } as any)
+const AppDocsRoute = AppDocsRouteImport.update({
+  id: '/docs',
+  path: '/docs',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppChatRoute = AppChatRouteImport.update({
   id: '/chat',
   path: '/chat',
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteWithChildren
   '/api/chat': typeof ApiChatRoute
   '/app/chat': typeof AppChatRoute
+  '/app/docs': typeof AppDocsRoute
   '/app/stake': typeof AppStakeRoute
   '/app/': typeof AppIndexRoute
 }
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/chat': typeof ApiChatRoute
   '/app/chat': typeof AppChatRoute
+  '/app/docs': typeof AppDocsRoute
   '/app/stake': typeof AppStakeRoute
   '/app': typeof AppIndexRoute
 }
@@ -68,20 +76,29 @@ export interface FileRoutesById {
   '/app': typeof AppRouteWithChildren
   '/api/chat': typeof ApiChatRoute
   '/app/chat': typeof AppChatRoute
+  '/app/docs': typeof AppDocsRoute
   '/app/stake': typeof AppStakeRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/app' | '/api/chat' | '/app/chat' | '/app/stake' | '/app/'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/api/chat'
+    | '/app/chat'
+    | '/app/docs'
+    | '/app/stake'
+    | '/app/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/chat' | '/app/chat' | '/app/stake' | '/app'
+  to: '/' | '/api/chat' | '/app/chat' | '/app/docs' | '/app/stake' | '/app'
   id:
     | '__root__'
     | '/'
     | '/app'
     | '/api/chat'
     | '/app/chat'
+    | '/app/docs'
     | '/app/stake'
     | '/app/'
   fileRoutesById: FileRoutesById
@@ -122,6 +139,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppStakeRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/docs': {
+      id: '/app/docs'
+      path: '/docs'
+      fullPath: '/app/docs'
+      preLoaderRoute: typeof AppDocsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/chat': {
       id: '/app/chat'
       path: '/chat'
@@ -141,12 +165,14 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppChatRoute: typeof AppChatRoute
+  AppDocsRoute: typeof AppDocsRoute
   AppStakeRoute: typeof AppStakeRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppChatRoute: AppChatRoute,
+  AppDocsRoute: AppDocsRoute,
   AppStakeRoute: AppStakeRoute,
   AppIndexRoute: AppIndexRoute,
 }

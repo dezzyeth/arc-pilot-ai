@@ -28,6 +28,7 @@ import { Input } from "@/components/ui/input";
 import { ARC_CHAIN_ID, arcTestnet } from "@/lib/chains";
 import { ARCPILOT_ABI, ARCPILOT_ADDRESS } from "@/lib/contracts";
 import { cn } from "@/lib/utils";
+import { ARC_CHAT_SUGGESTIONS } from "@/lib/arc-knowledge";
 
 const FREE_MESSAGES = 5;
 const FEE_USDC = "0.01";
@@ -173,14 +174,8 @@ function ChatPage() {
     });
   }, [messages]);
 
-  const suggestions = useMemo(
-    () => [
-      "What can you help me do on Arc Testnet?",
-      "Send 0.01 USDC to 0x0000000000000000000000000000000000000000",
-      "Explain gas on Arc Testnet",
-    ],
-    [],
-  );
+  const suggestions = ARC_CHAT_SUGGESTIONS;
+
 
   async function handleSubmit(e?: FormEvent) {
     e?.preventDefault();
@@ -309,14 +304,17 @@ function ChatPage() {
           </AnimatePresence>
 
           {messages.length <= 1 && (
-            <div className="mt-2 grid gap-2 sm:grid-cols-3">
+            <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {suggestions.map((s) => (
                 <button
-                  key={s}
-                  onClick={() => setInput(s)}
-                  className="glass rounded-2xl px-3 py-3 text-left text-xs text-muted-foreground transition-colors hover:text-foreground"
+                  key={s.label}
+                  onClick={() => setInput(s.prompt)}
+                  className="glass rounded-2xl px-3 py-3 text-left text-xs transition-colors hover:text-foreground"
                 >
-                  {s}
+                  <div className="font-medium text-foreground">{s.label}</div>
+                  <div className="mt-1 line-clamp-2 text-[11px] text-muted-foreground">
+                    {s.prompt}
+                  </div>
                 </button>
               ))}
             </div>
