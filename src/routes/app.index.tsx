@@ -106,7 +106,7 @@ function Dashboard() {
                   <Copy className="h-4 w-4" />
                 </button>
               </div>
-              <div className="mt-6 text-4xl font-semibold tracking-tight">
+              <div className="mt-6 text-4xl font-semibold tracking-tight [overflow-wrap:anywhere] break-words">
                 {balanceStr} <span className="text-lg text-muted-foreground">USDC</span>
               </div>
               <div className="mt-6 flex flex-wrap gap-2">
