@@ -11,7 +11,9 @@ import { useEffect, type ReactNode } from "react";
 
 import { Web3Providers, rainbowKitStylesHref } from "../components/providers";
 import { LiquidBackground } from "../components/liquid-background";
+import { CustomCursor } from "../components/custom-cursor";
 import { Toaster } from "../components/ui/sonner";
+
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import appCss from "../styles.css?url";
 
