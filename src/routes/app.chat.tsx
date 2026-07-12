@@ -299,7 +299,7 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
 
   const value = useMemo(() => {
     try {
-      return parseEther(plan.amountArc);
+      return parseUnits(plan.amountArc, 6);
     } catch {
       return null;
     }
