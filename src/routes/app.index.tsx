@@ -40,7 +40,7 @@ function Dashboard() {
     query: { enabled: mounted && !!address && !wrongNetwork },
   });
 
-  const balanceStr = balance ? Number(formatUnits(balance.value, 6)).toFixed(2) : "0.00";
+  const balanceStr = balance ? Number(formatUnits(balance.value, 18)).toFixed(2) : "0.00";
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-8">
@@ -106,8 +106,8 @@ function Dashboard() {
                   <Copy className="h-4 w-4" />
                 </button>
               </div>
-              <div className="mt-6 text-4xl font-semibold tracking-tight [overflow-wrap:anywhere] break-words">
-                {balanceStr} <span className="text-lg text-muted-foreground">USDC</span>
+              <div className="mt-6 text-4xl font-semibold tracking-tight">
+                <span className="block truncate">{balanceStr} <span className="text-lg text-muted-foreground">USDC</span></span>
               </div>
               <div className="mt-6 flex flex-wrap gap-2">
                 <Button asChild className="rounded-full shadow-glow">
@@ -187,7 +187,7 @@ function StatCard({
         <span className="truncate text-xs text-muted-foreground">{label}</span>
         <Icon className="h-4 w-4 shrink-0 text-muted-foreground" />
       </div>
-      <div className="mt-2 text-2xl font-semibold tracking-tight [overflow-wrap:anywhere] break-words">{value}</div>
+      <div className="mt-2 text-2xl font-semibold tracking-tight truncate">{value}</div>
     </motion.div>
   );
 }
