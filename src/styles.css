@@ -326,9 +326,10 @@ html {
   will-change: transform, opacity;
 }
 
-.custom-cursor[data-visible="true"] {
+.custom-cursor--visible {
   opacity: 1;
 }
+
 
 .custom-cursor-ring {
   position: absolute;
