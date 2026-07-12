@@ -182,7 +182,7 @@ function ChatPage() {
     const text = input.trim();
     if (!text || sending) return;
     if (needsPayment) {
-      toast.error("Message quota reached — pay a small fee to continue.");
+      toast.error("Deposit 0.01 USDC to unlock 5 messages.");
       return;
     }
 
