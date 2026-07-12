@@ -64,7 +64,7 @@ function Dashboard() {
           <div className="grid gap-4 md:grid-cols-3">
             <StatCard
               label="Wallet balance"
-              value={`${balanceStr} ARC`}
+              value={`${balanceStr} USDC`}
               icon={Wallet}
               highlight
             />
