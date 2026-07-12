@@ -126,8 +126,10 @@ function RootComponent() {
   return (
     <Web3Providers>
       <LiquidBackground />
+      <CustomCursor />
       <Outlet />
       <Toaster richColors position="top-right" theme="dark" />
     </Web3Providers>
   );
 }
+
