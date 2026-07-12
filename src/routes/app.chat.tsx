@@ -30,7 +30,7 @@ import { ARCPILOT_ABI, ARCPILOT_ADDRESS } from "@/lib/contracts";
 import { cn } from "@/lib/utils";
 import { ARC_CHAT_SUGGESTIONS } from "@/lib/arc-knowledge";
 
-const FREE_MESSAGES = 5;
+const FREE_MESSAGES = 0;
 const FEE_USDC = "0.01";
 const FEE_UNLOCKS = 5;
 
