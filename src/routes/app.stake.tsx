@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ARC_CHAIN_ID, arcTestnet } from "@/lib/chains";
 import { ARCPILOT_ABI, ARCPILOT_ADDRESS } from "@/lib/contracts";
+import { TREASURY_ADDRESS } from "@/lib/treasury";
 import { ensureArcChain } from "@/lib/ensure-arc-chain";
 
 export const Route = createFileRoute("/app/stake")({
