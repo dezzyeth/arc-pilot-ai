@@ -311,3 +311,54 @@ html {
   }
 }
 
+/* ================================================================
+ * Custom cursor — white ring with centered dot
+ * Desktop-only; hidden on touch and reduced-motion
+ * ================================================================ */
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease-out;
+  will-change: transform, opacity;
+}
+
+
+
+.custom-cursor--visible {
+  opacity: 1;
+}
+
+
+.custom-cursor-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  margin-top: -16px;
+  margin-left: -16px;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.12);
+  will-change: transform;
+}
+
+.custom-cursor-dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  margin-left: -3px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+  will-change: transform;
+}
+
+
