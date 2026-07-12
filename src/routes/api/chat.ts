@@ -39,19 +39,18 @@ export const Route = createFileRoute("/api/chat")({
         const gateway = createLovableAiGatewayProvider(key);
         const model = gateway("google/gemini-2.5-flash");
 
-        const modelMessages: ModelMessage[] = [
-          { role: "system", content: SYSTEM_PROMPT },
-          ...messages.map((m) => ({
-            role: m.role,
-            content: m.content,
-          })) as ModelMessage[],
-        ];
+        const modelMessages: ModelMessage[] = messages.map((m) => ({
+          role: m.role,
+          content: m.content,
+        })) as ModelMessage[];
 
         try {
           const result = streamText({
             model,
+            system: SYSTEM_PROMPT,
             messages: modelMessages,
           });
+
 
           return result.toTextStreamResponse({
             headers: { "content-type": "text/plain; charset=utf-8" },
