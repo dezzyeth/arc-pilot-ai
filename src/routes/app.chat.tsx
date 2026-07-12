@@ -6,9 +6,9 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { toast } from "sonner";
 import {
-  formatEther,
+  formatUnits,
   isAddress,
-  parseEther,
+  parseUnits,
   type Address,
 } from "viem";
 import {
