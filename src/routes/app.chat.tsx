@@ -349,8 +349,8 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
     risks.push({ level: "danger", text: "Insufficient balance for value + gas." });
   if (plan.to.toLowerCase() === "0x0000000000000000000000000000000000000000")
     risks.push({ level: "warn", text: "Recipient is the zero address (burn)." });
-  if (value && value > parseEther("1"))
-    risks.push({ level: "warn", text: "Amount is larger than 1 ARC — double-check." });
+  if (value && value > parseUnits("1", 6))
+    risks.push({ level: "warn", text: "Amount is larger than 1 USDC — double-check." });
 
   const canSign = isConnected && !wrongNetwork && value !== null && !notEnough;
 
