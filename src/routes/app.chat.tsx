@@ -9,6 +9,7 @@ import {
   formatUnits,
   isAddress,
   parseUnits,
+  stringToHex,
   type Address,
 } from "viem";
 import {
@@ -19,12 +20,18 @@ import {
   useSendTransaction,
   useSwitchChain,
   useWaitForTransactionReceipt,
+  useWriteContract,
 } from "wagmi";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ARC_CHAIN_ID, arcTestnet } from "@/lib/chains";
+import { ARCPILOT_ABI, ARCPILOT_ADDRESS } from "@/lib/contracts";
 import { cn } from "@/lib/utils";
+
+const FREE_MESSAGES = 5;
+const FEE_USDC = "0.01";
+const FEE_UNLOCKS = 5;
 
 export const Route = createFileRoute("/app/chat")({
   component: ChatPage,
@@ -89,6 +96,76 @@ function ChatPage() {
   const [sending, setSending] = useState(false);
   const scroller = useRef<HTMLDivElement>(null);
 
+  const { address, isConnected } = useAccount();
+  const chainId = useChainId();
+  const wrongNetwork = mounted && isConnected && chainId !== ARC_CHAIN_ID;
+
+  // Message quota — every FREE_MESSAGES prompts requires a small on-chain fee.
+  const quotaKey = address ? `arcpilot:chat-quota:${address.toLowerCase()}` : null;
+  const [used, setUsed] = useState(0);
+  const [quota, setQuota] = useState(FREE_MESSAGES);
+
+  useEffect(() => {
+    if (!quotaKey) return;
+    try {
+      const raw = localStorage.getItem(quotaKey);
+      if (raw) {
+        const p = JSON.parse(raw) as { used: number; quota: number };
+        setUsed(p.used ?? 0);
+        setQuota(p.quota ?? FREE_MESSAGES);
+      }
+    } catch {
+      /* noop */
+    }
+  }, [quotaKey]);
+
+  useEffect(() => {
+    if (!quotaKey) return;
+    localStorage.setItem(quotaKey, JSON.stringify({ used, quota }));
+  }, [quotaKey, used, quota]);
+
+  const remaining = Math.max(0, quota - used);
+  const needsPayment = mounted && isConnected && !wrongNetwork && remaining === 0;
+
+  const {
+    writeContract: payFee,
+    data: feeTxHash,
+    isPending: feeSigning,
+    reset: resetFee,
+  } = useWriteContract();
+  const { data: feeReceipt, isLoading: feeWaiting } = useWaitForTransactionReceipt({
+    hash: feeTxHash,
+    chainId: ARC_CHAIN_ID,
+    query: { enabled: !!feeTxHash },
+  });
+
+  useEffect(() => {
+    if (feeReceipt && feeTxHash) {
+      setQuota((q) => q + FEE_UNLOCKS);
+      toast.success(`Unlocked ${FEE_UNLOCKS} more messages`);
+      resetFee();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [feeReceipt]);
+
+  function payChatFee() {
+    payFee(
+      {
+        address: ARCPILOT_ADDRESS,
+        abi: ARCPILOT_ABI,
+        functionName: "pay",
+        args: [
+          ARCPILOT_ADDRESS,
+          stringToHex("CHATFEE", { size: 32 }),
+          `chat:${FEE_UNLOCKS}`,
+        ],
+        value: parseUnits(FEE_USDC, 18),
+        chainId: ARC_CHAIN_ID,
+      },
+      { onError: (e) => toast.error(e.message) },
+    );
+  }
+
   useEffect(() => {
     scroller.current?.scrollTo({
       top: scroller.current.scrollHeight,
@@ -109,10 +186,15 @@ function ChatPage() {
     e?.preventDefault();
     const text = input.trim();
     if (!text || sending) return;
+    if (needsPayment) {
+      toast.error("Message quota reached — pay a small fee to continue.");
+      return;
+    }
 
     const plan = parseSendIntent(text);
     const userMsg: Message = { id: uid(), role: "user", content: text };
     setInput("");
+    setUsed((u) => u + 1);
 
     if (plan) {
       const assistant: Message = {
@@ -246,19 +328,47 @@ function ChatPage() {
         onSubmit={handleSubmit}
         className="border-t border-border/60 bg-background/60 px-4 py-4 backdrop-blur-xl"
       >
+        {needsPayment && (
+          <div className="mx-auto mb-3 flex max-w-3xl flex-wrap items-center justify-between gap-2 rounded-2xl border border-[color:var(--brand-2)]/40 bg-[color:var(--brand-2)]/10 px-4 py-3 text-xs">
+            <span className="text-foreground/90">
+              You've used your {FREE_MESSAGES} free messages. Pay{" "}
+              <b>{FEE_USDC} USDC</b> to unlock {FEE_UNLOCKS} more.
+            </span>
+            <Button
+              type="button"
+              size="sm"
+              onClick={payChatFee}
+              disabled={feeSigning || feeWaiting}
+              className="rounded-full shadow-glow"
+            >
+              {feeSigning || feeWaiting ? (
+                <>
+                  <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                  {feeWaiting ? "Confirming…" : "Confirm…"}
+                </>
+              ) : (
+                <>Pay {FEE_USDC} USDC</>
+              )}
+            </Button>
+          </div>
+        )}
         <div className="mx-auto flex max-w-3xl items-end gap-2">
           <div className="glass flex-1 rounded-2xl px-3 py-2">
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask ArcPilot or type: send 0.01 USDC to 0x…"
+              placeholder={
+                needsPayment
+                  ? "Pay the fee above to keep chatting…"
+                  : "Ask ArcPilot or type: send 0.01 USDC to 0x…"
+              }
               className="border-0 bg-transparent focus-visible:ring-0"
-              disabled={sending}
+              disabled={sending || needsPayment}
             />
           </div>
           <Button
             type="submit"
-            disabled={!input.trim() || sending}
+            disabled={!input.trim() || sending || needsPayment}
             className="h-11 w-11 rounded-2xl p-0 shadow-glow"
             aria-label="Send"
           >
@@ -271,8 +381,12 @@ function ChatPage() {
         </div>
         <p className="mx-auto mt-2 max-w-3xl text-center text-[10px] text-muted-foreground">
           ArcPilot only signs on Arc Testnet · always simulates · never auto-signs.
+          {isConnected && !wrongNetwork && (
+            <> · {remaining} message{remaining === 1 ? "" : "s"} left</>
+          )}
         </p>
       </form>
+
     </div>
   );
 }
