@@ -329,8 +329,9 @@ function ChatPage() {
         {needsPayment && (
           <div className="mx-auto mb-3 flex max-w-3xl flex-wrap items-center justify-between gap-2 rounded-2xl border border-[color:var(--brand-2)]/40 bg-[color:var(--brand-2)]/10 px-4 py-3 text-xs">
             <span className="text-foreground/90">
-              You've used your {FREE_MESSAGES} free messages. Pay{" "}
-              <b>{FEE_USDC} USDC</b> to unlock {FEE_UNLOCKS} more.
+              {used === 0
+                ? <>Deposit <b>{FEE_USDC} USDC</b> to unlock {FEE_UNLOCKS} messages and start chatting.</>
+                : <>You've used your {FEE_UNLOCKS} messages. Deposit <b>{FEE_USDC} USDC</b> to unlock {FEE_UNLOCKS} more.</>}
             </span>
             <Button
               type="button"
@@ -345,7 +346,7 @@ function ChatPage() {
                   {feeWaiting ? "Confirming…" : "Confirm…"}
                 </>
               ) : (
-                <>Pay {FEE_USDC} USDC</>
+                <>Deposit {FEE_USDC} USDC</>
               )}
             </Button>
           </div>
