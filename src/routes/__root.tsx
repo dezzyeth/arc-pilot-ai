@@ -10,6 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import { Web3Providers, rainbowKitStylesHref } from "../components/providers";
+import { LiquidBackground } from "../components/liquid-background";
 import { Toaster } from "../components/ui/sonner";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import appCss from "../styles.css?url";
@@ -122,6 +123,7 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   return (
     <Web3Providers>
+      <LiquidBackground />
       <Outlet />
       <Toaster richColors position="top-right" theme="dark" />
     </Web3Providers>
