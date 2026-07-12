@@ -9,6 +9,7 @@ import {
   formatUnits,
   isAddress,
   parseUnits,
+  stringToHex,
   type Address,
 } from "viem";
 import {
@@ -19,12 +20,18 @@ import {
   useSendTransaction,
   useSwitchChain,
   useWaitForTransactionReceipt,
+  useWriteContract,
 } from "wagmi";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ARC_CHAIN_ID, arcTestnet } from "@/lib/chains";
+import { ARCPILOT_ABI, ARCPILOT_ADDRESS } from "@/lib/contracts";
 import { cn } from "@/lib/utils";
+
+const FREE_MESSAGES = 5;
+const FEE_USDC = "0.01";
+const FEE_UNLOCKS = 5;
 
 export const Route = createFileRoute("/app/chat")({
   component: ChatPage,
