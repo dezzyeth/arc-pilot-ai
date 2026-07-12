@@ -154,7 +154,7 @@ function Dashboard() {
               <Link to="/app/chat" className="underline hover:text-foreground">
                 AI Chat
               </Link>{" "}
-              to send your first ARC.
+              to send your first USDC.
             </div>
           </motion.div>
         </>
