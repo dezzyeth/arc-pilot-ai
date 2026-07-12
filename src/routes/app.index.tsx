@@ -119,7 +119,7 @@ function Dashboard() {
                 <Button asChild variant="secondary" className="rounded-full">
                   <Link to="/app/chat" search={{}}>
                     <ArrowUpRight className="mr-2 h-4 w-4" />
-                    Send ARC
+                    Send USDC
                   </Link>
                 </Button>
               </div>
