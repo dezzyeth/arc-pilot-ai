@@ -299,7 +299,7 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
 
   const value = useMemo(() => {
     try {
-      return parseUnits(plan.amountArc, 6);
+      return parseUnits(plan.amountArc, 18);
     } catch {
       return null;
     }
@@ -349,7 +349,7 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
     risks.push({ level: "danger", text: "Insufficient balance for value + gas." });
   if (plan.to.toLowerCase() === "0x0000000000000000000000000000000000000000")
     risks.push({ level: "warn", text: "Recipient is the zero address (burn)." });
-  if (value && value > parseUnits("1", 6))
+  if (value && value > parseUnits("1", 18))
     risks.push({ level: "warn", text: "Amount is larger than 1 USDC — double-check." });
 
   const canSign = isConnected && !wrongNetwork && value !== null && !notEnough;
@@ -387,14 +387,14 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
           value={
             gasFetching
               ? "estimating…"
-              : gas
-                ? `${Number(formatUnits(gas, 6)).toFixed(6)} USDC (units: ${gas.toString()})`
+            : gas
+                ? `${Number(formatUnits(gas, 18)).toFixed(6)} USDC (units: ${gas.toString()})`
                 : "—"
           }
         />
         <Row
           label="Your balance"
-          value={balance ? `${Number(formatUnits(balance.value, 6)).toFixed(4)} USDC` : "—"}
+          value={balance ? `${Number(formatUnits(balance.value, 18)).toFixed(4)} USDC` : "—"}
         />
       </div>
 
