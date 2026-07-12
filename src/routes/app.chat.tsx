@@ -168,7 +168,7 @@ function ChatPage() {
         abi: ARCPILOT_ABI,
         functionName: "pay",
         args: [
-          address,
+          TREASURY_ADDRESS,
           stringToHex("CHATFEE", { size: 32 }),
           `chat:${FEE_UNLOCKS}`,
         ],
