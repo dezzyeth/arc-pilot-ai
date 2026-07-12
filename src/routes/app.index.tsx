@@ -136,7 +136,7 @@ function Dashboard() {
                 <Insight>
                   You're only connected to Arc Testnet — great, ArcPilot only signs here.
                 </Insight>
-                <Insight>Try: “send 0.1 ARC to 0x… and warn me if it's new”.</Insight>
+                <Insight>Try: “send 0.1 USDC to 0x… and warn me if it's new”.</Insight>
                 <Insight>Every transaction is simulated before you sign.</Insight>
               </ul>
             </motion.div>
