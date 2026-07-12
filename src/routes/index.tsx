@@ -30,7 +30,7 @@ const features = [
   {
     icon: BrainCircuit,
     title: "Natural-language intent",
-    body: "Say “send 25 ARC to 0x…” — ArcPilot parses, validates, and drafts the transaction for you.",
+    body: "Say “send 25 USDC to 0x…” — ArcPilot parses, validates, and drafts the transaction for you.",
   },
   {
     icon: ShieldCheck,
