@@ -77,8 +77,7 @@ export function CustomCursor() {
   return (
     <div
       ref={cursorRef}
-      className="custom-cursor"
-      data-visible={visible}
+      className={`custom-cursor ${visible ? "custom-cursor--visible" : ""}`}
       aria-hidden="true"
     >
       <span className="custom-cursor-ring" />
@@ -86,3 +85,4 @@ export function CustomCursor() {
     </div>
   );
 }
+
