@@ -328,19 +328,47 @@ function ChatPage() {
         onSubmit={handleSubmit}
         className="border-t border-border/60 bg-background/60 px-4 py-4 backdrop-blur-xl"
       >
+        {needsPayment && (
+          <div className="mx-auto mb-3 flex max-w-3xl flex-wrap items-center justify-between gap-2 rounded-2xl border border-[color:var(--brand-2)]/40 bg-[color:var(--brand-2)]/10 px-4 py-3 text-xs">
+            <span className="text-foreground/90">
+              You've used your {FREE_MESSAGES} free messages. Pay{" "}
+              <b>{FEE_USDC} USDC</b> to unlock {FEE_UNLOCKS} more.
+            </span>
+            <Button
+              type="button"
+              size="sm"
+              onClick={payChatFee}
+              disabled={feeSigning || feeWaiting}
+              className="rounded-full shadow-glow"
+            >
+              {feeSigning || feeWaiting ? (
+                <>
+                  <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                  {feeWaiting ? "Confirming…" : "Confirm…"}
+                </>
+              ) : (
+                <>Pay {FEE_USDC} USDC</>
+              )}
+            </Button>
+          </div>
+        )}
         <div className="mx-auto flex max-w-3xl items-end gap-2">
           <div className="glass flex-1 rounded-2xl px-3 py-2">
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask ArcPilot or type: send 0.01 USDC to 0x…"
+              placeholder={
+                needsPayment
+                  ? "Pay the fee above to keep chatting…"
+                  : "Ask ArcPilot or type: send 0.01 USDC to 0x…"
+              }
               className="border-0 bg-transparent focus-visible:ring-0"
-              disabled={sending}
+              disabled={sending || needsPayment}
             />
           </div>
           <Button
             type="submit"
-            disabled={!input.trim() || sending}
+            disabled={!input.trim() || sending || needsPayment}
             className="h-11 w-11 rounded-2xl p-0 shadow-glow"
             aria-label="Send"
           >
@@ -353,8 +381,12 @@ function ChatPage() {
         </div>
         <p className="mx-auto mt-2 max-w-3xl text-center text-[10px] text-muted-foreground">
           ArcPilot only signs on Arc Testnet · always simulates · never auto-signs.
+          {isConnected && !wrongNetwork && (
+            <> · {remaining} message{remaining === 1 ? "" : "s"} left</>
+          )}
         </p>
       </form>
+
     </div>
   );
 }
