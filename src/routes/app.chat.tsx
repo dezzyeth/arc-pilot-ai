@@ -149,7 +149,15 @@ function ChatPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [feeReceipt]);
 
-  function payChatFee() {
+  async function payChatFee() {
+    try {
+      if (chainId !== ARC_CHAIN_ID) {
+        await switchChainAsync({ chainId: ARC_CHAIN_ID });
+      }
+    } catch {
+      toast.error("Please switch MetaMask to Arc Testnet (chain 5042002).");
+      return;
+    }
     payFee(
       {
         address: ARCPILOT_ADDRESS,
