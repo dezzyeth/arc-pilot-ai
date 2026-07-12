@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { formatEther } from "viem";
+import { formatUnits } from "viem";
 import { useAccount, useBalance, useChainId } from "wagmi";
 
 import { Button } from "@/components/ui/button";
