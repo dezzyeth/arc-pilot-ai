@@ -157,7 +157,7 @@ function StakePage() {
         abi: ARCPILOT_ABI,
         functionName: "pay",
         args: [
-          ARCPILOT_ADDRESS,
+          address,
           stringToHex("STAKE", { size: 32 }),
           `stake:${amount}`,
         ],
@@ -168,6 +168,7 @@ function StakePage() {
         onError: (e) => toast.error(e.message),
       },
     );
+
   }
 
   function claim(rec: StakeRecord) {

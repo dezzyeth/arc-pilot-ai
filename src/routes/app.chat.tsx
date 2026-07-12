@@ -151,6 +151,7 @@ function ChatPage() {
   }, [feeReceipt]);
 
   async function payChatFee() {
+    if (!address) return;
     try {
       if (chainId !== ARC_CHAIN_ID) {
         await switchChainAsync({ chainId: ARC_CHAIN_ID });
@@ -165,7 +166,7 @@ function ChatPage() {
         abi: ARCPILOT_ABI,
         functionName: "pay",
         args: [
-          ARCPILOT_ADDRESS,
+          address,
           stringToHex("CHATFEE", { size: 32 }),
           `chat:${FEE_UNLOCKS}`,
         ],
@@ -175,6 +176,7 @@ function ChatPage() {
       { onError: (e) => toast.error(e.message) },
     );
   }
+
 
   useEffect(() => {
     scroller.current?.scrollTo({
