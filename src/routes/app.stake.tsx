@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ARC_CHAIN_ID, arcTestnet } from "@/lib/chains";
 import { ARCPILOT_ABI, ARCPILOT_ADDRESS } from "@/lib/contracts";
+import { TREASURY_ADDRESS } from "@/lib/treasury";
 import { ensureArcChain } from "@/lib/ensure-arc-chain";
 
 export const Route = createFileRoute("/app/stake")({
@@ -158,7 +159,7 @@ function StakePage() {
         abi: ARCPILOT_ABI,
         functionName: "pay",
         args: [
-          address,
+          TREASURY_ADDRESS,
           stringToHex("STAKE", { size: 32 }),
           `stake:${amount}`,
         ],
@@ -234,7 +235,9 @@ function StakePage() {
       >
         <h1 className="text-2xl font-semibold tracking-tight">Stake</h1>
         <p className="text-sm text-muted-foreground">
-          Lock USDC for 24 hours. Funds unlock automatically after the timer.
+          Commit USDC with a 24-hour timer. Testnet demo: funds are routed to a
+          treasury sink, so the balance drops for real. A refundable stake
+          requires deploying ArcPilotVault.sol.
         </p>
       </motion.div>
 
