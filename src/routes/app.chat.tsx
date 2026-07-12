@@ -251,7 +251,7 @@ function ChatPage() {
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask ArcPilot or type: send 0.01 ARC to 0x…"
+              placeholder="Ask ArcPilot or type: send 0.01 USDC to 0x…"
               className="border-0 bg-transparent focus-visible:ring-0"
               disabled={sending}
             />
