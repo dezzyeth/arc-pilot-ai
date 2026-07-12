@@ -30,7 +30,7 @@ import { ARCPILOT_ABI, ARCPILOT_ADDRESS } from "@/lib/contracts";
 import { cn } from "@/lib/utils";
 import { ARC_CHAT_SUGGESTIONS } from "@/lib/arc-knowledge";
 
-const FREE_MESSAGES = 5;
+const FREE_MESSAGES = 0;
 const FEE_USDC = "0.01";
 const FEE_UNLOCKS = 5;
 
@@ -182,7 +182,7 @@ function ChatPage() {
     const text = input.trim();
     if (!text || sending) return;
     if (needsPayment) {
-      toast.error("Message quota reached — pay a small fee to continue.");
+      toast.error("Deposit 0.01 USDC to unlock 5 messages.");
       return;
     }
 
@@ -329,8 +329,9 @@ function ChatPage() {
         {needsPayment && (
           <div className="mx-auto mb-3 flex max-w-3xl flex-wrap items-center justify-between gap-2 rounded-2xl border border-[color:var(--brand-2)]/40 bg-[color:var(--brand-2)]/10 px-4 py-3 text-xs">
             <span className="text-foreground/90">
-              You've used your {FREE_MESSAGES} free messages. Pay{" "}
-              <b>{FEE_USDC} USDC</b> to unlock {FEE_UNLOCKS} more.
+              {used === 0
+                ? <>Deposit <b>{FEE_USDC} USDC</b> to unlock {FEE_UNLOCKS} messages and start chatting.</>
+                : <>You've used your {FEE_UNLOCKS} messages. Deposit <b>{FEE_USDC} USDC</b> to unlock {FEE_UNLOCKS} more.</>}
             </span>
             <Button
               type="button"
@@ -345,7 +346,7 @@ function ChatPage() {
                   {feeWaiting ? "Confirming…" : "Confirm…"}
                 </>
               ) : (
-                <>Pay {FEE_USDC} USDC</>
+                <>Deposit {FEE_USDC} USDC</>
               )}
             </Button>
           </div>
@@ -357,7 +358,7 @@ function ChatPage() {
               onChange={(e) => setInput(e.target.value)}
               placeholder={
                 needsPayment
-                  ? "Pay the fee above to keep chatting…"
+                  ? "Deposit 0.01 USDC above to start chatting…"
                   : "Ask ArcPilot or type: send 0.01 USDC to 0x…"
               }
               className="border-0 bg-transparent focus-visible:ring-0"
