@@ -1,5 +1,5 @@
 import { Link, Outlet, createFileRoute, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Lock, MessageSquare, Sparkles } from "lucide-react";
+import { BookOpen, LayoutDashboard, Lock, MessageSquare, Sparkles } from "lucide-react";
 
 import { WalletButton } from "@/components/wallet-button";
 import { cn } from "@/lib/utils";
