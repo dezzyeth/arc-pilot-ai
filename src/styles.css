@@ -143,6 +143,17 @@ html {
     linear-gradient(180deg, #050816 0%, #060a1d 100%);
 }
 
+.liquid-blob-wrap {
+  position: absolute;
+  inset: 0;
+  --mx: 0px;
+  --my: 0px;
+  transform: translate3d(var(--mx), var(--my), 0);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+  pointer-events: none;
+}
+
 .liquid-blob {
   position: absolute;
   border-radius: 50%;
@@ -151,6 +162,31 @@ html {
   transform: translate3d(0, 0, 0);
   mix-blend-mode: screen;
   opacity: 0.14;
+}
+
+.liquid-cursor-glow {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 560px;
+  height: 560px;
+  --cx: 50vw;
+  --cy: 50vh;
+  transform: translate3d(calc(var(--cx) - 280px), calc(var(--cy) - 280px), 0);
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(143, 211, 255, 0.22) 0%,
+    rgba(107, 168, 255, 0.14) 25%,
+    rgba(79, 140, 255, 0.06) 50%,
+    transparent 72%
+  );
+  filter: blur(40px);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 0.7s ease-out;
+  pointer-events: none;
+  will-change: transform, opacity;
+  border-radius: 50%;
 }
 
 .liquid-blob-1 {
