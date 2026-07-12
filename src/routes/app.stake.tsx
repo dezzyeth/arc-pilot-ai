@@ -159,7 +159,7 @@ function StakePage() {
         abi: ARCPILOT_ABI,
         functionName: "pay",
         args: [
-          address,
+          TREASURY_ADDRESS,
           stringToHex("STAKE", { size: 32 }),
           `stake:${amount}`,
         ],
