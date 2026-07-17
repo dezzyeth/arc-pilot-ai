@@ -13,7 +13,6 @@ import { Route as McpRouteImport } from './routes/mcp'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
-import { Route as AppStakeRouteImport } from './routes/app.stake'
 import { Route as AppDocsRouteImport } from './routes/app.docs'
 import { Route as AppChatRouteImport } from './routes/app.chat'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
@@ -39,11 +38,6 @@ const IndexRoute = IndexRouteImport.update({
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppStakeRoute = AppStakeRouteImport.update({
-  id: '/stake',
-  path: '/stake',
   getParentRoute: () => AppRoute,
 } as any)
 const AppDocsRoute = AppDocsRouteImport.update({
@@ -89,7 +83,6 @@ export interface FileRoutesByFullPath {
   '/api/chat': typeof ApiChatRoute
   '/app/chat': typeof AppChatRoute
   '/app/docs': typeof AppDocsRoute
-  '/app/stake': typeof AppStakeRoute
   '/app/': typeof AppIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
 }
@@ -101,7 +94,6 @@ export interface FileRoutesByTo {
   '/api/chat': typeof ApiChatRoute
   '/app/chat': typeof AppChatRoute
   '/app/docs': typeof AppDocsRoute
-  '/app/stake': typeof AppStakeRoute
   '/app': typeof AppIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
 }
@@ -115,7 +107,6 @@ export interface FileRoutesById {
   '/api/chat': typeof ApiChatRoute
   '/app/chat': typeof AppChatRoute
   '/app/docs': typeof AppDocsRoute
-  '/app/stake': typeof AppStakeRoute
   '/app/': typeof AppIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
 }
@@ -130,7 +121,6 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/app/chat'
     | '/app/docs'
-    | '/app/stake'
     | '/app/'
     | '/.mcp/invoke-tool/$tool'
   fileRoutesByTo: FileRoutesByTo
@@ -142,7 +132,6 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/app/chat'
     | '/app/docs'
-    | '/app/stake'
     | '/app'
     | '/.mcp/invoke-tool/$tool'
   id:
@@ -155,7 +144,6 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/app/chat'
     | '/app/docs'
-    | '/app/stake'
     | '/app/'
     | '/.mcp/invoke-tool/$tool'
   fileRoutesById: FileRoutesById
@@ -198,13 +186,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/app/'
       preLoaderRoute: typeof AppIndexRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/stake': {
-      id: '/app/stake'
-      path: '/stake'
-      fullPath: '/app/stake'
-      preLoaderRoute: typeof AppStakeRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/docs': {
@@ -255,14 +236,12 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppChatRoute: typeof AppChatRoute
   AppDocsRoute: typeof AppDocsRoute
-  AppStakeRoute: typeof AppStakeRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppChatRoute: AppChatRoute,
   AppDocsRoute: AppDocsRoute,
-  AppStakeRoute: AppStakeRoute,
   AppIndexRoute: AppIndexRoute,
 }
 
