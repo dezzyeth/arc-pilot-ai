@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "sdk_version": "0.23.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "arcpilot-mcp",
+      "version": "0.1.0",
+      "title": "ArcPilot AI · Arc Testnet MCP"
+    },
+    "tools": [
+      {
+        "name": "get_arc_network_info",
+        "title": "Get Arc Testnet network info",
+        "description": "Return Arc Testnet connection parameters: chain ID, RPC URL, block explorer, native gas token (USDC), and faucet guidance. Use this whenever a caller asks how to connect a wallet or client to Arc Testnet.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_arc_knowledge",
+        "title": "Get Arc docs knowledge base",
+        "description": "Return the ArcPilot condensed Arc documentation (network overview, App Kit features, agentic economy protocols ERC-8004/ERC-8183, and developer references). Optionally filter to sections whose headings contain a query string.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "query": {
+              "description": "Optional case-insensitive substring to filter section headings.",
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_address_balance",
+        "title": "Get address balance on Arc Testnet",
+        "description": "Return the native USDC (gas token) balance on Arc Testnet for a given 0x address. Read-only, no signing. Uses the public Arc Testnet RPC.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": false,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string",
+              "description": "EVM address (0x-prefixed, 40 hex chars) to query on Arc Testnet."
+            }
+          },
+          "required": [
+            "address"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_transaction",
+        "title": "Get Arc Testnet transaction",
+        "description": "Fetch a transaction and its receipt from Arc Testnet by hash. Returns from/to, value in USDC, status, block, and gas used. Read-only.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": false,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "hash": {
+              "type": "string",
+              "description": "Transaction hash (0x-prefixed, 66 chars) on Arc Testnet."
+            }
+          },
+          "required": [
+            "hash"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_explorer_url",
+        "title": "Build Arc Testnet explorer URL",
+        "description": "Build a canonical Arc Testnet block explorer URL for an address, transaction hash, or block number.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "address",
+                "tx",
+                "block"
+              ],
+              "description": "What the value refers to."
+            },
+            "value": {
+              "type": "string",
+              "description": "The address, tx hash, or block number."
+            }
+          },
+          "required": [
+            "kind",
+            "value"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
