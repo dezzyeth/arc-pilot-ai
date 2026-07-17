@@ -1,5 +1,5 @@
 import { Link, Outlet, createFileRoute, useRouterState } from "@tanstack/react-router";
-import { BookOpen, LayoutDashboard, Lock, MessageSquare, Sparkles } from "lucide-react";
+import { BookOpen, LayoutDashboard, MessageSquare, Sparkles } from "lucide-react";
 
 import { WalletButton } from "@/components/wallet-button";
 import { cn } from "@/lib/utils";
@@ -17,7 +17,7 @@ export const Route = createFileRoute("/app")({
 const nav = [
   { to: "/app", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/app/chat", label: "AI Chat", icon: MessageSquare, exact: false },
-  { to: "/app/stake", label: "Stake", icon: Lock, exact: false },
+  
   { to: "/app/docs", label: "Arc Docs", icon: BookOpen, exact: false },
 ];
 
