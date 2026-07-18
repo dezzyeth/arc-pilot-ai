@@ -16,7 +16,7 @@ import { IntroOverlay } from "../components/intro-overlay";
 import { Toaster } from "../components/ui/sonner";
 
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import appCss from "../styles.css?url";
+import "../styles.css";
 
 function NotFoundComponent() {
   return (
@@ -98,7 +98,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
-      { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
