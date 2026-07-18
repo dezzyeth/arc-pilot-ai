@@ -82,9 +82,16 @@ export default function Landing() {
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
+          transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
           className="mx-auto max-w-3xl text-center"
         >
+          <div className="mb-8 flex justify-center">
+            <div className="logo-3d">
+              <div className="logo-3d-orbit" />
+              <div className="logo-3d-core" />
+              <div className="logo-3d-glyph">A</div>
+            </div>
+          </div>
           <div className="glass mx-auto inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs text-muted-foreground">
             <span className="h-1.5 w-1.5 rounded-full bg-[color:var(--success)]" />
             Live on Arc Testnet
