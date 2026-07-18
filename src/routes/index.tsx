@@ -89,8 +89,9 @@ export default function Landing() {
           <div className="mb-8 flex justify-center">
             <div className="logo-3d">
               <div className="logo-3d-orbit" />
-              <div className="logo-3d-core" />
-              <div className="logo-3d-glyph">A</div>
+              <div className="logo-3d-core">
+                <img src={arcLogo.url} alt="Arc" className="logo-3d-image" draggable={false} />
+              </div>
             </div>
           </div>
           <div className="glass mx-auto inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs text-muted-foreground">
