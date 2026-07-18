@@ -139,23 +139,43 @@ export function LiquidBackground() {
       className="liquid-bg"
       style={{ animationPlayState: playState } as React.CSSProperties}
     >
+      {/* SVG goo filter for merging liquid metaball effect */}
+      <svg className="liquid-svg" aria-hidden="true">
+        <defs>
+          <filter id="liquid-goo">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="30" result="blur" />
+            <feColorMatrix
+              in="blur"
+              mode="matrix"
+              values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10"
+              result="goo"
+            />
+            <feBlend in="SourceGraphic" in2="goo" />
+          </filter>
+        </defs>
+      </svg>
+
       <div className="liquid-base" />
-      {blobClasses.map((cls, i) => (
-        <div
-          key={cls}
-          ref={(el) => {
-            wrapRefs.current[i] = el;
-          }}
-          className="liquid-blob-wrap"
-        >
+      <div className="liquid-sheen" />
+      <div className="liquid-goo-layer">
+        {blobClasses.map((cls, i) => (
           <div
-            className={`liquid-blob ${cls}`}
-            style={{ animationPlayState: playState }}
-          />
-        </div>
-      ))}
+            key={cls}
+            ref={(el) => {
+              wrapRefs.current[i] = el;
+            }}
+            className="liquid-blob-wrap"
+          >
+            <div
+              className={`liquid-blob ${cls}`}
+              style={{ animationPlayState: playState }}
+            />
+          </div>
+        ))}
+      </div>
       <div ref={glowRef} className="liquid-cursor-glow" />
       <div className="liquid-grain" />
     </div>
   );
 }
+
