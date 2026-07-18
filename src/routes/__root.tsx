@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import { Web3Providers } from "../components/providers";
 import { LiquidBackground } from "../components/liquid-background";
 import { CustomCursor } from "../components/custom-cursor";
+import { IntroOverlay } from "../components/intro-overlay";
 import { Toaster } from "../components/ui/sonner";
 
 import { reportLovableError } from "../lib/lovable-error-reporting";
