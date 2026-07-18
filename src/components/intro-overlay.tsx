@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import arcLogo from "@/assets/arc-logo.jpeg.asset.json";
 
 /**
- * Cinematic intro: "ARC" zooms from tiny to huge with a shimmer,
+ * Cinematic intro: Arc logo zooms from tiny to huge with shimmer + rings,
  * then fades to reveal the app. Runs once per session.
  */
 export function IntroOverlay() {
@@ -17,11 +18,11 @@ export function IntroOverlay() {
       return;
     }
     setShow(true);
-    const t1 = setTimeout(() => setPhase("out"), 1900);
+    const t1 = setTimeout(() => setPhase("out"), 2100);
     const t2 = setTimeout(() => {
       setShow(false);
       sessionStorage.setItem("arcpilot_intro_played", "1");
-    }, 2600);
+    }, 2900);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
@@ -37,16 +38,15 @@ export function IntroOverlay() {
     >
       <div className="intro-vignette" />
       <div className="intro-stage">
-        <div className="intro-word">
-          {"ARC".split("").map((ch, i) => (
-            <span key={i} className="intro-letter" style={{ ["--i" as string]: i }}>
-              {ch}
-            </span>
-          ))}
+        <div className="intro-logo-wrap">
+          <div className="intro-ring" />
+          <div className="intro-ring intro-ring--2" />
+          <div className="intro-logo">
+            <img src={arcLogo.url} alt="Arc" className="intro-logo-img" draggable={false} />
+            <div className="intro-logo-shine" />
+          </div>
         </div>
-        <div className="intro-sub">PILOT · AI</div>
-        <div className="intro-ring" />
-        <div className="intro-ring intro-ring--2" />
+        <div className="intro-sub">ARCPILOT · AI</div>
       </div>
     </div>
   );
