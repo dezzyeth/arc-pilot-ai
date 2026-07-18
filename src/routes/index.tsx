@@ -11,6 +11,7 @@ import {
 
 import { WalletButton } from "@/components/wallet-button";
 import { Button } from "@/components/ui/button";
+import arcLogo from "@/assets/arc-logo.jpeg.asset.json";
 
 export const Route = createFileRoute("/")({
   component: Landing,
