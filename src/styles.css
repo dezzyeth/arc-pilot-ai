@@ -143,6 +143,42 @@ html {
     linear-gradient(180deg, #050816 0%, #060a1d 100%);
 }
 
+/* Invisible SVG holding the goo filter definition */
+.liquid-svg {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Slowly rotating conic sheen — subtle "liquid flowing around" feel */
+.liquid-sheen {
+  position: absolute;
+  inset: -20%;
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    rgba(79, 140, 255, 0) 0deg,
+    rgba(79, 140, 255, 0.08) 60deg,
+    rgba(143, 211, 255, 0.10) 140deg,
+    rgba(107, 168, 255, 0.06) 220deg,
+    rgba(79, 140, 255, 0) 300deg,
+    rgba(79, 140, 255, 0) 360deg
+  );
+  mix-blend-mode: screen;
+  filter: blur(80px);
+  animation: liquid-sheen-spin 40s linear infinite;
+  will-change: transform;
+  opacity: 0.7;
+}
+
+/* The goo layer merges blobs into a single flowing liquid mass */
+.liquid-goo-layer {
+  position: absolute;
+  inset: 0;
+  filter: url(#liquid-goo) blur(6px);
+  will-change: filter;
+}
+
 .liquid-blob-wrap {
   position: absolute;
   inset: 0;
@@ -157,11 +193,11 @@ html {
 .liquid-blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(160px);
+  filter: blur(70px);
   will-change: transform, opacity;
   transform: translate3d(0, 0, 0);
   mix-blend-mode: screen;
-  opacity: 0.14;
+  opacity: 0.55;
 }
 
 .liquid-cursor-glow {
@@ -190,68 +226,70 @@ html {
 }
 
 .liquid-blob-1 {
-  width: 55vw;
-  height: 55vw;
-  left: -10vw;
-  top: -10vw;
-  background: radial-gradient(circle at 30% 30%, #4F8CFF, transparent 70%);
-  animation: liquid-drift-1 38s ease-in-out infinite;
+  width: 42vw;
+  height: 42vw;
+  left: -6vw;
+  top: -8vw;
+  background: radial-gradient(circle at 30% 30%, #4F8CFF, #2a5cbf 55%, transparent 72%);
+  animation: liquid-drift-1 22s ease-in-out infinite;
+  opacity: 0.6;
 }
 
 .liquid-blob-2 {
-  width: 48vw;
-  height: 48vw;
-  right: -8vw;
-  top: 5vh;
-  background: radial-gradient(circle at 60% 40%, #6BA8FF, transparent 70%);
-  animation: liquid-drift-2 44s ease-in-out infinite;
-  opacity: 0.12;
-  filter: blur(180px);
+  width: 38vw;
+  height: 38vw;
+  right: -6vw;
+  top: 4vh;
+  background: radial-gradient(circle at 60% 40%, #6BA8FF, #3a72d6 55%, transparent 72%);
+  animation: liquid-drift-2 26s ease-in-out infinite;
+  opacity: 0.55;
+  filter: blur(80px);
 }
 
 .liquid-blob-3 {
-  width: 60vw;
-  height: 60vw;
-  left: 20vw;
-  bottom: -20vw;
-  background: radial-gradient(circle at 50% 50%, #8FD3FF, transparent 70%);
-  animation: liquid-drift-3 42s ease-in-out infinite;
-  opacity: 0.10;
-  filter: blur(200px);
+  width: 46vw;
+  height: 46vw;
+  left: 18vw;
+  bottom: -18vw;
+  background: radial-gradient(circle at 50% 50%, #8FD3FF, #4a9fe0 55%, transparent 72%);
+  animation: liquid-drift-3 24s ease-in-out infinite;
+  opacity: 0.5;
+  filter: blur(90px);
 }
 
 .liquid-blob-4 {
-  width: 40vw;
-  height: 40vw;
-  left: 5vw;
-  bottom: 5vh;
-  background: radial-gradient(circle at 40% 60%, #7DD3FC, transparent 70%);
-  animation: liquid-drift-4 36s ease-in-out infinite;
-  opacity: 0.11;
-  filter: blur(150px);
+  width: 32vw;
+  height: 32vw;
+  left: 4vw;
+  bottom: 4vh;
+  background: radial-gradient(circle at 40% 60%, #7DD3FC, #3d8fcc 55%, transparent 72%);
+  animation: liquid-drift-4 20s ease-in-out infinite;
+  opacity: 0.55;
+  filter: blur(65px);
 }
 
 .liquid-blob-5 {
-  width: 35vw;
-  height: 35vw;
-  right: 10vw;
-  bottom: -5vw;
-  background: radial-gradient(circle at 55% 45%, #4F8CFF, transparent 70%);
-  animation: liquid-drift-5 40s ease-in-out infinite;
-  opacity: 0.13;
-  filter: blur(170px);
+  width: 28vw;
+  height: 28vw;
+  right: 8vw;
+  bottom: -4vw;
+  background: radial-gradient(circle at 55% 45%, #4F8CFF, #2a5cbf 55%, transparent 72%);
+  animation: liquid-drift-5 23s ease-in-out infinite;
+  opacity: 0.6;
+  filter: blur(75px);
 }
 
 .liquid-blob-6 {
-  width: 30vw;
-  height: 30vw;
-  left: 45vw;
-  top: 30vh;
-  background: radial-gradient(circle at 50% 50%, #6BA8FF, transparent 70%);
-  animation: liquid-drift-6 34s ease-in-out infinite;
-  opacity: 0.09;
-  filter: blur(220px);
+  width: 24vw;
+  height: 24vw;
+  left: 42vw;
+  top: 28vh;
+  background: radial-gradient(circle at 50% 50%, #6BA8FF, #3a72d6 55%, transparent 72%);
+  animation: liquid-drift-6 18s ease-in-out infinite;
+  opacity: 0.5;
+  filter: blur(85px);
 }
+
 
 .liquid-grain {
   position: absolute;
