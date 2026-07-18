@@ -7,15 +7,16 @@ import arcLogo from "@/assets/arc-logo.jpeg.asset.json";
  * Plays on every full page load (not on SPA route changes).
  */
 export function IntroOverlay() {
-  const [mounted, setMounted] = useState(false);
   const [phase, setPhase] = useState<"in" | "out" | "done">("in");
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) return;
+    if (reduced) {
+      setPhase("done");
+      return;
+    }
 
-    setMounted(true);
     const t1 = setTimeout(() => setPhase("out"), 3200);
     const t2 = setTimeout(() => setPhase("done"), 4100);
     return () => {
@@ -24,7 +25,7 @@ export function IntroOverlay() {
     };
   }, []);
 
-  if (!mounted || phase === "done") return null;
+  if (phase === "done") return null;
 
   return (
     <div
