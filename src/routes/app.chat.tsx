@@ -25,6 +25,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { supabase } from "@/integrations/supabase/client";
 import { ARC_CHAIN_ID, arcTestnet } from "@/lib/chains";
 import { ARCPILOT_ABI, ARCPILOT_ADDRESS } from "@/lib/contracts";
 import { TREASURY_ADDRESS } from "@/lib/treasury";
@@ -466,6 +467,24 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
 
   const notEnough =
     balance && value ? balance.value < value + (gas ?? 0n) : false;
+
+  // Log confirmed tx to Lovable Cloud so Portfolio / Reports / Budgets see it.
+  const loggedRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!receipt || !txHash || !address) return;
+    if (loggedRef.current === txHash) return;
+    loggedRef.current = txHash;
+    supabase.from("tx_log").insert({
+      wallet: address.toLowerCase(),
+      hash: txHash,
+      to_addr: plan.to.toLowerCase(),
+      amount_usdc: Number(plan.amountArc),
+      category: plan.note || "transfer",
+      memo: plan.note ?? null,
+      explanation: `Sent ${plan.amountArc} USDC to ${plan.to} on Arc Testnet.`,
+    });
+  }, [receipt, txHash, address, plan]);
+
 
   const risks: { level: "info" | "warn" | "danger"; text: string }[] = [];
   if (value === null) risks.push({ level: "danger", text: "Invalid amount." });

@@ -13,8 +13,12 @@ import { Route as McpRouteImport } from './routes/mcp'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppReportsRouteImport } from './routes/app.reports'
+import { Route as AppPortfolioRouteImport } from './routes/app.portfolio'
+import { Route as AppPlannerRouteImport } from './routes/app.planner'
 import { Route as AppDocsRouteImport } from './routes/app.docs'
 import { Route as AppChatRouteImport } from './routes/app.chat'
+import { Route as AppBudgetsRouteImport } from './routes/app.budgets'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
@@ -40,6 +44,21 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppReportsRoute = AppReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPortfolioRoute = AppPortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPlannerRoute = AppPlannerRouteImport.update({
+  id: '/planner',
+  path: '/planner',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppDocsRoute = AppDocsRouteImport.update({
   id: '/docs',
   path: '/docs',
@@ -48,6 +67,11 @@ const AppDocsRoute = AppDocsRouteImport.update({
 const AppChatRoute = AppChatRouteImport.update({
   id: '/chat',
   path: '/chat',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBudgetsRoute = AppBudgetsRouteImport.update({
+  id: '/budgets',
+  path: '/budgets',
   getParentRoute: () => AppRoute,
 } as any)
 const ApiChatRoute = ApiChatRouteImport.update({
@@ -81,8 +105,12 @@ export interface FileRoutesByFullPath {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/api/chat': typeof ApiChatRoute
+  '/app/budgets': typeof AppBudgetsRoute
   '/app/chat': typeof AppChatRoute
   '/app/docs': typeof AppDocsRoute
+  '/app/planner': typeof AppPlannerRoute
+  '/app/portfolio': typeof AppPortfolioRoute
+  '/app/reports': typeof AppReportsRoute
   '/app/': typeof AppIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
 }
@@ -92,8 +120,12 @@ export interface FileRoutesByTo {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/api/chat': typeof ApiChatRoute
+  '/app/budgets': typeof AppBudgetsRoute
   '/app/chat': typeof AppChatRoute
   '/app/docs': typeof AppDocsRoute
+  '/app/planner': typeof AppPlannerRoute
+  '/app/portfolio': typeof AppPortfolioRoute
+  '/app/reports': typeof AppReportsRoute
   '/app': typeof AppIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
 }
@@ -105,8 +137,12 @@ export interface FileRoutesById {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/api/chat': typeof ApiChatRoute
+  '/app/budgets': typeof AppBudgetsRoute
   '/app/chat': typeof AppChatRoute
   '/app/docs': typeof AppDocsRoute
+  '/app/planner': typeof AppPlannerRoute
+  '/app/portfolio': typeof AppPortfolioRoute
+  '/app/reports': typeof AppReportsRoute
   '/app/': typeof AppIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
 }
@@ -119,8 +155,12 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/api/chat'
+    | '/app/budgets'
     | '/app/chat'
     | '/app/docs'
+    | '/app/planner'
+    | '/app/portfolio'
+    | '/app/reports'
     | '/app/'
     | '/.mcp/invoke-tool/$tool'
   fileRoutesByTo: FileRoutesByTo
@@ -130,8 +170,12 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/api/chat'
+    | '/app/budgets'
     | '/app/chat'
     | '/app/docs'
+    | '/app/planner'
+    | '/app/portfolio'
+    | '/app/reports'
     | '/app'
     | '/.mcp/invoke-tool/$tool'
   id:
@@ -142,8 +186,12 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/api/chat'
+    | '/app/budgets'
     | '/app/chat'
     | '/app/docs'
+    | '/app/planner'
+    | '/app/portfolio'
+    | '/app/reports'
     | '/app/'
     | '/.mcp/invoke-tool/$tool'
   fileRoutesById: FileRoutesById
@@ -188,6 +236,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/reports': {
+      id: '/app/reports'
+      path: '/reports'
+      fullPath: '/app/reports'
+      preLoaderRoute: typeof AppReportsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/portfolio': {
+      id: '/app/portfolio'
+      path: '/portfolio'
+      fullPath: '/app/portfolio'
+      preLoaderRoute: typeof AppPortfolioRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/planner': {
+      id: '/app/planner'
+      path: '/planner'
+      fullPath: '/app/planner'
+      preLoaderRoute: typeof AppPlannerRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/docs': {
       id: '/app/docs'
       path: '/docs'
@@ -200,6 +269,13 @@ declare module '@tanstack/react-router' {
       path: '/chat'
       fullPath: '/app/chat'
       preLoaderRoute: typeof AppChatRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/budgets': {
+      id: '/app/budgets'
+      path: '/budgets'
+      fullPath: '/app/budgets'
+      preLoaderRoute: typeof AppBudgetsRouteImport
       parentRoute: typeof AppRoute
     }
     '/api/chat': {
@@ -234,14 +310,22 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteChildren {
+  AppBudgetsRoute: typeof AppBudgetsRoute
   AppChatRoute: typeof AppChatRoute
   AppDocsRoute: typeof AppDocsRoute
+  AppPlannerRoute: typeof AppPlannerRoute
+  AppPortfolioRoute: typeof AppPortfolioRoute
+  AppReportsRoute: typeof AppReportsRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppBudgetsRoute: AppBudgetsRoute,
   AppChatRoute: AppChatRoute,
   AppDocsRoute: AppDocsRoute,
+  AppPlannerRoute: AppPlannerRoute,
+  AppPortfolioRoute: AppPortfolioRoute,
+  AppReportsRoute: AppReportsRoute,
   AppIndexRoute: AppIndexRoute,
 }
 
