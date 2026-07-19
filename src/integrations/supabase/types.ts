@@ -14,7 +14,159 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      ai_memory: {
+        Row: {
+          preferences: string | null
+          updated_at: string
+          wallet: string
+        }
+        Insert: {
+          preferences?: string | null
+          updated_at?: string
+          wallet: string
+        }
+        Update: {
+          preferences?: string | null
+          updated_at?: string
+          wallet?: string
+        }
+        Relationships: []
+      }
+      budgets: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          monthly_limit_usdc: number
+          wallet: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          monthly_limit_usdc: number
+          wallet: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          monthly_limit_usdc?: number
+          wallet?: string
+        }
+        Relationships: []
+      }
+      goals: {
+        Row: {
+          created_at: string
+          deadline: string | null
+          id: string
+          name: string
+          saved_usdc: number
+          target_usdc: number
+          wallet: string
+        }
+        Insert: {
+          created_at?: string
+          deadline?: string | null
+          id?: string
+          name: string
+          saved_usdc?: number
+          target_usdc: number
+          wallet: string
+        }
+        Update: {
+          created_at?: string
+          deadline?: string | null
+          id?: string
+          name?: string
+          saved_usdc?: number
+          target_usdc?: number
+          wallet?: string
+        }
+        Relationships: []
+      }
+      scheduled_tx: {
+        Row: {
+          amount_usdc: number
+          condition: string | null
+          created_at: string
+          id: string
+          kind: string
+          memo: string | null
+          run_at: string | null
+          status: string
+          to_addr: string
+          tx_hash: string | null
+          wallet: string
+        }
+        Insert: {
+          amount_usdc: number
+          condition?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          memo?: string | null
+          run_at?: string | null
+          status?: string
+          to_addr: string
+          tx_hash?: string | null
+          wallet: string
+        }
+        Update: {
+          amount_usdc?: number
+          condition?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          memo?: string | null
+          run_at?: string | null
+          status?: string
+          to_addr?: string
+          tx_hash?: string | null
+          wallet?: string
+        }
+        Relationships: []
+      }
+      tx_log: {
+        Row: {
+          amount_usdc: number
+          category: string | null
+          created_at: string
+          direction: string
+          explanation: string | null
+          hash: string | null
+          id: string
+          memo: string | null
+          to_addr: string | null
+          wallet: string
+        }
+        Insert: {
+          amount_usdc?: number
+          category?: string | null
+          created_at?: string
+          direction?: string
+          explanation?: string | null
+          hash?: string | null
+          id?: string
+          memo?: string | null
+          to_addr?: string | null
+          wallet: string
+        }
+        Update: {
+          amount_usdc?: number
+          category?: string | null
+          created_at?: string
+          direction?: string
+          explanation?: string | null
+          hash?: string | null
+          id?: string
+          memo?: string | null
+          to_addr?: string | null
+          wallet?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
