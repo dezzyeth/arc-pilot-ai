@@ -439,14 +439,22 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
     query: { enabled: !!address && !wrongNetwork },
   });
 
-  const { data: gas, isFetching: gasFetching } = useEstimateGas({
+  const { data: gas, isFetching: gasFetching, error: gasError } = useEstimateGas({
     to: plan.to,
     value: value ?? undefined,
     chainId: ARC_CHAIN_ID,
     query: {
       enabled: !!address && !wrongNetwork && value !== null,
+      retry: 2,
+      retryDelay: 500,
     },
   });
+
+  // Fallback gas limit when RPC estimation is unavailable (Arc uses ~21k for plain transfers).
+  const FALLBACK_GAS = 50_000n;
+  const effectiveGas = gas ?? FALLBACK_GAS;
+  const gasUnavailable = !gasFetching && !gas;
+
 
   const {
     sendTransaction,
