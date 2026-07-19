@@ -1,5 +1,7 @@
 import { Link, Outlet, createFileRoute, useRouterState } from "@tanstack/react-router";
-import { BookOpen, LayoutDashboard, MessageSquare, Sparkles } from "lucide-react";
+import { BookOpen, LayoutDashboard, MessageSquare } from "lucide-react";
+
+import arcLogo from "@/assets/arc-logo.jpeg.asset.json";
 
 import { WalletButton } from "@/components/wallet-button";
 import { cn } from "@/lib/utils";
@@ -28,8 +30,8 @@ function AppLayout() {
     <div className="relative flex min-h-screen">
       <aside className="hidden w-64 shrink-0 border-r border-border/60 bg-card/40 backdrop-blur-xl md:flex md:flex-col">
         <div className="flex h-16 items-center gap-2 px-6">
-          <div className="grid h-8 w-8 place-items-center rounded-xl bg-[image:var(--gradient-brand)] shadow-glow">
-            <Sparkles className="h-4 w-4 text-primary-foreground" />
+          <div className="grid h-8 w-8 place-items-center overflow-hidden rounded-xl bg-[image:var(--gradient-brand)] shadow-glow">
+            <img src={arcLogo.url} alt="Arc" className="h-full w-full object-cover" draggable={false} />
           </div>
           <span className="text-base font-semibold">ArcPilot</span>
         </div>
@@ -67,8 +69,8 @@ function AppLayout() {
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-border/60 bg-background/70 px-6 backdrop-blur-xl">
           <div className="flex items-center gap-3 md:hidden">
-            <div className="grid h-8 w-8 place-items-center rounded-xl bg-[image:var(--gradient-brand)]">
-              <Sparkles className="h-4 w-4 text-primary-foreground" />
+            <div className="grid h-8 w-8 place-items-center overflow-hidden rounded-xl bg-[image:var(--gradient-brand)]">
+              <img src={arcLogo.url} alt="Arc" className="h-full w-full object-cover" draggable={false} />
             </div>
             <span className="font-semibold">ArcPilot</span>
           </div>
