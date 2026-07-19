@@ -1,5 +1,7 @@
 import { Link, Outlet, createFileRoute, useRouterState } from "@tanstack/react-router";
-import { BookOpen, LayoutDashboard, MessageSquare, Sparkles } from "lucide-react";
+import { BookOpen, LayoutDashboard, MessageSquare } from "lucide-react";
+
+import arcLogo from "@/assets/arc-logo.jpeg.asset.json";
 
 import { WalletButton } from "@/components/wallet-button";
 import { cn } from "@/lib/utils";
