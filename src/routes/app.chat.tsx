@@ -445,8 +445,16 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
     chainId: ARC_CHAIN_ID,
     query: {
       enabled: !!address && !wrongNetwork && value !== null,
+      retry: 2,
+      retryDelay: 500,
     },
   });
+
+  // Fallback gas limit when RPC estimation is unavailable (Arc uses ~21k for plain transfers).
+  const FALLBACK_GAS = 50_000n;
+  const effectiveGas = gas ?? FALLBACK_GAS;
+  const gasUnavailable = !gasFetching && !gas;
+
 
   const {
     sendTransaction,
@@ -466,7 +474,7 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
   });
 
   const notEnough =
-    balance && value ? balance.value < value + (gas ?? 0n) : false;
+    balance && value ? balance.value < value + effectiveGas : false;
 
   // Log confirmed tx to Lovable Cloud so Portfolio / Reports / Budgets see it.
   const loggedRef = useRef<string | null>(null);
@@ -493,6 +501,8 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
     risks.push({ level: "danger", text: "Wallet is on the wrong network." });
   if (notEnough)
     risks.push({ level: "danger", text: "Insufficient balance for value + gas." });
+  if (gasUnavailable && !wrongNetwork && value !== null)
+    risks.push({ level: "info", text: "Live gas estimate unavailable — using a safe fallback limit." });
   if (plan.to.toLowerCase() === "0x0000000000000000000000000000000000000000")
     risks.push({ level: "warn", text: "Recipient is the zero address (burn)." });
   if (value && value > parseUnits("1", 18))
@@ -507,6 +517,8 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
         to: plan.to,
         value,
         chainId: ARC_CHAIN_ID,
+        // Pass explicit gas so the wallet doesn't fail when its own estimation errors out.
+        gas: effectiveGas,
       },
       {
         onSuccess: () => toast.success("Transaction submitted"),
@@ -533,9 +545,13 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
           value={
             gasFetching
               ? "estimating…"
-            : gas
+              : gas
                 ? `${Number(formatUnits(gas, 18)).toFixed(6)} USDC (units: ${gas.toString()})`
-                : "—"
+                : (
+                  <span className="text-muted-foreground">
+                    ~{Number(formatUnits(FALLBACK_GAS, 18)).toFixed(6)} USDC (fallback)
+                  </span>
+                )
           }
         />
         <Row
@@ -543,6 +559,7 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
           value={balance ? `${Number(formatUnits(balance.value, 18)).toFixed(4)} USDC` : "—"}
         />
       </div>
+
 
       {risks.length > 0 && (
         <ul className="mt-3 space-y-1.5">
