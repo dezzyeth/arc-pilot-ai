@@ -439,7 +439,7 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
     query: { enabled: !!address && !wrongNetwork },
   });
 
-  const { data: gas, isFetching: gasFetching, error: gasError } = useEstimateGas({
+  const { data: gas, isFetching: gasFetching } = useEstimateGas({
     to: plan.to,
     value: value ?? undefined,
     chainId: ARC_CHAIN_ID,
