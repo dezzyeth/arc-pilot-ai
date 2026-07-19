@@ -288,8 +288,8 @@ function ChatPage() {
                 className={cn("flex gap-3", m.role === "user" && "justify-end")}
               >
                 {m.role === "assistant" && (
-                  <div className="mt-1 grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-[image:var(--gradient-brand)] shadow-glow">
-                    <Sparkles className="h-4 w-4 text-primary-foreground" />
+                  <div className="mt-1 grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-xl bg-[image:var(--gradient-brand)] shadow-glow">
+                    <img src={arcLogo.url} alt="Arc" className="h-full w-full object-cover" draggable={false} />
                   </div>
                 )}
                 <div
