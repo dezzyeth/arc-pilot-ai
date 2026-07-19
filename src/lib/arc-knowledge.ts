@@ -240,5 +240,4 @@ export const ARC_CHAT_SUGGESTIONS: { label: string; prompt: string }[] = [
   { label: "Contract addresses", prompt: "Where do I find canonical USDC, EURC, CCTP, and Gateway addresses on Arc?" },
   { label: "Architects program", prompt: "What is the Arc Architects program and how do I earn points?" },
   { label: "Mainnet timeline", prompt: "When is Arc mainnet launching and what's the current testnet status?" },
-  { label: "Send 0.01 USDC", prompt: "Send 0.01 USDC to 0x0000000000000000000000000000000000000000" },
 ];
