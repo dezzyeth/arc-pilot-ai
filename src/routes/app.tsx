@@ -30,8 +30,8 @@ function AppLayout() {
     <div className="relative flex min-h-screen">
       <aside className="hidden w-64 shrink-0 border-r border-border/60 bg-card/40 backdrop-blur-xl md:flex md:flex-col">
         <div className="flex h-16 items-center gap-2 px-6">
-          <div className="grid h-8 w-8 place-items-center rounded-xl bg-[image:var(--gradient-brand)] shadow-glow">
-            <Sparkles className="h-4 w-4 text-primary-foreground" />
+          <div className="grid h-8 w-8 place-items-center overflow-hidden rounded-xl bg-[image:var(--gradient-brand)] shadow-glow">
+            <img src={arcLogo.url} alt="Arc" className="h-full w-full object-cover" draggable={false} />
           </div>
           <span className="text-base font-semibold">ArcPilot</span>
         </div>
