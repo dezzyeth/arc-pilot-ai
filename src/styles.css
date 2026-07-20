@@ -152,26 +152,16 @@ html {
 }
 
 
-.liquid-blob-wrap {
-  position: absolute;
-  inset: 0;
-  --mx: 0px;
-  --my: 0px;
-  transform: translate3d(var(--mx), var(--my), 0);
-  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: transform;
-  pointer-events: none;
-}
-
 .liquid-blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(70px);
-  will-change: transform, opacity;
+  /* Individual blob blur is small; the goo-layer applies the heavy blur once for all blobs */
+  filter: blur(20px);
   transform: translate3d(0, 0, 0);
   mix-blend-mode: screen;
-  opacity: 0.55;
+  opacity: 0.6;
 }
+
 
 .liquid-cursor-glow {
   position: absolute;
