@@ -1,6 +1,6 @@
 import { Link, Outlet, createFileRoute, useRouterState } from "@tanstack/react-router";
 import {
-  BookOpen, CalendarClock, FileBarChart, LayoutDashboard, MessageSquare, PieChart, Target,
+  BookOpen, CalendarClock, FileBarChart, LayoutDashboard, LifeBuoy, MessageSquare, PieChart, Target,
 } from "lucide-react";
 
 import arcLogo from "@/assets/arc-logo.jpeg.asset.json";
@@ -26,6 +26,7 @@ const nav = [
   { to: "/app/budgets", label: "Budgets & Goals", icon: Target, exact: false },
   { to: "/app/reports", label: "Reports", icon: FileBarChart, exact: false },
   { to: "/app/docs", label: "Arc Docs", icon: BookOpen, exact: false },
+  { to: "/app/manual", label: "How it works", icon: LifeBuoy, exact: false },
 ];
 
 function AppLayout() {
