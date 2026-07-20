@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { motion } from "framer-motion";
-import { CalendarClock, CheckCircle2, Loader2, Play, Sparkles, Trash2, Wallet, Zap } from "lucide-react";
-import { useEffect, useState } from "react";
+import {
+  CalendarClock, CheckCircle2, Copy, KeyRound, Loader2, Play, Power, Sparkles, Trash2, Wallet, Zap,
+} from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { toast } from "sonner";
@@ -17,6 +19,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { ARC_CHAIN_ID } from "@/lib/chains";
 import { ensureArcChain } from "@/lib/ensure-arc-chain";
 import { generatePlannerSuggestion } from "@/lib/planner-plan.functions";
+import {
+  arcPublicClient, clearSessionKey, createSessionKey, getSessionKey,
+  sessionAccount, sessionWalletClient,
+} from "@/lib/session-key";
 import { ACTION_FEE_USDC, useActionFee } from "@/lib/use-action-fee";
 import { cn } from "@/lib/utils";
 
@@ -26,7 +32,7 @@ export const Route = createFileRoute("/app/planner")({
   head: () => ({
     meta: [
       { title: "ArcPilot · Planner" },
-      { name: "description", content: "Schedule & conditional transactions on Arc Testnet." },
+      { name: "description", content: "Auto-executing scheduled & conditional transactions on Arc Testnet." },
     ],
   }),
 });
@@ -63,9 +69,71 @@ function PlannerPage() {
   const [runAt, setRunAt] = useState("");
   const [condition, setCondition] = useState("balance>1");
   const [saving, setSaving] = useState(false);
+  const [fundAmt, setFundAmt] = useState("0.05");
 
   const { data: balance } = useBalance({ address, chainId: ARC_CHAIN_ID, query: { enabled: !!address && !wrong } });
   const balUsdc = balance ? Number(formatUnits(balance.value, 18)) : 0;
+
+  // ─── Session key (auto-sign burner) ─────────────────────────────
+  const [sessionPk, setSessionPk] = useState<`0x${string}` | null>(null);
+  useEffect(() => {
+    if (!address) return;
+    setSessionPk(getSessionKey(address));
+  }, [address]);
+  const sessionAddr = useMemo(
+    () => (sessionPk ? sessionAccount(sessionPk).address : null),
+    [sessionPk],
+  );
+  const [sessionBal, setSessionBal] = useState<bigint>(0n);
+  useEffect(() => {
+    if (!sessionAddr) return setSessionBal(0n);
+    let alive = true;
+    const load = async () => {
+      try {
+        const b = await arcPublicClient.getBalance({ address: sessionAddr });
+        if (alive) setSessionBal(b);
+      } catch { /* ignore */ }
+    };
+    load();
+    const id = setInterval(load, 15_000);
+    return () => { alive = false; clearInterval(id); };
+  }, [sessionAddr]);
+
+  const enableSession = () => {
+    if (!address) return;
+    const pk = createSessionKey(address);
+    setSessionPk(pk);
+    toast.success("Auto-sign session key created");
+  };
+  const disableSession = () => {
+    if (!address) return;
+    clearSessionKey(address);
+    setSessionPk(null);
+    toast.message("Session key removed");
+  };
+
+  const { sendTransactionAsync } = useSendTransaction();
+  const [pendingHash, setPendingHash] = useState<`0x${string}` | undefined>();
+  useWaitForTransactionReceipt({ hash: pendingHash, chainId: ARC_CHAIN_ID, query: { enabled: !!pendingHash } });
+
+  async function fundSession(amountUsdc: string) {
+    if (!address || !sessionAddr) return;
+    if (!/^\d+(\.\d+)?$/.test(amountUsdc) || Number(amountUsdc) <= 0) {
+      return toast.error("Enter a positive amount");
+    }
+    try {
+      await ensureArcChain();
+      const hash = await sendTransactionAsync({
+        to: sessionAddr,
+        value: parseUnits(amountUsdc, 18),
+        chainId: ARC_CHAIN_ID,
+      });
+      setPendingHash(hash);
+      toast.success(`Funding session key with ${amountUsdc} USDC`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Funding failed");
+    }
+  }
 
   async function refresh() {
     if (!address) return;
@@ -96,12 +164,7 @@ function PlannerPage() {
       ]);
       const { plan } = await suggestFn({
         data: {
-          kind,
-          to,
-          amount,
-          memo,
-          runAt,
-          condition,
+          kind, to, amount, memo, runAt, condition,
           balanceUsdc: balUsdc,
           budgets: (budgets ?? []).map((b) => ({
             category: b.category as string,
@@ -156,26 +219,51 @@ function PlannerPage() {
     });
     setSaving(false);
     if (error) return toast.error(error.message);
-    toast.success("Plan created");
+    toast.success("Plan created — will auto-execute when due");
     setTo(""); setAmount(""); setMemo(""); setRunAt("");
     refresh();
   }
 
-  const { sendTransactionAsync } = useSendTransaction();
-  const [pendingHash, setPendingHash] = useState<`0x${string}` | undefined>();
-  useWaitForTransactionReceipt({ hash: pendingHash, chainId: ARC_CHAIN_ID, query: { enabled: !!pendingHash } });
+  function conditionMet(row: Row, bal: number): boolean {
+    if (row.kind !== "conditional" || !row.condition) return false;
+    const m = row.condition.match(/^balance(>|<|>=|<=|==)([\d.]+)$/);
+    if (!m) return false;
+    const op = m[1], v = Number(m[2]);
+    if (op === ">") return bal > v;
+    if (op === "<") return bal < v;
+    if (op === ">=") return bal >= v;
+    if (op === "<=") return bal <= v;
+    return bal === v;
+  }
+  function isDue(row: Row): boolean {
+    if (row.kind !== "scheduled" || !row.run_at) return false;
+    return new Date(row.run_at).getTime() <= Date.now();
+  }
 
-  async function execute(row: Row) {
+  async function executeRow(row: Row, opts?: { silent?: boolean }) {
     if (!address) return;
     try {
-      await ensureArcChain();
       setBusyId(row.id);
-      const hash = await sendTransactionAsync({
-        to: row.to_addr as Address,
-        value: parseUnits(String(row.amount_usdc), 18),
-        chainId: ARC_CHAIN_ID,
-      });
-      setPendingHash(hash);
+      let hash: `0x${string}`;
+
+      if (sessionPk) {
+        // Auto-sign path: burner wallet, no MetaMask popup.
+        const wc = sessionWalletClient(sessionPk);
+        hash = await wc.sendTransaction({
+          to: row.to_addr as Address,
+          value: parseUnits(String(row.amount_usdc), 18),
+        });
+      } else {
+        // Fallback: prompt MetaMask.
+        await ensureArcChain();
+        hash = await sendTransactionAsync({
+          to: row.to_addr as Address,
+          value: parseUnits(String(row.amount_usdc), 18),
+          chainId: ARC_CHAIN_ID,
+        });
+        setPendingHash(hash);
+      }
+
       await supabase
         .from("scheduled_tx")
         .update({ status: "executed", tx_hash: hash })
@@ -187,16 +275,57 @@ function PlannerPage() {
         amount_usdc: row.amount_usdc,
         category: row.kind === "conditional" ? "conditional" : "scheduled",
         memo: row.memo,
-        explanation: `Executed ${row.kind} plan${row.condition ? ` (${row.condition})` : ""}.`,
+        explanation: `${opts?.silent ? "Auto-executed" : "Executed"} ${row.kind} plan${row.condition ? ` (${row.condition})` : ""}${sessionPk ? " via session key" : ""}.`,
       });
-      toast.success("Executed on-chain");
+      toast.success(opts?.silent ? `Auto-executed ${row.amount_usdc} USDC` : "Executed on-chain");
       refresh();
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Failed");
+      if (!opts?.silent) toast.error(e instanceof Error ? e.message : "Failed");
+      else console.error("auto-execute failed", e);
     } finally {
       setBusyId(null);
     }
   }
+
+  // ─── Auto-execute scheduler ────────────────────────────────────
+  const runningRef = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    if (!address || wrong) return;
+    let cancelled = false;
+    const tick = async () => {
+      if (cancelled) return;
+      // Fetch balance fresh for conditional evaluation
+      let liveBal = balUsdc;
+      if (sessionPk && sessionAddr) {
+        // if using session key, use its balance for conditional relative to *sender*
+        try {
+          const b = await arcPublicClient.getBalance({ address: sessionAddr });
+          liveBal = Number(formatUnits(b, 18));
+        } catch { /* ignore */ }
+      } else if (address) {
+        try {
+          const b = await arcPublicClient.getBalance({ address });
+          liveBal = Number(formatUnits(b, 18));
+        } catch { /* ignore */ }
+      }
+      for (const r of rows) {
+        if (r.status !== "pending") continue;
+        if (runningRef.current.has(r.id)) continue;
+        const ready = isDue(r) || conditionMet(r, liveBal);
+        if (!ready) continue;
+        // Only auto-fire silently when session key is available; otherwise
+        // still fire but MetaMask will prompt (still "automatic trigger").
+        runningRef.current.add(r.id);
+        await executeRow(r, { silent: true });
+        runningRef.current.delete(r.id);
+      }
+    };
+    // Run immediately then interval
+    tick();
+    const id = setInterval(tick, 10_000);
+    return () => { cancelled = true; clearInterval(id); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rows, address, wrong, sessionPk, sessionAddr]);
 
   async function cancel(row: Row) {
     await supabase.from("scheduled_tx").update({ status: "cancelled" }).eq("id", row.id);
@@ -205,22 +334,6 @@ function PlannerPage() {
   async function remove(row: Row) {
     await supabase.from("scheduled_tx").delete().eq("id", row.id);
     refresh();
-  }
-
-  function conditionMet(row: Row): boolean {
-    if (row.kind !== "conditional" || !row.condition) return false;
-    const m = row.condition.match(/^balance(>|<|>=|<=|==)([\d.]+)$/);
-    if (!m) return false;
-    const op = m[1], v = Number(m[2]);
-    if (op === ">") return balUsdc > v;
-    if (op === "<") return balUsdc < v;
-    if (op === ">=") return balUsdc >= v;
-    if (op === "<=") return balUsdc <= v;
-    return balUsdc === v;
-  }
-  function isDue(row: Row): boolean {
-    if (row.kind !== "scheduled" || !row.run_at) return false;
-    return new Date(row.run_at).getTime() <= Date.now();
   }
 
   if (!mounted || !isConnected) {
@@ -233,16 +346,76 @@ function PlannerPage() {
     );
   }
 
+  const sessionBalUsdc = Number(formatUnits(sessionBal, 18));
+
   return (
     <div className="mx-auto max-w-6xl px-6 py-8">
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-2xl font-semibold tracking-tight">Planner</h1>
         <p className="text-sm text-muted-foreground">
-          Schedule future transfers or set balance-triggered conditional payments.
+          Plans auto-execute the moment they're due or their condition is met — keep this tab open.
         </p>
       </motion.div>
 
-      <div className="mt-6 grid gap-4 lg:grid-cols-2">
+      {/* Session key card */}
+      <div className="glass mt-4 rounded-2xl p-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <KeyRound className="h-4 w-4 text-[color:var(--brand-2)]" />
+            <div>
+              <div className="text-sm font-medium">Auto-sign session key</div>
+              <div className="text-[11px] text-muted-foreground">
+                {sessionPk
+                  ? "Enabled — executions sign silently, no MetaMask popup."
+                  : "Off — auto-executions will prompt MetaMask each time."}
+              </div>
+            </div>
+          </div>
+          {sessionPk ? (
+            <Button size="sm" variant="secondary" onClick={disableSession} className="rounded-full">
+              <Power className="mr-1 h-3 w-3" /> Disable
+            </Button>
+          ) : (
+            <Button size="sm" onClick={enableSession} className="rounded-full">
+              <KeyRound className="mr-1 h-3 w-3" /> Enable auto-sign
+            </Button>
+          )}
+        </div>
+        {sessionPk && sessionAddr && (
+          <div className="mt-3 grid gap-3 md:grid-cols-[1fr_auto] md:items-end">
+            <div className="rounded-xl border border-border/60 p-3 text-xs">
+              <div className="flex items-center gap-2">
+                <span className="text-muted-foreground">Session address:</span>
+                <code className="truncate">{sessionAddr}</code>
+                <button
+                  className="rounded p-1 hover:bg-white/10"
+                  onClick={() => { navigator.clipboard.writeText(sessionAddr); toast.success("Copied"); }}
+                  title="Copy"
+                >
+                  <Copy className="h-3 w-3" />
+                </button>
+              </div>
+              <div className="mt-1 text-muted-foreground">
+                Balance: <span className="text-foreground">{sessionBalUsdc.toFixed(6)} USDC</span> ·
+                needs enough to cover future plan amounts + gas.
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <Input
+                value={fundAmt}
+                onChange={(e) => setFundAmt(e.target.value)}
+                className="w-28"
+                placeholder="0.05"
+              />
+              <Button size="sm" onClick={() => fundSession(fundAmt)} className="rounded-full">
+                Fund
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="mt-4 grid gap-4 lg:grid-cols-2">
         <div className="glass rounded-2xl p-6">
           <div className="mb-3 flex gap-2">
             <button
@@ -284,8 +457,9 @@ function PlannerPage() {
               Create plan · {ACTION_FEE_USDC} USDC
             </Button>
             <p className="text-[11px] text-muted-foreground">
-              Each plan is registered with 1 on-chain transaction ({ACTION_FEE_USDC} USDC). Execution is
-              a second transaction you confirm — ArcPilot never auto-signs.
+              Each plan is registered with 1 on-chain transaction ({ACTION_FEE_USDC} USDC).
+              When it becomes due, ArcPilot auto-fires the transfer — silently if the
+              session key is enabled and funded.
             </p>
             <Button
               type="button"
@@ -319,7 +493,7 @@ function PlannerPage() {
           ) : (
             <ul className="mt-4 space-y-3">
               {rows.map((r) => {
-                const ready = r.status === "pending" && (isDue(r) || conditionMet(r));
+                const ready = r.status === "pending" && (isDue(r) || conditionMet(r, balUsdc));
                 return (
                   <li key={r.id} className="rounded-xl border border-border/60 p-3">
                     <div className="flex items-start justify-between gap-2">
@@ -338,6 +512,13 @@ function PlannerPage() {
                             : `Trigger: ${r.condition}`}
                           {r.memo ? ` · ${r.memo}` : ""}
                         </div>
+                        {r.status === "pending" && (
+                          <div className="mt-1 text-[10px] text-[color:var(--brand-2)]">
+                            {ready
+                              ? busyId === r.id ? "Auto-executing…" : "Ready — firing next tick"
+                              : "Waiting for trigger · auto-fires when ready"}
+                          </div>
+                        )}
                       </div>
                       <span
                         className={cn(
@@ -354,17 +535,18 @@ function PlannerPage() {
                       <div className="mt-3 flex flex-wrap gap-2">
                         <Button
                           size="sm"
-                          disabled={busyId === r.id || !ready}
-                          onClick={() => execute(r)}
+                          disabled={busyId === r.id}
+                          onClick={() => executeRow(r)}
+                          variant="secondary"
                           className="rounded-full"
-                          title={ready ? "Ready to execute" : "Not yet due / condition not met"}
+                          title="Fire now"
                         >
                           {busyId === r.id ? (
                             <Loader2 className="mr-1 h-3 w-3 animate-spin" />
                           ) : (
                             <Play className="mr-1 h-3 w-3" />
                           )}
-                          Execute
+                          Run now
                         </Button>
                         <Button size="sm" variant="secondary" onClick={() => cancel(r)} className="rounded-full">
                           Cancel
