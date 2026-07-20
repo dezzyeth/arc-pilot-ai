@@ -608,14 +608,7 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
         <div className="mt-3 flex items-center gap-2 rounded-lg bg-[color:var(--success)]/15 px-2 py-1.5 text-xs text-[color:var(--success)]">
           <CheckCircle2 className="h-4 w-4" />
           Confirmed in block {receipt.blockNumber.toString()}.
-          <a
-            href={`${arcTestnet.blockExplorers.default.url}/tx/${txHash}`}
-            target="_blank"
-            rel="noreferrer"
-            className="ml-auto underline"
-          >
-            View
-          </a>
+          {txHash && <ExplorerLink value={txHash} kind="tx" className="ml-auto" />}
         </div>
       )}
 

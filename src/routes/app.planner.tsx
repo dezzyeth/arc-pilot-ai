@@ -14,6 +14,7 @@ import {
 } from "wagmi";
 
 import { Button } from "@/components/ui/button";
+import { ExplorerLink } from "@/components/explorer-link";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { ARC_CHAIN_ID } from "@/lib/chains";
