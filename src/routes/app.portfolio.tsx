@@ -117,15 +117,7 @@ function PortfolioPage() {
                   <div className="flex items-center gap-3">
                     <span className="font-mono text-sm">{Number(r.amount_usdc).toFixed(4)} USDC</span>
                     {r.hash && (
-                      <a
-                        href={`${arcTestnet.blockExplorers.default.url}/tx/${r.hash}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-muted-foreground hover:text-foreground"
-                        title="View on explorer"
-                      >
-                        <ExternalLink className="h-4 w-4" />
-                      </a>
+                      <ExplorerLink value={r.hash} kind="tx" variant="icon" />
                     )}
                   </div>
                 </li>
