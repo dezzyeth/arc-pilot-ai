@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { motion } from "framer-motion";
-import { CalendarClock, CheckCircle2, Loader2, Play, Trash2, Wallet, Zap } from "lucide-react";
+import { CalendarClock, CheckCircle2, Loader2, Play, Sparkles, Trash2, Wallet, Zap } from "lucide-react";
 import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { toast } from "sonner";
 import { formatUnits, isAddress, parseUnits, type Address } from "viem";
 import {
@@ -13,8 +16,10 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { ARC_CHAIN_ID } from "@/lib/chains";
 import { ensureArcChain } from "@/lib/ensure-arc-chain";
+import { generatePlannerSuggestion } from "@/lib/planner-plan.functions";
 import { ACTION_FEE_USDC, useActionFee } from "@/lib/use-action-fee";
 import { cn } from "@/lib/utils";
+
 
 export const Route = createFileRoute("/app/planner")({
   component: PlannerPage,
