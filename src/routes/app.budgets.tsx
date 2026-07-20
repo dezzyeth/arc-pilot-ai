@@ -179,8 +179,8 @@ function BudgetsPage() {
           <div className="grid grid-cols-[1fr_1fr_auto] gap-2">
             <Input placeholder="Category (e.g. gaming)" value={bCat} onChange={(e) => setBCat(e.target.value)} />
             <Input placeholder="Monthly USDC limit" value={bLimit} onChange={(e) => setBLimit(e.target.value)} />
-            <Button onClick={addBudget} disabled={busy} className="rounded-xl">
-              {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+            <Button onClick={addBudget} disabled={busy || paying} className="rounded-xl" title={`Costs ${ACTION_FEE_USDC} USDC (1 on-chain tx)`}>
+              {busy || paying ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
             </Button>
           </div>
           <ul className="mt-4 space-y-3">
@@ -229,9 +229,9 @@ function BudgetsPage() {
               <Input placeholder="Target USDC" value={gTarget} onChange={(e) => setGTarget(e.target.value)} />
               <Input type="date" value={gDeadline} onChange={(e) => setGDeadline(e.target.value)} />
             </div>
-            <Button onClick={addGoal} disabled={busy} className="w-full rounded-xl">
-              {busy ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2 h-4 w-4" />}
-              Add goal
+            <Button onClick={addGoal} disabled={busy || paying} className="w-full rounded-xl" title={`Costs ${ACTION_FEE_USDC} USDC (1 on-chain tx)`}>
+              {busy || paying ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2 h-4 w-4" />}
+              Add goal · {ACTION_FEE_USDC} USDC
             </Button>
           </div>
           <ul className="mt-4 space-y-3">
