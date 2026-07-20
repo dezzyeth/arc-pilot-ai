@@ -1,13 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { motion } from "framer-motion";
-import { Loader2, Plus, Shield, Target, Trash2, Wallet } from "lucide-react";
+import { Loader2, Plus, Shield, Sparkles, Target, Trash2, Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { toast } from "sonner";
 import { useAccount } from "wagmi";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
+import { generateGoalPlan } from "@/lib/goal-plan.functions";
 import { ACTION_FEE_USDC, useActionFee } from "@/lib/use-action-fee";
 import { cn } from "@/lib/utils";
 
@@ -46,6 +50,41 @@ function BudgetsPage() {
   const [gDeadline, setGDeadline] = useState("");
   const [busy, setBusy] = useState(false);
   const { payFee, paying } = useActionFee();
+  const goalPlan = useServerFn(generateGoalPlan);
+  const [plans, setPlans] = useState<Record<string, string>>({});
+  const [planLoading, setPlanLoading] = useState<string | null>(null);
+
+  async function askForPlan(g: Goal) {
+    if (plans[g.id]) {
+      // toggle close
+      setPlans((p) => {
+        const n = { ...p };
+        delete n[g.id];
+        return n;
+      });
+      return;
+    }
+    setPlanLoading(g.id);
+    try {
+      const res = await goalPlan({
+        data: {
+          name: g.name,
+          target: Number(g.target_usdc),
+          saved: Number(g.saved_usdc),
+          deadline: g.deadline,
+          monthlyBudgets: budgets.map((b) => ({
+            category: b.category,
+            limit: Number(b.monthly_limit_usdc),
+          })),
+        },
+      });
+      setPlans((p) => ({ ...p, [g.id]: res.plan }));
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to generate plan");
+    } finally {
+      setPlanLoading(null);
+    }
+  }
 
   async function refresh() {
     if (!address) return;
@@ -253,7 +292,7 @@ function BudgetsPage() {
                   <div className="mt-2 h-2 overflow-hidden rounded-full bg-accent/40">
                     <div className="h-full rounded-full bg-[image:var(--gradient-brand)]" style={{ width: `${pct}%` }} />
                   </div>
-                  <div className="mt-2 flex gap-1">
+                  <div className="mt-2 flex flex-wrap items-center gap-1">
                     <Button size="sm" variant="secondary" onClick={() => addToGoal(g, 0.1)} className="rounded-full text-[11px]">
                       +0.1
                     </Button>
@@ -263,7 +302,26 @@ function BudgetsPage() {
                     <Button size="sm" variant="ghost" onClick={() => addToGoal(g, -0.1)} className="rounded-full text-[11px]">
                       −0.1
                     </Button>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => askForPlan(g)}
+                      disabled={planLoading === g.id}
+                      className="ml-auto rounded-full text-[11px]"
+                    >
+                      {planLoading === g.id ? (
+                        <Loader2 className="mr-1 h-3 w-3 animate-spin" />
+                      ) : (
+                        <Sparkles className="mr-1 h-3 w-3 text-[color:var(--brand-2)]" />
+                      )}
+                      {plans[g.id] ? "Hide plan" : "Get AI plan"}
+                    </Button>
                   </div>
+                  {plans[g.id] && (
+                    <div className="prose prose-invert prose-sm mt-3 max-w-none rounded-xl border border-white/10 bg-black/30 p-3 prose-headings:mt-3 prose-headings:mb-1 prose-h1:text-base prose-h2:text-sm prose-h3:text-sm prose-p:my-1 prose-ul:my-1 prose-li:my-0.5">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{plans[g.id]}</ReactMarkdown>
+                    </div>
+                  )}
                 </li>
               );
             })}

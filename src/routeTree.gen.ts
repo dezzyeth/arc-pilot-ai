@@ -16,6 +16,7 @@ import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppReportsRouteImport } from './routes/app.reports'
 import { Route as AppPortfolioRouteImport } from './routes/app.portfolio'
 import { Route as AppPlannerRouteImport } from './routes/app.planner'
+import { Route as AppManualRouteImport } from './routes/app.manual'
 import { Route as AppDocsRouteImport } from './routes/app.docs'
 import { Route as AppChatRouteImport } from './routes/app.chat'
 import { Route as AppBudgetsRouteImport } from './routes/app.budgets'
@@ -57,6 +58,11 @@ const AppPortfolioRoute = AppPortfolioRouteImport.update({
 const AppPlannerRoute = AppPlannerRouteImport.update({
   id: '/planner',
   path: '/planner',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppManualRoute = AppManualRouteImport.update({
+  id: '/manual',
+  path: '/manual',
   getParentRoute: () => AppRoute,
 } as any)
 const AppDocsRoute = AppDocsRouteImport.update({
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/app/budgets': typeof AppBudgetsRoute
   '/app/chat': typeof AppChatRoute
   '/app/docs': typeof AppDocsRoute
+  '/app/manual': typeof AppManualRoute
   '/app/planner': typeof AppPlannerRoute
   '/app/portfolio': typeof AppPortfolioRoute
   '/app/reports': typeof AppReportsRoute
@@ -123,6 +130,7 @@ export interface FileRoutesByTo {
   '/app/budgets': typeof AppBudgetsRoute
   '/app/chat': typeof AppChatRoute
   '/app/docs': typeof AppDocsRoute
+  '/app/manual': typeof AppManualRoute
   '/app/planner': typeof AppPlannerRoute
   '/app/portfolio': typeof AppPortfolioRoute
   '/app/reports': typeof AppReportsRoute
@@ -140,6 +148,7 @@ export interface FileRoutesById {
   '/app/budgets': typeof AppBudgetsRoute
   '/app/chat': typeof AppChatRoute
   '/app/docs': typeof AppDocsRoute
+  '/app/manual': typeof AppManualRoute
   '/app/planner': typeof AppPlannerRoute
   '/app/portfolio': typeof AppPortfolioRoute
   '/app/reports': typeof AppReportsRoute
@@ -158,6 +167,7 @@ export interface FileRouteTypes {
     | '/app/budgets'
     | '/app/chat'
     | '/app/docs'
+    | '/app/manual'
     | '/app/planner'
     | '/app/portfolio'
     | '/app/reports'
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
     | '/app/budgets'
     | '/app/chat'
     | '/app/docs'
+    | '/app/manual'
     | '/app/planner'
     | '/app/portfolio'
     | '/app/reports'
@@ -189,6 +200,7 @@ export interface FileRouteTypes {
     | '/app/budgets'
     | '/app/chat'
     | '/app/docs'
+    | '/app/manual'
     | '/app/planner'
     | '/app/portfolio'
     | '/app/reports'
@@ -257,6 +269,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPlannerRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/manual': {
+      id: '/app/manual'
+      path: '/manual'
+      fullPath: '/app/manual'
+      preLoaderRoute: typeof AppManualRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/docs': {
       id: '/app/docs'
       path: '/docs'
@@ -313,6 +332,7 @@ interface AppRouteChildren {
   AppBudgetsRoute: typeof AppBudgetsRoute
   AppChatRoute: typeof AppChatRoute
   AppDocsRoute: typeof AppDocsRoute
+  AppManualRoute: typeof AppManualRoute
   AppPlannerRoute: typeof AppPlannerRoute
   AppPortfolioRoute: typeof AppPortfolioRoute
   AppReportsRoute: typeof AppReportsRoute
@@ -323,6 +343,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppBudgetsRoute: AppBudgetsRoute,
   AppChatRoute: AppChatRoute,
   AppDocsRoute: AppDocsRoute,
+  AppManualRoute: AppManualRoute,
   AppPlannerRoute: AppPlannerRoute,
   AppPortfolioRoute: AppPortfolioRoute,
   AppReportsRoute: AppReportsRoute,
