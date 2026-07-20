@@ -206,7 +206,6 @@ html {
   background: radial-gradient(circle at 60% 40%, #6BA8FF, #3a72d6 55%, transparent 72%);
   animation: liquid-drift-2 26s ease-in-out infinite;
   opacity: 0.55;
-  filter: blur(80px);
 }
 
 .liquid-blob-3 {
@@ -217,7 +216,6 @@ html {
   background: radial-gradient(circle at 50% 50%, #8FD3FF, #4a9fe0 55%, transparent 72%);
   animation: liquid-drift-3 24s ease-in-out infinite;
   opacity: 0.5;
-  filter: blur(90px);
 }
 
 .liquid-blob-4 {
@@ -228,7 +226,6 @@ html {
   background: radial-gradient(circle at 40% 60%, #7DD3FC, #3d8fcc 55%, transparent 72%);
   animation: liquid-drift-4 20s ease-in-out infinite;
   opacity: 0.55;
-  filter: blur(65px);
 }
 
 .liquid-blob-5 {
@@ -239,7 +236,6 @@ html {
   background: radial-gradient(circle at 55% 45%, #4F8CFF, #2a5cbf 55%, transparent 72%);
   animation: liquid-drift-5 23s ease-in-out infinite;
   opacity: 0.6;
-  filter: blur(75px);
 }
 
 .liquid-blob-6 {
@@ -250,7 +246,6 @@ html {
   background: radial-gradient(circle at 50% 50%, #6BA8FF, #3a72d6 55%, transparent 72%);
   animation: liquid-drift-6 18s ease-in-out infinite;
   opacity: 0.5;
-  filter: blur(85px);
 }
 
 
