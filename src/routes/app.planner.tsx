@@ -69,6 +69,7 @@ function PlannerPage() {
   const [runAt, setRunAt] = useState("");
   const [condition, setCondition] = useState("balance>1");
   const [saving, setSaving] = useState(false);
+  const [fundAmt, setFundAmt] = useState("0.05");
 
   const { data: balance } = useBalance({ address, chainId: ARC_CHAIN_ID, query: { enabled: !!address && !wrong } });
   const balUsdc = balance ? Number(formatUnits(balance.value, 18)) : 0;
@@ -345,7 +346,6 @@ function PlannerPage() {
     );
   }
 
-  const [fundAmt, setFundAmt] = useState("0.05");
   const sessionBalUsdc = Number(formatUnits(sessionBal, 18));
 
   return (
