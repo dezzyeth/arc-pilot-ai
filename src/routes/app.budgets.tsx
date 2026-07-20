@@ -292,7 +292,7 @@ function BudgetsPage() {
                   <div className="mt-2 h-2 overflow-hidden rounded-full bg-accent/40">
                     <div className="h-full rounded-full bg-[image:var(--gradient-brand)]" style={{ width: `${pct}%` }} />
                   </div>
-                  <div className="mt-2 flex gap-1">
+                  <div className="mt-2 flex flex-wrap items-center gap-1">
                     <Button size="sm" variant="secondary" onClick={() => addToGoal(g, 0.1)} className="rounded-full text-[11px]">
                       +0.1
                     </Button>
@@ -302,7 +302,26 @@ function BudgetsPage() {
                     <Button size="sm" variant="ghost" onClick={() => addToGoal(g, -0.1)} className="rounded-full text-[11px]">
                       −0.1
                     </Button>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => askForPlan(g)}
+                      disabled={planLoading === g.id}
+                      className="ml-auto rounded-full text-[11px]"
+                    >
+                      {planLoading === g.id ? (
+                        <Loader2 className="mr-1 h-3 w-3 animate-spin" />
+                      ) : (
+                        <Sparkles className="mr-1 h-3 w-3 text-[color:var(--brand-2)]" />
+                      )}
+                      {plans[g.id] ? "Hide plan" : "Get AI plan"}
+                    </Button>
                   </div>
+                  {plans[g.id] && (
+                    <div className="prose prose-invert prose-sm mt-3 max-w-none rounded-xl border border-white/10 bg-black/30 p-3 prose-headings:mt-3 prose-headings:mb-1 prose-h1:text-base prose-h2:text-sm prose-h3:text-sm prose-p:my-1 prose-ul:my-1 prose-li:my-0.5">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{plans[g.id]}</ReactMarkdown>
+                    </div>
+                  )}
                 </li>
               );
             })}
