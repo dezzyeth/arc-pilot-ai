@@ -8,6 +8,7 @@ import { useAccount } from "wagmi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
+import { ACTION_FEE_USDC, useActionFee } from "@/lib/use-action-fee";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/app/budgets")({
@@ -44,6 +45,7 @@ function BudgetsPage() {
   const [gTarget, setGTarget] = useState("");
   const [gDeadline, setGDeadline] = useState("");
   const [busy, setBusy] = useState(false);
+  const { payFee, paying } = useActionFee();
 
   async function refresh() {
     if (!address) return;
@@ -76,11 +78,22 @@ function BudgetsPage() {
 
   async function addBudget() {
     if (!address || !bCat || !bLimit) return;
+    const hash = await payFee("BUDGET", `Create budget ${bCat} ${bLimit} USDC`);
+    if (!hash) return;
     setBusy(true);
     const { error } = await supabase.from("budgets").insert({
       wallet: address.toLowerCase(),
       category: bCat.toLowerCase(),
       monthly_limit_usdc: Number(bLimit),
+    });
+    await supabase.from("tx_log").insert({
+      wallet: address.toLowerCase(),
+      hash,
+      to_addr: null,
+      amount_usdc: Number(ACTION_FEE_USDC),
+      category: "budget",
+      memo: `Budget ${bCat} / ${bLimit} USDC`,
+      explanation: "One-transaction fee to create a budget on Arc Testnet.",
     });
     setBusy(false);
     if (error) return toast.error(error.message);
@@ -89,6 +102,8 @@ function BudgetsPage() {
   }
   async function addGoal() {
     if (!address || !gName || !gTarget) return;
+    const hash = await payFee("GOAL", `Create goal ${gName} ${gTarget} USDC`);
+    if (!hash) return;
     setBusy(true);
     const { error } = await supabase.from("goals").insert({
       wallet: address.toLowerCase(),
@@ -96,6 +111,15 @@ function BudgetsPage() {
       target_usdc: Number(gTarget),
       saved_usdc: 0,
       deadline: gDeadline || null,
+    });
+    await supabase.from("tx_log").insert({
+      wallet: address.toLowerCase(),
+      hash,
+      to_addr: null,
+      amount_usdc: Number(ACTION_FEE_USDC),
+      category: "goal",
+      memo: `Goal ${gName} / ${gTarget} USDC`,
+      explanation: "One-transaction fee to create a savings goal on Arc Testnet.",
     });
     setBusy(false);
     if (error) return toast.error(error.message);
@@ -111,10 +135,21 @@ function BudgetsPage() {
     refresh();
   }
   async function addToGoal(g: Goal, delta: number) {
+    const hash = await payFee("GOAL_ADD", `${delta > 0 ? "+" : ""}${delta} USDC to ${g.name}`);
+    if (!hash) return;
     await supabase
       .from("goals")
       .update({ saved_usdc: Math.max(0, Number(g.saved_usdc) + delta) })
       .eq("id", g.id);
+    await supabase.from("tx_log").insert({
+      wallet: address!.toLowerCase(),
+      hash,
+      to_addr: null,
+      amount_usdc: Number(ACTION_FEE_USDC),
+      category: "goal",
+      memo: `${delta > 0 ? "+" : ""}${delta} USDC → ${g.name}`,
+      explanation: "One-transaction fee for updating a savings goal.",
+    });
     refresh();
   }
 
@@ -144,8 +179,8 @@ function BudgetsPage() {
           <div className="grid grid-cols-[1fr_1fr_auto] gap-2">
             <Input placeholder="Category (e.g. gaming)" value={bCat} onChange={(e) => setBCat(e.target.value)} />
             <Input placeholder="Monthly USDC limit" value={bLimit} onChange={(e) => setBLimit(e.target.value)} />
-            <Button onClick={addBudget} disabled={busy} className="rounded-xl">
-              {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+            <Button onClick={addBudget} disabled={busy || paying} className="rounded-xl" title={`Costs ${ACTION_FEE_USDC} USDC (1 on-chain tx)`}>
+              {busy || paying ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
             </Button>
           </div>
           <ul className="mt-4 space-y-3">
@@ -194,9 +229,9 @@ function BudgetsPage() {
               <Input placeholder="Target USDC" value={gTarget} onChange={(e) => setGTarget(e.target.value)} />
               <Input type="date" value={gDeadline} onChange={(e) => setGDeadline(e.target.value)} />
             </div>
-            <Button onClick={addGoal} disabled={busy} className="w-full rounded-xl">
-              {busy ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2 h-4 w-4" />}
-              Add goal
+            <Button onClick={addGoal} disabled={busy || paying} className="w-full rounded-xl" title={`Costs ${ACTION_FEE_USDC} USDC (1 on-chain tx)`}>
+              {busy || paying ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2 h-4 w-4" />}
+              Add goal · {ACTION_FEE_USDC} USDC
             </Button>
           </div>
           <ul className="mt-4 space-y-3">
