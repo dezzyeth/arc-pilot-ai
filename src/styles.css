@@ -143,41 +143,14 @@ html {
     linear-gradient(180deg, #050816 0%, #060a1d 100%);
 }
 
-/* Invisible SVG holding the goo filter definition */
-.liquid-svg {
-  position: absolute;
-  width: 0;
-  height: 0;
-  pointer-events: none;
-}
-
-/* Slowly rotating conic sheen — subtle "liquid flowing around" feel */
-.liquid-sheen {
-  position: absolute;
-  inset: -20%;
-  background: conic-gradient(
-    from 0deg at 50% 50%,
-    rgba(79, 140, 255, 0) 0deg,
-    rgba(79, 140, 255, 0.08) 60deg,
-    rgba(143, 211, 255, 0.10) 140deg,
-    rgba(107, 168, 255, 0.06) 220deg,
-    rgba(79, 140, 255, 0) 300deg,
-    rgba(79, 140, 255, 0) 360deg
-  );
-  mix-blend-mode: screen;
-  filter: blur(80px);
-  animation: liquid-sheen-spin 40s linear infinite;
-  will-change: transform;
-  opacity: 0.7;
-}
-
-/* The goo layer merges blobs into a single flowing liquid mass */
+/* The goo layer — pure CSS blur (GPU-composited), no SVG filter */
 .liquid-goo-layer {
   position: absolute;
   inset: 0;
-  filter: url(#liquid-goo) blur(6px);
-  will-change: filter;
+  filter: blur(40px) saturate(1.1);
+  transform: translateZ(0);
 }
+
 
 .liquid-blob-wrap {
   position: absolute;
