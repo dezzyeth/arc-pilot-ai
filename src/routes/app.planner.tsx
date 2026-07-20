@@ -287,6 +287,26 @@ function PlannerPage() {
               Each plan is registered with 1 on-chain transaction ({ACTION_FEE_USDC} USDC). Execution is
               a second transaction you confirm — ArcPilot never auto-signs.
             </p>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={askForSuggestion}
+              disabled={suggesting}
+              className="w-full rounded-xl"
+            >
+              {suggesting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Sparkles className="mr-2 h-4 w-4 text-[color:var(--brand-2)]" />
+              )}
+              {suggestion ? "Refresh AI suggestion" : "Get AI suggestion"}
+            </Button>
+            {suggestion && (
+              <div className="prose prose-invert prose-sm mt-1 max-w-none rounded-xl border border-white/10 bg-black/30 p-3 prose-headings:mt-3 prose-headings:mb-1 prose-h1:text-base prose-h2:text-sm prose-h3:text-sm prose-p:my-1 prose-ul:my-1 prose-li:my-0.5">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{suggestion}</ReactMarkdown>
+              </div>
+            )}
+
           </div>
         </div>
 
