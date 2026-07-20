@@ -557,9 +557,10 @@ function PlannerPage() {
                       </div>
                     )}
                     {r.status === "executed" && r.tx_hash && (
-                      <div className="mt-2 flex items-center gap-1 text-[11px] text-[color:var(--success)]">
+                      <div className="mt-2 flex items-center gap-2 text-[11px] text-[color:var(--success)]">
                         <CheckCircle2 className="h-3 w-3" />
-                        Executed · {r.tx_hash.slice(0, 10)}…
+                        <span>Executed · {r.tx_hash.slice(0, 10)}…</span>
+                        <ExplorerLink value={r.tx_hash} kind="tx" className="ml-auto" />
                       </div>
                     )}
                   </li>
