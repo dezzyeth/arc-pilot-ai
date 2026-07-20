@@ -1,12 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { ExternalLink, PieChart as PieIcon, TrendingUp, Wallet } from "lucide-react";
+import { PieChart as PieIcon, TrendingUp, Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
 import { formatUnits } from "viem";
 import { useAccount, useBalance, useChainId } from "wagmi";
 
+import { ExplorerLink } from "@/components/explorer-link";
 import { supabase } from "@/integrations/supabase/client";
-import { ARC_CHAIN_ID, arcTestnet } from "@/lib/chains";
+import { ARC_CHAIN_ID } from "@/lib/chains";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/app/portfolio")({
