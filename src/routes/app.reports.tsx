@@ -146,9 +146,9 @@ Recent memos: ${rows.slice(0, 10).map((r) => r.memo).filter(Boolean).join(" | ")
             </button>
           ))}
         </div>
-        <Button onClick={generateReport} disabled={loading} className="rounded-full shadow-glow">
-          {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
-          Generate AI report
+        <Button onClick={generateReport} disabled={loading || paying} className="rounded-full shadow-glow">
+          {loading || paying ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+          Generate AI report · {ACTION_FEE_USDC} USDC
         </Button>
       </div>
 
