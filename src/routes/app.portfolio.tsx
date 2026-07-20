@@ -1,12 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { ExternalLink, PieChart as PieIcon, TrendingUp, Wallet } from "lucide-react";
+import { PieChart as PieIcon, TrendingUp, Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
 import { formatUnits } from "viem";
 import { useAccount, useBalance, useChainId } from "wagmi";
 
+import { ExplorerLink } from "@/components/explorer-link";
 import { supabase } from "@/integrations/supabase/client";
-import { ARC_CHAIN_ID, arcTestnet } from "@/lib/chains";
+import { ARC_CHAIN_ID } from "@/lib/chains";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/app/portfolio")({
@@ -116,15 +117,7 @@ function PortfolioPage() {
                   <div className="flex items-center gap-3">
                     <span className="font-mono text-sm">{Number(r.amount_usdc).toFixed(4)} USDC</span>
                     {r.hash && (
-                      <a
-                        href={`${arcTestnet.blockExplorers.default.url}/tx/${r.hash}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-muted-foreground hover:text-foreground"
-                        title="View on explorer"
-                      >
-                        <ExternalLink className="h-4 w-4" />
-                      </a>
+                      <ExplorerLink value={r.hash} kind="tx" variant="icon" />
                     )}
                   </div>
                 </li>

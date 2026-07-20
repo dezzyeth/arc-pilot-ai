@@ -24,9 +24,10 @@ import {
 } from "wagmi";
 
 import { Button } from "@/components/ui/button";
+import { ExplorerLink } from "@/components/explorer-link";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
-import { ARC_CHAIN_ID, arcTestnet } from "@/lib/chains";
+import { ARC_CHAIN_ID } from "@/lib/chains";
 import { ARCPILOT_ABI, ARCPILOT_ADDRESS } from "@/lib/contracts";
 import { TREASURY_ADDRESS } from "@/lib/treasury";
 import arcLogo from "@/assets/arc-logo.jpeg.asset.json";
@@ -608,14 +609,7 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
         <div className="mt-3 flex items-center gap-2 rounded-lg bg-[color:var(--success)]/15 px-2 py-1.5 text-xs text-[color:var(--success)]">
           <CheckCircle2 className="h-4 w-4" />
           Confirmed in block {receipt.blockNumber.toString()}.
-          <a
-            href={`${arcTestnet.blockExplorers.default.url}/tx/${txHash}`}
-            target="_blank"
-            rel="noreferrer"
-            className="ml-auto underline"
-          >
-            View
-          </a>
+          {txHash && <ExplorerLink value={txHash} kind="tx" className="ml-auto" />}
         </div>
       )}
 
