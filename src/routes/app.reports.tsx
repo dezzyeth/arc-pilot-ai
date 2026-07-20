@@ -9,6 +9,7 @@ import { useAccount } from "wagmi";
 
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { ACTION_FEE_USDC, useActionFee } from "@/lib/use-action-fee";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/app/reports")({
@@ -40,6 +41,7 @@ function ReportsPage() {
   const [rows, setRows] = useState<TxRow[]>([]);
   const [report, setReport] = useState("");
   const [loading, setLoading] = useState(false);
+  const { payFee, paying } = useActionFee();
 
   useEffect(() => {
     if (!address) return;
@@ -63,6 +65,19 @@ function ReportsPage() {
 
   async function generateReport() {
     if (rows.length === 0) return toast.error("No activity to summarize.");
+    const hash = await payFee("REPORT", `Generate ${range} report`);
+    if (!hash) return;
+    if (address) {
+      await supabase.from("tx_log").insert({
+        wallet: address.toLowerCase(),
+        hash,
+        to_addr: null,
+        amount_usdc: Number(ACTION_FEE_USDC),
+        category: "report",
+        memo: `AI ${range} report`,
+        explanation: "One-transaction fee to generate an AI finance report.",
+      });
+    }
     setLoading(true);
     setReport("");
     try {
