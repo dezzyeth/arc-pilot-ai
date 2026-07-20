@@ -1,13 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { motion } from "framer-motion";
-import { Loader2, Plus, Shield, Target, Trash2, Wallet } from "lucide-react";
+import { Loader2, Plus, Shield, Sparkles, Target, Trash2, Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { toast } from "sonner";
 import { useAccount } from "wagmi";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
+import { generateGoalPlan } from "@/lib/goal-plan.functions";
 import { ACTION_FEE_USDC, useActionFee } from "@/lib/use-action-fee";
 import { cn } from "@/lib/utils";
 
