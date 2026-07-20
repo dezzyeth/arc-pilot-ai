@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { motion } from "framer-motion";
-import { CalendarClock, CheckCircle2, Loader2, Play, Trash2, Wallet, Zap } from "lucide-react";
+import { CalendarClock, CheckCircle2, Loader2, Play, Sparkles, Trash2, Wallet, Zap } from "lucide-react";
 import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { toast } from "sonner";
 import { formatUnits, isAddress, parseUnits, type Address } from "viem";
 import {
@@ -13,8 +16,10 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { ARC_CHAIN_ID } from "@/lib/chains";
 import { ensureArcChain } from "@/lib/ensure-arc-chain";
+import { generatePlannerSuggestion } from "@/lib/planner-plan.functions";
 import { ACTION_FEE_USDC, useActionFee } from "@/lib/use-action-fee";
 import { cn } from "@/lib/utils";
+
 
 export const Route = createFileRoute("/app/planner")({
   component: PlannerPage,
@@ -77,6 +82,47 @@ function PlannerPage() {
   }, [address]);
 
   const { payFee, paying } = useActionFee();
+  const suggestFn = useServerFn(generatePlannerSuggestion);
+  const [suggestion, setSuggestion] = useState<string>("");
+  const [suggesting, setSuggesting] = useState(false);
+
+  async function askForSuggestion() {
+    if (!address) return toast.error("Connect wallet");
+    try {
+      setSuggesting(true);
+      const [{ data: budgets }, { data: goals }] = await Promise.all([
+        supabase.from("budgets").select("category, monthly_limit_usdc").eq("wallet", address.toLowerCase()),
+        supabase.from("goals").select("name, target_usdc, saved_usdc, deadline").eq("wallet", address.toLowerCase()),
+      ]);
+      const { plan } = await suggestFn({
+        data: {
+          kind,
+          to,
+          amount,
+          memo,
+          runAt,
+          condition,
+          balanceUsdc: balUsdc,
+          budgets: (budgets ?? []).map((b) => ({
+            category: b.category as string,
+            limit: Number(b.monthly_limit_usdc),
+          })),
+          goals: (goals ?? []).map((g) => ({
+            name: g.name as string,
+            target: Number(g.target_usdc),
+            saved: Number(g.saved_usdc),
+            deadline: (g.deadline as string | null) ?? null,
+          })),
+        },
+      });
+      setSuggestion(plan);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to get suggestion");
+    } finally {
+      setSuggesting(false);
+    }
+  }
+
 
   async function createPlan() {
     if (!address) return toast.error("Connect wallet");
@@ -241,6 +287,26 @@ function PlannerPage() {
               Each plan is registered with 1 on-chain transaction ({ACTION_FEE_USDC} USDC). Execution is
               a second transaction you confirm — ArcPilot never auto-signs.
             </p>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={askForSuggestion}
+              disabled={suggesting}
+              className="w-full rounded-xl"
+            >
+              {suggesting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Sparkles className="mr-2 h-4 w-4 text-[color:var(--brand-2)]" />
+              )}
+              {suggestion ? "Refresh AI suggestion" : "Get AI suggestion"}
+            </Button>
+            {suggestion && (
+              <div className="prose prose-invert prose-sm mt-1 max-w-none rounded-xl border border-white/10 bg-black/30 p-3 prose-headings:mt-3 prose-headings:mb-1 prose-h1:text-base prose-h2:text-sm prose-h3:text-sm prose-p:my-1 prose-ul:my-1 prose-li:my-0.5">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{suggestion}</ReactMarkdown>
+              </div>
+            )}
+
           </div>
         </div>
 
