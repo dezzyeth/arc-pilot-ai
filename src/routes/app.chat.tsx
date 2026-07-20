@@ -106,29 +106,47 @@ function ChatPage() {
   const wrongNetwork = mounted && isConnected && chainId !== ARC_CHAIN_ID;
   const { switchChainAsync } = useSwitchChain();
 
-  // Message quota — every FREE_MESSAGES prompts requires a small on-chain fee.
-  const quotaKey = address ? `arcpilot:chat-quota:${address.toLowerCase()}` : null;
+  // Message quota — persisted per wallet in Lovable Cloud so it survives
+  // reloads, new tabs, and different devices.
   const [used, setUsed] = useState(0);
   const [quota, setQuota] = useState(FREE_MESSAGES);
+  const [quotaLoaded, setQuotaLoaded] = useState(false);
 
   useEffect(() => {
-    if (!quotaKey) return;
-    try {
-      const raw = localStorage.getItem(quotaKey);
-      if (raw) {
-        const p = JSON.parse(raw) as { used: number; quota: number };
-        setUsed(p.used ?? 0);
-        setQuota(p.quota ?? FREE_MESSAGES);
-      }
-    } catch {
-      /* noop */
+    if (!address) {
+      setUsed(0);
+      setQuota(FREE_MESSAGES);
+      setQuotaLoaded(false);
+      return;
     }
-  }, [quotaKey]);
+    const wallet = address.toLowerCase();
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("chat_quota")
+        .select("used, quota")
+        .eq("wallet", wallet)
+        .maybeSingle();
+      if (cancelled) return;
+      setUsed(data?.used ?? 0);
+      setQuota(data?.quota ?? FREE_MESSAGES);
+      setQuotaLoaded(true);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [address]);
 
   useEffect(() => {
-    if (!quotaKey) return;
-    localStorage.setItem(quotaKey, JSON.stringify({ used, quota }));
-  }, [quotaKey, used, quota]);
+    if (!address || !quotaLoaded) return;
+    const wallet = address.toLowerCase();
+    void supabase
+      .from("chat_quota")
+      .upsert(
+        { wallet, used, quota, updated_at: new Date().toISOString() },
+        { onConflict: "wallet" },
+      );
+  }, [address, quotaLoaded, used, quota]);
 
   const remaining = Math.max(0, quota - used);
   const needsPayment = mounted && isConnected && !wrongNetwork && remaining === 0;

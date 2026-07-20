@@ -56,6 +56,27 @@ export type Database = {
         }
         Relationships: []
       }
+      chat_quota: {
+        Row: {
+          quota: number
+          updated_at: string
+          used: number
+          wallet: string
+        }
+        Insert: {
+          quota?: number
+          updated_at?: string
+          used?: number
+          wallet: string
+        }
+        Update: {
+          quota?: number
+          updated_at?: string
+          used?: number
+          wallet?: string
+        }
+        Relationships: []
+      }
       goals: {
         Row: {
           created_at: string
