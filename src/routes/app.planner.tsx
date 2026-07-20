@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { ARC_CHAIN_ID } from "@/lib/chains";
 import { ensureArcChain } from "@/lib/ensure-arc-chain";
+import { ACTION_FEE_USDC, useActionFee } from "@/lib/use-action-fee";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/app/planner")({
@@ -75,11 +76,18 @@ function PlannerPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address]);
 
+  const { payFee, paying } = useActionFee();
+
   async function createPlan() {
     if (!address) return toast.error("Connect wallet");
     if (!isAddress(to)) return toast.error("Invalid recipient");
     if (!/^\d+(\.\d+)?$/.test(amount) || Number(amount) <= 0) return toast.error("Invalid amount");
     if (kind === "scheduled" && !runAt) return toast.error("Pick a run time");
+    const hash = await payFee(
+      kind === "scheduled" ? "PLAN_SCHED" : "PLAN_COND",
+      `Create ${kind} plan · ${amount} USDC`,
+    );
+    if (!hash) return;
     setSaving(true);
     const { error } = await supabase.from("scheduled_tx").insert({
       wallet: address.toLowerCase(),
@@ -90,6 +98,15 @@ function PlannerPage() {
       run_at: kind === "scheduled" ? new Date(runAt).toISOString() : null,
       condition: kind === "conditional" ? condition : null,
       status: "pending",
+    });
+    await supabase.from("tx_log").insert({
+      wallet: address.toLowerCase(),
+      hash,
+      to_addr: null,
+      amount_usdc: Number(ACTION_FEE_USDC),
+      category: kind === "conditional" ? "conditional" : "scheduled",
+      memo: `Plan ${amount} USDC → ${to.slice(0, 6)}…`,
+      explanation: "One-transaction fee to register a plan on Arc Testnet.",
     });
     setSaving(false);
     if (error) return toast.error(error.message);
