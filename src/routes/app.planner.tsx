@@ -82,6 +82,47 @@ function PlannerPage() {
   }, [address]);
 
   const { payFee, paying } = useActionFee();
+  const suggestFn = useServerFn(generatePlannerSuggestion);
+  const [suggestion, setSuggestion] = useState<string>("");
+  const [suggesting, setSuggesting] = useState(false);
+
+  async function askForSuggestion() {
+    if (!address) return toast.error("Connect wallet");
+    try {
+      setSuggesting(true);
+      const [{ data: budgets }, { data: goals }] = await Promise.all([
+        supabase.from("budgets").select("category, monthly_limit_usdc").eq("wallet", address.toLowerCase()),
+        supabase.from("goals").select("name, target_usdc, saved_usdc, deadline").eq("wallet", address.toLowerCase()),
+      ]);
+      const { plan } = await suggestFn({
+        data: {
+          kind,
+          to,
+          amount,
+          memo,
+          runAt,
+          condition,
+          balanceUsdc: balUsdc,
+          budgets: (budgets ?? []).map((b) => ({
+            category: b.category as string,
+            limit: Number(b.monthly_limit_usdc),
+          })),
+          goals: (goals ?? []).map((g) => ({
+            name: g.name as string,
+            target: Number(g.target_usdc),
+            saved: Number(g.saved_usdc),
+            deadline: (g.deadline as string | null) ?? null,
+          })),
+        },
+      });
+      setSuggestion(plan);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to get suggestion");
+    } finally {
+      setSuggesting(false);
+    }
+  }
+
 
   async function createPlan() {
     if (!address) return toast.error("Connect wallet");
