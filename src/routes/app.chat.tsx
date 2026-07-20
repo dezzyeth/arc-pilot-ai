@@ -27,7 +27,7 @@ import { Button } from "@/components/ui/button";
 import { ExplorerLink } from "@/components/explorer-link";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
-import { ARC_CHAIN_ID, arcTestnet } from "@/lib/chains";
+import { ARC_CHAIN_ID } from "@/lib/chains";
 import { ARCPILOT_ABI, ARCPILOT_ADDRESS } from "@/lib/contracts";
 import { TREASURY_ADDRESS } from "@/lib/treasury";
 import arcLogo from "@/assets/arc-logo.jpeg.asset.json";
