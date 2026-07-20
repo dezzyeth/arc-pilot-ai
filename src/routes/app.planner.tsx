@@ -233,12 +233,13 @@ function PlannerPage() {
                 onChange={(e) => setCondition(e.target.value)}
               />
             )}
-            <Button onClick={createPlan} disabled={saving} className="w-full rounded-xl shadow-glow">
-              {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-              Create plan
+            <Button onClick={createPlan} disabled={saving || paying} className="w-full rounded-xl shadow-glow">
+              {saving || paying ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              Create plan · {ACTION_FEE_USDC} USDC
             </Button>
             <p className="text-[11px] text-muted-foreground">
-              Plans are stored in Lovable Cloud. You confirm each execution — ArcPilot never auto-signs.
+              Each plan is registered with 1 on-chain transaction ({ACTION_FEE_USDC} USDC). Execution is
+              a second transaction you confirm — ArcPilot never auto-signs.
             </p>
           </div>
         </div>
