@@ -50,6 +50,41 @@ function BudgetsPage() {
   const [gDeadline, setGDeadline] = useState("");
   const [busy, setBusy] = useState(false);
   const { payFee, paying } = useActionFee();
+  const goalPlan = useServerFn(generateGoalPlan);
+  const [plans, setPlans] = useState<Record<string, string>>({});
+  const [planLoading, setPlanLoading] = useState<string | null>(null);
+
+  async function askForPlan(g: Goal) {
+    if (plans[g.id]) {
+      // toggle close
+      setPlans((p) => {
+        const n = { ...p };
+        delete n[g.id];
+        return n;
+      });
+      return;
+    }
+    setPlanLoading(g.id);
+    try {
+      const res = await goalPlan({
+        data: {
+          name: g.name,
+          target: Number(g.target_usdc),
+          saved: Number(g.saved_usdc),
+          deadline: g.deadline,
+          monthlyBudgets: budgets.map((b) => ({
+            category: b.category,
+            limit: Number(b.monthly_limit_usdc),
+          })),
+        },
+      });
+      setPlans((p) => ({ ...p, [g.id]: res.plan }));
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to generate plan");
+    } finally {
+      setPlanLoading(null);
+    }
+  }
 
   async function refresh() {
     if (!address) return;
