@@ -143,11 +143,10 @@ html {
     linear-gradient(180deg, #050816 0%, #060a1d 100%);
 }
 
-/* The goo layer — pure CSS blur (GPU-composited), no SVG filter */
+/* The goo layer — no fullscreen blur filter (huge perf win) */
 .liquid-goo-layer {
   position: absolute;
   inset: 0;
-  filter: blur(40px) saturate(1.1);
   transform: translateZ(0);
 }
 
@@ -155,38 +154,14 @@ html {
 .liquid-blob {
   position: absolute;
   border-radius: 50%;
-  /* Individual blob blur is small; the goo-layer applies the heavy blur once for all blobs */
-  filter: blur(20px);
+  /* Heavier per-blob blur replaces the fullscreen goo-layer blur */
+  filter: blur(70px);
   transform: translate3d(0, 0, 0);
   mix-blend-mode: screen;
-  opacity: 0.6;
+  opacity: 0.55;
+  will-change: transform;
 }
 
-
-.liquid-cursor-glow {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 560px;
-  height: 560px;
-  --cx: 50vw;
-  --cy: 50vh;
-  transform: translate3d(calc(var(--cx) - 280px), calc(var(--cy) - 280px), 0);
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(143, 211, 255, 0.22) 0%,
-    rgba(107, 168, 255, 0.14) 25%,
-    rgba(79, 140, 255, 0.06) 50%,
-    transparent 72%
-  );
-  filter: blur(40px);
-  mix-blend-mode: screen;
-  opacity: 0;
-  transition: opacity 0.7s ease-out;
-  pointer-events: none;
-  will-change: transform, opacity;
-  border-radius: 50%;
-}
 
 .liquid-blob-1 {
   width: 42vw;
