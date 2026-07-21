@@ -62,8 +62,8 @@ export default function Landing() {
 
       <header className="relative z-10 mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
         <Link to="/" className="flex items-center gap-2">
-          <div className="grid h-8 w-8 place-items-center rounded-xl bg-[image:var(--gradient-brand)] shadow-glow">
-            <Sparkles className="h-4 w-4 text-primary-foreground" />
+          <div className="grid h-8 w-8 place-items-center overflow-hidden rounded-xl bg-[image:var(--gradient-brand)] shadow-glow">
+            <img src={arcLogo.url} alt="Arc" className="h-full w-full object-cover" draggable={false} />
           </div>
           <span className="text-lg font-semibold tracking-tight">ArcPilot AI</span>
         </Link>
