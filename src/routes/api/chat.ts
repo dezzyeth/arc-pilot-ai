@@ -48,16 +48,16 @@ export const Route = createFileRoute("/api/chat")({
         }
 
         let model;
-        if (lovableKey) {
-          const gateway = createLovableAiGatewayProvider(lovableKey);
-          model = gateway("google/gemini-2.5-flash");
-        } else {
+        if (geminiKey) {
           const google = createOpenAICompatible({
             name: "google",
             baseURL: "https://generativelanguage.googleapis.com/v1beta/openai",
             headers: { Authorization: `Bearer ${geminiKey}` },
           });
-          model = google("gemini-2.5-flash");
+          model = google("gemini-3.1-flash-lite");
+        } else if (lovableKey) {
+          const gateway = createLovableAiGatewayProvider(lovableKey);
+          model = gateway("google/gemini-3.1-flash-lite");
         }
 
         const modelMessages: ModelMessage[] = messages.map((m) => ({
@@ -70,6 +70,7 @@ export const Route = createFileRoute("/api/chat")({
             model,
             system: SYSTEM_PROMPT,
             messages: modelMessages,
+            abortSignal: request.signal,
           });
 
 
