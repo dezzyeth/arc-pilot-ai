@@ -4,14 +4,13 @@ import {
   ArrowRight,
   BrainCircuit,
   ShieldCheck,
-  Sparkles,
   Wallet,
   Zap,
 } from "lucide-react";
 
 import { WalletButton } from "@/components/wallet-button";
 import { Button } from "@/components/ui/button";
-import arcLogo from "@/assets/arc-logo.jpeg.asset.json";
+import arcLogo from "@/assets/arc-logo.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   component: Landing,
