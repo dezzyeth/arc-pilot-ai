@@ -211,7 +211,14 @@ export default function Landing() {
       <footer className="relative z-10 border-t border-border/60">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-8 text-xs text-muted-foreground">
           <div>© {new Date().getFullYear()} ArcPilot AI · Testnet only, no real value.</div>
-          <div>Built for Arc Testnet</div>
+          <a
+            href="https://x.com/0x_Dezzy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-foreground transition-colors"
+          >
+            Made by @0x_Dezzy
+          </a>
         </div>
       </footer>
     </div>
