@@ -30,7 +30,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ARC_CHAIN_ID } from "@/lib/chains";
 import { ARCPILOT_ABI, ARCPILOT_ADDRESS } from "@/lib/contracts";
 import { TREASURY_ADDRESS } from "@/lib/treasury";
-import arcLogo from "@/assets/arc-logo.jpeg.asset.json";
+import arcLogo from "@/assets/arc-logo.jpg.asset.json";
 import { ensureArcChain } from "@/lib/ensure-arc-chain";
 import { cn } from "@/lib/utils";
 import { ARC_CHAT_SUGGESTIONS } from "@/lib/arc-knowledge";

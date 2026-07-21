@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import arcLogo from "@/assets/arc-logo.jpeg.asset.json";
+import arcLogo from "@/assets/arc-logo.jpg.asset.json";
 
 /**
  * Cinematic intro: Arc logo zooms from a tiny speck into a huge hero mark
