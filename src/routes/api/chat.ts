@@ -1,3 +1,4 @@
+import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { createFileRoute } from "@tanstack/react-router";
 import { streamText, type ModelMessage } from "ai";
 
@@ -40,13 +41,24 @@ export const Route = createFileRoute("/api/chat")({
           return new Response("messages are required", { status: 400 });
         }
 
-        const key = process.env.LOVABLE_API_KEY;
-        if (!key) {
-          return new Response("Missing LOVABLE_API_KEY", { status: 500 });
+        const lovableKey = process.env.LOVABLE_API_KEY;
+        const geminiKey = process.env.GEMINI_API_KEY;
+        if (!lovableKey && !geminiKey) {
+          return new Response("Missing LOVABLE_API_KEY or GEMINI_API_KEY", { status: 500 });
         }
 
-        const gateway = createLovableAiGatewayProvider(key);
-        const model = gateway("google/gemini-2.5-flash");
+        let model;
+        if (lovableKey) {
+          const gateway = createLovableAiGatewayProvider(lovableKey);
+          model = gateway("google/gemini-2.5-flash");
+        } else {
+          const google = createOpenAICompatible({
+            name: "google",
+            baseURL: "https://generativelanguage.googleapis.com/v1beta/openai",
+            headers: { Authorization: `Bearer ${geminiKey}` },
+          });
+          model = google("gemini-2.5-flash");
+        }
 
         const modelMessages: ModelMessage[] = messages.map((m) => ({
           role: m.role,
