@@ -85,20 +85,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "ArcPilot AI is an AI finance copilot for Arc Testnet. Send USDC, analyze portfolios, and simulate transactions in plain English.",
+          "Send, simulate, and understand every transaction on Arc Testnet through natural language. AI copilot with risk analysis and gas estimation.",
       },
       { name: "author", content: "ArcPilot AI" },
-      { property: "og:title", content: "ArcPilot AI — AI Finance Copilot for Arc Testnet" },
+      { property: "og:title", content: "ArcPilot AI — Natural-language finance on Arc Testnet" },
       {
         property: "og:description",
         content:
-          "Chat with your wallet. Simulate, explain, and confirm every transaction — exclusively on Arc Testnet.",
+          "Send, simulate, and understand every transaction on Arc Testnet through natural language. AI copilot with risk analysis and gas estimation.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "ArcPilot AI — Natural-language finance on Arc Testnet" },
+      { name: "twitter:description", content: "Send, simulate, and understand every transaction on Arc Testnet through natural language. AI copilot with risk analysis and gas estimation." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f02b8dcd-9857-4f0a-8859-20c49aa07168/id-preview-8b58b0ca--81686c3e-4232-4d16-8ef9-3e8f7258ef07.lovable.app-1784645717879.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f02b8dcd-9857-4f0a-8859-20c49aa07168/id-preview-8b58b0ca--81686c3e-4232-4d16-8ef9-3e8f7258ef07.lovable.app-1784645717879.png" },
     ],
     links: [
-      { rel: "icon", href: "/favicon.jpg", type: "image/jpeg" },
+      { rel: "icon", href: "/favicon.jpg", type: "image/x-icon" },
     ],
   }),
   shellComponent: RootShell,
