@@ -3,7 +3,7 @@ import {
   BookOpen, CalendarClock, FileBarChart, LayoutDashboard, LifeBuoy, MessageSquare, PieChart, Target,
 } from "lucide-react";
 
-import arcLogo from "@/assets/arc-logo.jpeg.asset.json";
+import arcLogo from "@/assets/arc-logo.jpg.asset.json";
 
 import { WalletButton } from "@/components/wallet-button";
 import { cn } from "@/lib/utils";
