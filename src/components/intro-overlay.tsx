@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import arcLogo from "@/assets/arc-logo.jpg.asset.json";
+import arcLogo from "@/assets/arc-logo.jpg";
 
 /**
  * Cinematic intro: Arc logo zooms from a tiny speck into a huge hero mark
@@ -40,7 +40,7 @@ export function IntroOverlay() {
           <div className="intro-ring intro-ring--2" />
           <div className="intro-ring intro-ring--3" />
           <div className="intro-logo">
-            <img src={arcLogo.url} alt="Arc" className="intro-logo-img" draggable={false} />
+            <img src={arcLogo} alt="Arc" className="intro-logo-img" draggable={false} />
             <div className="intro-logo-shine" />
             <div className="intro-logo-glow" />
           </div>

@@ -30,7 +30,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ARC_CHAIN_ID } from "@/lib/chains";
 import { ARCPILOT_ABI, ARCPILOT_ADDRESS } from "@/lib/contracts";
 import { TREASURY_ADDRESS } from "@/lib/treasury";
-import arcLogo from "@/assets/arc-logo.jpg.asset.json";
+import arcLogo from "@/assets/arc-logo.jpg";
 import { ensureArcChain } from "@/lib/ensure-arc-chain";
 import { cn } from "@/lib/utils";
 import { ARC_CHAT_SUGGESTIONS } from "@/lib/arc-knowledge";
@@ -309,7 +309,7 @@ function ChatPage() {
               >
                 {m.role === "assistant" && (
                   <div className="mt-1 grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-xl bg-[image:var(--gradient-brand)] shadow-glow">
-                    <img src={arcLogo.url} alt="Arc" className="h-full w-full object-cover" draggable={false} />
+                    <img src={arcLogo} alt="Arc" className="h-full w-full object-cover" draggable={false} />
                   </div>
                 )}
                 <div
