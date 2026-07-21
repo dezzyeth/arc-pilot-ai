@@ -1,8 +1,12 @@
-import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { createFileRoute } from "@tanstack/react-router";
 import { streamText, type ModelMessage } from "ai";
 
-import { createLovableAiGatewayProvider } from "@/lib/ai-gateway.server";
+import {
+  aiErrorMessage,
+  createArcPilotModel,
+  missingAiConfigMessage,
+  proxyChatToLovable,
+} from "@/lib/ai-model.server";
 import { ARC_KNOWLEDGE } from "@/lib/arc-knowledge";
 
 type ChatRequestBody = {
@@ -30,9 +34,10 @@ export const Route = createFileRoute("/api/chat")({
   server: {
     handlers: {
       POST: async ({ request }) => {
+        const rawBody = await request.text();
         let body: ChatRequestBody;
         try {
-          body = (await request.json()) as ChatRequestBody;
+          body = JSON.parse(rawBody) as ChatRequestBody;
         } catch {
           return new Response("Invalid JSON body", { status: 400 });
         }
@@ -41,23 +46,15 @@ export const Route = createFileRoute("/api/chat")({
           return new Response("messages are required", { status: 400 });
         }
 
-        const lovableKey = process.env.LOVABLE_API_KEY;
-        const geminiKey = process.env.GEMINI_API_KEY;
-        if (!lovableKey && !geminiKey) {
-          return new Response("Missing LOVABLE_API_KEY or GEMINI_API_KEY", { status: 500 });
-        }
-
-        let model;
-        if (geminiKey) {
-          const google = createOpenAICompatible({
-            name: "google",
-            baseURL: "https://generativelanguage.googleapis.com/v1beta/openai",
-            headers: { Authorization: `Bearer ${geminiKey}` },
-          });
-          model = google("gemini-3.1-flash-lite");
-        } else {
-          const gateway = createLovableAiGatewayProvider(lovableKey!);
-          model = gateway("google/gemini-3.1-flash-lite");
+        const model = createArcPilotModel();
+        if (!model) {
+          try {
+            const proxied = await proxyChatToLovable(request, rawBody);
+            if (proxied) return proxied;
+          } catch (error) {
+            console.error("ArcPilot chat proxy failed", error);
+          }
+          return new Response(missingAiConfigMessage(), { status: 500 });
         }
 
         const modelMessages: ModelMessage[] = messages.map((m) => ({
@@ -78,8 +75,8 @@ export const Route = createFileRoute("/api/chat")({
             headers: { "content-type": "text/plain; charset=utf-8" },
           });
         } catch (err) {
-          const message = err instanceof Error ? err.message : "AI gateway error";
-          return new Response(message, { status: 500 });
+          console.error("ArcPilot chat failed", err);
+          return new Response(aiErrorMessage(err), { status: 500 });
         }
       },
     },

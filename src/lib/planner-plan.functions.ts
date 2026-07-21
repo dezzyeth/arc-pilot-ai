@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { generateText } from "ai";
 import { z } from "zod";
 
-import { createLovableAiGatewayProvider } from "@/lib/ai-gateway.server";
+import { createArcPilotModel, missingAiConfigMessage } from "@/lib/ai-model.server";
 
 const Input = z.object({
   kind: z.enum(["scheduled", "conditional"]),
@@ -32,10 +32,9 @@ const Input = z.object({
 export const generatePlannerSuggestion = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => Input.parse(data))
   .handler(async ({ data }) => {
-    const key = process.env.LOVABLE_API_KEY;
-    if (!key) throw new Error("Missing LOVABLE_API_KEY");
+    const model = createArcPilotModel();
+    if (!model) throw new Error(missingAiConfigMessage());
 
-    const gateway = createLovableAiGatewayProvider(key);
     const budgets =
       data.budgets.length > 0
         ? data.budgets.map((b) => `- ${b.category}: ${b.limit} USDC/mo`).join("\n")
@@ -51,7 +50,7 @@ export const generatePlannerSuggestion = createServerFn({ method: "POST" })
         : "None set.";
 
     const { text } = await generateText({
-      model: gateway("google/gemini-2.5-flash"),
+      model,
       system:
         "You are ArcPilot AI, a friendly finance copilot for Arc Testnet. Output concise Markdown (no preamble). Use short bullets and one small table if useful. Testnet USDC has no real value — mention this once at the end.",
       prompt: `The user is drafting a ${data.kind} transaction plan on Arc Testnet.

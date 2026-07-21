@@ -254,8 +254,12 @@ function ChatPage() {
           })),
         }),
       });
-      if (!res.ok || !res.body) {
-        throw new Error(`Chat failed (${res.status})`);
+      if (!res.ok) {
+        const detail = await res.text().catch(() => "");
+        throw new Error(detail ? `Chat failed (${res.status}): ${detail}` : `Chat failed (${res.status})`);
+      }
+      if (!res.body) {
+        throw new Error("Chat failed: empty response");
       }
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
