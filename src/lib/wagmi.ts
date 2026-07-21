@@ -11,10 +11,7 @@ import { arcTestnet } from "./chains";
 export const wagmiConfig = createConfig({
   chains: [arcTestnet],
   connectors: [
-    injected({
-      target: "metaMask",
-      shimDisconnect: true,
-    }),
+    injected({ shimDisconnect: true }),
   ],
   transports: {
     [arcTestnet.id]: http(),
