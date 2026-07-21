@@ -96,7 +96,11 @@ Recent memos: ${rows.slice(0, 10).map((r) => r.memo).filter(Boolean).join(" | ")
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ messages: [{ role: "user", content: prompt }] }),
       });
-      if (!res.ok || !res.body) throw new Error(`Report failed (${res.status})`);
+      if (!res.ok) {
+        const detail = await res.text().catch(() => "");
+        throw new Error(detail ? `Report failed (${res.status}): ${detail}` : `Report failed (${res.status})`);
+      }
+      if (!res.body) throw new Error("Report failed: empty response");
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
       let acc = "";

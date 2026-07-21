@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { generateText } from "ai";
 import { z } from "zod";
 
-import { createLovableAiGatewayProvider } from "@/lib/ai-gateway.server";
+import { createArcPilotModel, missingAiConfigMessage } from "@/lib/ai-model.server";
 
 const Input = z.object({
   name: z.string().min(1).max(120),
@@ -17,8 +17,8 @@ const Input = z.object({
 export const generateGoalPlan = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => Input.parse(data))
   .handler(async ({ data }) => {
-    const key = process.env.LOVABLE_API_KEY;
-    if (!key) throw new Error("Missing LOVABLE_API_KEY");
+    const model = createArcPilotModel();
+    if (!model) throw new Error(missingAiConfigMessage());
 
     const remaining = Math.max(0, data.target - data.saved);
     const deadline = data.deadline ?? "no deadline set";
@@ -29,9 +29,8 @@ export const generateGoalPlan = createServerFn({ method: "POST" })
             .join("\n")
         : "None set yet.";
 
-    const gateway = createLovableAiGatewayProvider(key);
     const { text } = await generateText({
-      model: gateway("google/gemini-2.5-flash"),
+      model,
       system:
         "You are ArcPilot AI, a friendly finance copilot for Arc Testnet. Produce a concise, actionable savings plan in Markdown. Use short bullet lists and one small table if useful. Testnet USDC has no real value — mention this once at the end. No preamble.",
       prompt: `Build a personalized savings plan for this goal.
