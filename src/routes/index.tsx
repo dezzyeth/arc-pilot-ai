@@ -10,7 +10,7 @@ import {
 
 import { WalletButton } from "@/components/wallet-button";
 import { Button } from "@/components/ui/button";
-import arcLogo from "@/assets/arc-logo.jpg.asset.json";
+import arcLogo from "@/assets/arc-logo.jpg";
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -63,7 +63,7 @@ export default function Landing() {
       <header className="relative z-10 mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
         <Link to="/" className="flex items-center gap-2">
           <div className="grid h-8 w-8 place-items-center overflow-hidden rounded-xl bg-[image:var(--gradient-brand)] shadow-glow">
-            <img src={arcLogo.url} alt="Arc" className="h-full w-full object-cover" draggable={false} />
+            <img src={arcLogo} alt="Arc" className="h-full w-full object-cover" draggable={false} />
           </div>
           <span className="text-lg font-semibold tracking-tight">ArcPilot AI</span>
         </Link>
@@ -89,7 +89,7 @@ export default function Landing() {
             <div className="logo-3d">
               <div className="logo-3d-orbit" />
               <div className="logo-3d-core">
-                <img src={arcLogo.url} alt="Arc" className="logo-3d-image" draggable={false} />
+                <img src={arcLogo} alt="Arc" className="logo-3d-image" draggable={false} />
               </div>
             </div>
           </div>

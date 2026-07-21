@@ -3,7 +3,7 @@ import {
   BookOpen, CalendarClock, FileBarChart, LayoutDashboard, LifeBuoy, MessageSquare, PieChart, Target,
 } from "lucide-react";
 
-import arcLogo from "@/assets/arc-logo.jpg.asset.json";
+import arcLogo from "@/assets/arc-logo.jpg";
 
 import { WalletButton } from "@/components/wallet-button";
 import { cn } from "@/lib/utils";
@@ -37,7 +37,7 @@ function AppLayout() {
       <aside className="hidden w-64 shrink-0 border-r border-border/60 bg-card/40 backdrop-blur-xl md:flex md:flex-col">
         <div className="flex h-16 items-center gap-2 px-6">
           <div className="grid h-8 w-8 place-items-center overflow-hidden rounded-xl bg-[image:var(--gradient-brand)] shadow-glow">
-            <img src={arcLogo.url} alt="Arc" className="h-full w-full object-cover" draggable={false} />
+            <img src={arcLogo} alt="Arc" className="h-full w-full object-cover" draggable={false} />
           </div>
           <span className="text-base font-semibold">ArcPilot</span>
         </div>
@@ -76,7 +76,7 @@ function AppLayout() {
         <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-border/60 bg-background/70 px-6 backdrop-blur-xl">
           <div className="flex items-center gap-3 md:hidden">
             <div className="grid h-8 w-8 place-items-center overflow-hidden rounded-xl bg-[image:var(--gradient-brand)]">
-              <img src={arcLogo.url} alt="Arc" className="h-full w-full object-cover" draggable={false} />
+              <img src={arcLogo} alt="Arc" className="h-full w-full object-cover" draggable={false} />
             </div>
             <span className="font-semibold">ArcPilot</span>
           </div>
