@@ -240,4 +240,10 @@ export const ARC_CHAT_SUGGESTIONS: { label: string; prompt: string }[] = [
   { label: "Contract addresses", prompt: "Where do I find canonical USDC, EURC, CCTP, and Gateway addresses on Arc?" },
   { label: "Architects program", prompt: "What is the Arc Architects program and how do I earn points?" },
   { label: "Mainnet timeline", prompt: "When is Arc mainnet launching and what's the current testnet status?" },
+  { label: "What should I build on Arc?", prompt: "Suggest 5 concrete project ideas I could build on Arc Testnet right now, ranked by difficulty. For each: what it does, which Arc features it uses (USDC gas, CCTP, App Kit, FX, agents, privacy), and a rough tech stack." },
+  { label: "Beginner build ideas", prompt: "I'm new to Arc. Give me 3 beginner-friendly project ideas I can ship on Arc Testnet in a weekend, with step-by-step build outlines." },
+  { label: "AI agent project ideas", prompt: "Suggest project ideas that use Arc's agentic economy (ERC-8004 identity + ERC-8183 jobs) with USDC-native settlement. Give me 3 concrete ideas with example flows." },
+  { label: "Payments app ideas", prompt: "What kinds of stablecoin payment apps make sense on Arc Testnet? Suggest 4 ideas (P2P, ecommerce, payroll, subscriptions) with the core contracts and UX I'd need." },
+  { label: "RWA / tokenization ideas", prompt: "Give me 3 real-world-asset tokenization project ideas that fit Arc's compliance + privacy features, with the primitives I'd use for each." },
+  { label: "Hackathon-winning idea", prompt: "Suggest a hackathon-winning ArcPilot-style idea I can build on Arc Testnet this week. Include the pitch, key Arc features used, MVP scope, and a build plan." },
 ];
