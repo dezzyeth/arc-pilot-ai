@@ -55,7 +55,7 @@ export const Route = createFileRoute("/api/chat")({
             headers: { Authorization: `Bearer ${geminiKey}` },
           });
           model = google("gemini-3.1-flash-lite");
-        } else if (lovableKey) {
+        } else {
           const gateway = createLovableAiGatewayProvider(lovableKey);
           model = gateway("google/gemini-3.1-flash-lite");
         }
