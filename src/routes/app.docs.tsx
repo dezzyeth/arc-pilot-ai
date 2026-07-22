@@ -745,7 +745,7 @@ function DocsPage() {
                 ))}
               </div>
               <p className="mt-3 text-[13px] text-slate-500">
-                <b className="text-slate-300">Presale (May 2026)</b>: raised $222M at a $3B FDV, led by a16z crypto.
+                <b className="text-slate-300">Presale (May 2026):</b> raised $222M at a $3B FDV, led by a16z crypto.
               </p>
             </div>
           </Section>
