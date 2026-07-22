@@ -172,17 +172,17 @@ const PROPERTIES = [
   {
     icon: Activity,
     title: "Consensus",
-    body: "Malachite BFT consensus engine built by ex-Informal Systems engineers, in the Tendermint lineage. Optimized for high throughput and deterministic ordering. Initial validator set is permissioned, with a roadmap toward open PoS.",
+    body: "Malachite is a BFT consensus engine built by former Informal Systems engineers, in the Tendermint lineage. It is optimized for high throughput and deterministic ordering. The initial validator set is permissioned, with a roadmap toward open PoS.",
   },
   {
     icon: Gauge,
     title: "Finality",
-    body: "Sub-second deterministic finality. Every included transaction is settled — not 'probably safe' after N confirmations. This unlocks real-time payments, FX, and capital markets settlement.",
+    body: "Sub-second deterministic finality. Every included transaction is settled once it lands, with no need to wait for extra confirmations. That is what makes real-time payments, FX, and capital markets settlement viable.",
   },
   {
     icon: Eye,
     title: "Privacy",
-    body: "Opt-in configurable privacy lets applications hide balances and history while remaining auditable for compliance. Designed for institutions and regulated flows.",
+    body: "Opt-in configurable privacy lets applications hide balances and history while remaining auditable for compliance. It is designed for institutions and regulated flows.",
   },
   {
     icon: Lock,
@@ -192,22 +192,22 @@ const PROPERTIES = [
   {
     icon: Link2,
     title: "Composability",
-    body: "Full EVM compatibility means Solidity, Foundry, Hardhat, Remix, wagmi, viem, and ethers all work out of the box. Cross-chain composability via CCTP and Circle's stack.",
+    body: "Full EVM compatibility means Solidity, Foundry, Hardhat, Remix, wagmi, viem, and ethers all work out of the box. Cross-chain composability is handled through CCTP and the rest of Circle's stack.",
   },
   {
     icon: DollarSign,
     title: "FX Engine",
-    body: "Built-in real-time onchain FX with transparent pricing, instant settlement, and predictable dollar-denominated fees — first-class support for stablecoin foreign exchange.",
+    body: "Built-in onchain FX with transparent pricing, instant settlement, and predictable dollar-denominated fees. Stablecoin foreign exchange is a first-class primitive.",
   },
 ];
 
 const USE_CASES = [
   { icon: Wallet, title: "Peer-to-Peer Payments", desc: "Instant, low-cost stablecoin transfers with deterministic settlement." },
   { icon: Building2, title: "eCommerce Checkout", desc: "Accept stablecoin payments with fast settlement and built-in compliance." },
-  { icon: DollarSign, title: "Stablecoin FX", desc: "Real-time onchain FX with transparent pricing and predictable fees." },
+  { icon: DollarSign, title: "Stablecoin FX", desc: "Onchain FX with transparent pricing and predictable fees." },
   { icon: Database, title: "RWAs & Tokenization", desc: "Issuance, settlement, FX, and compliance-ready privacy for real-world assets." },
   { icon: Layers, title: "Lending & Prediction Markets", desc: "Stablecoin-native financial primitives with instant settlement." },
-  { icon: Sparkles, title: "Agentic Economy", desc: "AI agents with onchain identity (ERC-8004) that contract (ERC-8183) and settle 24/7 in USDC." },
+  { icon: Sparkles, title: "Agentic Economy", desc: "AI agents with onchain identity (ERC-8004) that can contract (ERC-8183) and settle 24/7 in USDC." },
 ];
 
 // ---------- Small UI atoms ----------
