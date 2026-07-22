@@ -540,18 +540,18 @@ function DocsPage() {
             <SectionHeading id="what-is">What is Arc?</SectionHeading>
             <div className="mt-4 space-y-4 text-[16px] leading-[1.7] text-slate-300">
               <p>
-                Arc is a stablecoin-native Layer-1 that turns dollars into a first-class primitive. USDC is not
-                just a token on the chain — it's the fuel. Every transaction, every contract deployment, every
-                agent action pays for itself in stable, dollar-denominated value.
+                Arc is a stablecoin-native Layer-1 that treats dollars as a first-class primitive. USDC is not
+                just a token on the chain, it is the fuel. Every transaction, contract deployment, and agent action
+                pays for itself in stable, dollar-denominated value.
               </p>
               <p>
                 Where general-purpose chains treat payments as one workload among many, Arc treats them as the
                 workload. Consensus, gas mechanics, FX, and privacy are all designed around the assumption that
-                money is moving — and that it needs to settle deterministically, cheaply, and compliantly.
+                money is moving and that it needs to settle deterministically, cheaply, and compliantly.
               </p>
               <p>
                 The chain is <b className="text-white">EVM-compatible</b>, so existing Solidity contracts, Foundry
-                pipelines, and wagmi/viem frontends work today. What's new is what surrounds them: native USDC
+                pipelines, and wagmi and viem frontends work today. What is new is what surrounds them: native USDC
                 gas, sub-second finality, an onchain FX engine, opt-in privacy, and deep integration with Circle's
                 CCTP and Gateway.
               </p>
