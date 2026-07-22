@@ -525,12 +525,12 @@ function DocsPage() {
             <Card className="mt-4 p-6">
               <p className="text-[16px] leading-[1.7] text-slate-300">
                 Arc is an <b className="text-white">open, EVM-compatible Layer-1 blockchain</b> purpose-built for{" "}
-                <b className="text-white">stablecoin-native economic activity</b> — payments, FX, capital markets,
-                tokenized assets (RWAs), lending, and the agentic (AI) economy. Unlike general-purpose chains, Arc
+                <b className="text-white">stablecoin-native economic activity</b>. It targets payments, FX, capital markets,
+                tokenized assets (RWAs), lending, and the agentic AI economy. Unlike general-purpose chains, Arc
                 is optimized for real-world money movement with <b className="text-white">USDC as the native gas token</b>.
               </p>
               <p className="mt-3 text-[15px] italic text-slate-400">
-                "The Economic OS for the internet." — Built by <b className="text-white not-italic">Circle</b>, the issuer of USDC.
+                "The Economic OS for the internet." Built by <b className="text-white not-italic">Circle</b>, the issuer of USDC.
               </p>
             </Card>
           </Section>
