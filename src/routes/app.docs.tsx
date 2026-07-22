@@ -124,10 +124,10 @@ const HIGHLIGHTS = [
 ];
 
 const PROBLEMS = [
-  { icon: Zap, text: "Volatile gas tokens (ETH, SOL) making fees unpredictable" },
-  { icon: Layers, text: "Fragmented liquidity across L1s and L2s" },
-  { icon: Shield, text: "Weak compliance and privacy trade-offs for institutions" },
-  { icon: Timer, text: "Probabilistic finality — no true 'settled' moment" },
+  { icon: Zap, text: "Volatile gas tokens like ETH and SOL make fees unpredictable." },
+  { icon: Layers, text: "Liquidity is fragmented across L1s and L2s." },
+  { icon: Shield, text: "Institutions face weak compliance tooling and hard privacy trade-offs." },
+  { icon: Timer, text: "Probabilistic finality leaves no clear settled moment." },
 ];
 
 const NETWORK_ROWS: { label: string; value: string; copy?: string }[] = [
