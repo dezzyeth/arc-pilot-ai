@@ -461,7 +461,7 @@ function DocsPage() {
               Arc Documentation
             </h1>
             <p className="mt-3 max-w-2xl text-[18px] leading-[1.6] text-slate-400">
-              Everything ArcPilot knows about <span className="font-semibold text-white">Arc</span> — Circle's
+              Everything ArcPilot knows about <span className="font-semibold text-white">Arc</span>, Circle's
               Layer-1 for programmable money. Ask the AI Chat anything from these topics.
             </p>
 
