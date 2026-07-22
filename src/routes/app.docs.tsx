@@ -44,7 +44,7 @@ export const Route = createFileRoute("/app/docs")({
       {
         name: "description",
         content:
-          "The complete Arc knowledge base — network, agentic economy, and builder resources — reimagined as a premium documentation experience.",
+          "The complete Arc knowledge base covering the network, agentic economy, and builder resources in one focused documentation experience.",
       },
     ],
   }),
