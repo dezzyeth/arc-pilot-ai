@@ -613,9 +613,9 @@ function DocsPage() {
               </div>
               <p className="text-[16px] leading-[1.7] text-slate-200">
                 Arc makes <b className="text-white">stablecoins the native medium</b> and gives builders
-                enterprise-grade reliability plus composability across chains via Circle's stack. Predictable
-                USDC-denominated fees, deterministic sub-second finality, native cross-chain USDC through CCTP,
-                and opt-in configurable privacy — all on an EVM-compatible base that ships with Solidity today.
+                enterprise-grade reliability plus composability across chains through Circle's stack. That means
+                predictable USDC-denominated fees, deterministic sub-second finality, native cross-chain USDC via
+                CCTP, and opt-in configurable privacy, all on an EVM-compatible base that ships with Solidity today.
               </p>
             </div>
           </Section>
