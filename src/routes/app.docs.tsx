@@ -44,7 +44,7 @@ export const Route = createFileRoute("/app/docs")({
       {
         name: "description",
         content:
-          "The complete Arc knowledge base — network, agentic economy, and builder resources — reimagined as a premium documentation experience.",
+          "The complete Arc knowledge base covering the network, agentic economy, and builder resources in one focused documentation experience.",
       },
     ],
   }),
@@ -94,40 +94,40 @@ const HIGHLIGHTS = [
   {
     icon: Coins,
     title: "USDC Native Gas",
-    desc: "No ETH, no volatile token. Fees are stable, low, and dollar-denominated — often under $0.01–0.05 per transaction on testnet.",
+    desc: "No ETH. No volatile gas token. Fees are stable and dollar-denominated, typically well under a cent on testnet.",
   },
   {
     icon: Gauge,
     title: "Deterministic Finality",
-    desc: "True sub-second settlement. Transactions are final in under 1 second — not 'probably safe' after N confirmations.",
+    desc: "Sub-second settlement with no confirmation guessing. Once a transaction lands, it is final.",
   },
   {
     icon: DollarSign,
     title: "Built-in FX Engine",
-    desc: "Real-time onchain FX with transparent pricing, instant settlement, and predictable, dollar-denominated fees.",
+    desc: "Onchain foreign exchange with transparent pricing, instant settlement, and predictable dollar fees.",
   },
   {
     icon: Blocks,
     title: "EVM Compatible",
-    desc: "Deploy Solidity with Foundry, Hardhat, or Remix. Build frontends with wagmi + viem or ethers — same tooling, new economics.",
+    desc: "Ship Solidity with Foundry, Hardhat, or Remix. Build frontends with wagmi and viem or ethers. Same tools, new economics.",
   },
   {
     icon: Network,
     title: "Deep Circle Integration",
-    desc: "Native USDC, EURC, CCTP for cross-chain USDC, Gateway, Circle Wallets, and institutional on/off-ramps built in.",
+    desc: "Native USDC and EURC, CCTP for cross-chain USDC, Gateway, Circle Wallets, and institutional on and off ramps.",
   },
   {
     icon: Eye,
     title: "Privacy Controls",
-    desc: "Opt-in configurable privacy hides balances and history while staying auditable for compliance. Post-quantum security on the roadmap.",
+    desc: "Opt-in configurable privacy hides balances and history while staying auditable for compliance. Post-quantum security is on the roadmap.",
   },
 ];
 
 const PROBLEMS = [
-  { icon: Zap, text: "Volatile gas tokens (ETH, SOL) making fees unpredictable" },
-  { icon: Layers, text: "Fragmented liquidity across L1s and L2s" },
-  { icon: Shield, text: "Weak compliance and privacy trade-offs for institutions" },
-  { icon: Timer, text: "Probabilistic finality — no true 'settled' moment" },
+  { icon: Zap, text: "Volatile gas tokens like ETH and SOL make fees unpredictable." },
+  { icon: Layers, text: "Liquidity is fragmented across L1s and L2s." },
+  { icon: Shield, text: "Institutions face weak compliance tooling and hard privacy trade-offs." },
+  { icon: Timer, text: "Probabilistic finality leaves no clear settled moment." },
 ];
 
 const NETWORK_ROWS: { label: string; value: string; copy?: string }[] = [
@@ -140,19 +140,19 @@ const NETWORK_ROWS: { label: string; value: string; copy?: string }[] = [
 ];
 
 const TIMELINE = [
-  { title: "Public Testnet Live", desc: "Millions of transactions per week — testnet is active and growing.", status: "done" as const },
-  { title: "Builder Programs", desc: "Arc House, Architects program, and Circle × Arc hackathons drive adoption.", status: "done" as const },
-  { title: "Mainnet Launch", desc: "Targeted for 2026. Initial validator set is permissioned at launch.", status: "current" as const },
+  { title: "Public Testnet Live", desc: "Millions of transactions per week. The testnet is active and growing.", status: "done" as const },
+  { title: "Builder Programs", desc: "Arc House, the Architects program, and Circle x Arc hackathons are driving adoption.", status: "done" as const },
+  { title: "Mainnet Launch", desc: "Targeted for 2026. The initial validator set is permissioned at launch.", status: "current" as const },
   { title: "Open PoS Roadmap", desc: "Progressive decentralization toward an open, staked validator set.", status: "future" as const },
 ];
 
 const ECOSYSTEM = ["USDC", "EURC", "CCTP", "Gateway", "Circle Wallets", "On/Off Ramps", "App Kit", "Unified Balance"];
 
 const FOUNDERS = [
-  { name: "Jeremy Allaire", role: "Co-founder, Chairman & CEO", org: "Circle", note: "Main visionary — has pushed internet-native money for a decade." },
-  { name: "Nikhil Chandhok", role: "Chief Product & Technology Officer", org: "Circle", note: "Deeply involved in Arc's product and technology decisions." },
+  { name: "Jeremy Allaire", role: "Co-founder, Chairman & CEO", org: "Circle", note: "The main visionary behind Arc. Has been pushing internet-native money for over a decade." },
+  { name: "Nikhil Chandhok", role: "Chief Product & Technology Officer", org: "Circle", note: "Deeply involved in Arc's product and technology direction." },
   { name: "Sean Neville", role: "Co-founder", org: "Circle / Catena Labs", note: "Focused on AI-native finance at Catena Labs." },
-  { name: "Malachite Team", role: "BFT Consensus Engineers", org: "ex-Informal Systems", note: "Joined Circle to build Arc's high-performance Tendermint-lineage consensus." },
+  { name: "Malachite Team", role: "BFT Consensus Engineers", org: "ex-Informal Systems", note: "Joined Circle to build Arc's high-performance consensus in the Tendermint lineage." },
 ];
 
 const BACKERS = ["a16z crypto", "BlackRock", "Apollo", "NYSE (ICE)", "ARK Invest"];
@@ -172,17 +172,17 @@ const PROPERTIES = [
   {
     icon: Activity,
     title: "Consensus",
-    body: "Malachite BFT consensus engine built by ex-Informal Systems engineers, in the Tendermint lineage. Optimized for high throughput and deterministic ordering. Initial validator set is permissioned, with a roadmap toward open PoS.",
+    body: "Malachite is a BFT consensus engine built by former Informal Systems engineers, in the Tendermint lineage. It is optimized for high throughput and deterministic ordering. The initial validator set is permissioned, with a roadmap toward open PoS.",
   },
   {
     icon: Gauge,
     title: "Finality",
-    body: "Sub-second deterministic finality. Every included transaction is settled — not 'probably safe' after N confirmations. This unlocks real-time payments, FX, and capital markets settlement.",
+    body: "Sub-second deterministic finality. Every included transaction is settled once it lands, with no need to wait for extra confirmations. That is what makes real-time payments, FX, and capital markets settlement viable.",
   },
   {
     icon: Eye,
     title: "Privacy",
-    body: "Opt-in configurable privacy lets applications hide balances and history while remaining auditable for compliance. Designed for institutions and regulated flows.",
+    body: "Opt-in configurable privacy lets applications hide balances and history while remaining auditable for compliance. It is designed for institutions and regulated flows.",
   },
   {
     icon: Lock,
@@ -192,22 +192,22 @@ const PROPERTIES = [
   {
     icon: Link2,
     title: "Composability",
-    body: "Full EVM compatibility means Solidity, Foundry, Hardhat, Remix, wagmi, viem, and ethers all work out of the box. Cross-chain composability via CCTP and Circle's stack.",
+    body: "Full EVM compatibility means Solidity, Foundry, Hardhat, Remix, wagmi, viem, and ethers all work out of the box. Cross-chain composability is handled through CCTP and the rest of Circle's stack.",
   },
   {
     icon: DollarSign,
     title: "FX Engine",
-    body: "Built-in real-time onchain FX with transparent pricing, instant settlement, and predictable dollar-denominated fees — first-class support for stablecoin foreign exchange.",
+    body: "Built-in onchain FX with transparent pricing, instant settlement, and predictable dollar-denominated fees. Stablecoin foreign exchange is a first-class primitive.",
   },
 ];
 
 const USE_CASES = [
   { icon: Wallet, title: "Peer-to-Peer Payments", desc: "Instant, low-cost stablecoin transfers with deterministic settlement." },
   { icon: Building2, title: "eCommerce Checkout", desc: "Accept stablecoin payments with fast settlement and built-in compliance." },
-  { icon: DollarSign, title: "Stablecoin FX", desc: "Real-time onchain FX with transparent pricing and predictable fees." },
+  { icon: DollarSign, title: "Stablecoin FX", desc: "Onchain FX with transparent pricing and predictable fees." },
   { icon: Database, title: "RWAs & Tokenization", desc: "Issuance, settlement, FX, and compliance-ready privacy for real-world assets." },
   { icon: Layers, title: "Lending & Prediction Markets", desc: "Stablecoin-native financial primitives with instant settlement." },
-  { icon: Sparkles, title: "Agentic Economy", desc: "AI agents with onchain identity (ERC-8004) that contract (ERC-8183) and settle 24/7 in USDC." },
+  { icon: Sparkles, title: "Agentic Economy", desc: "AI agents with onchain identity (ERC-8004) that can contract (ERC-8183) and settle 24/7 in USDC." },
 ];
 
 // ---------- Small UI atoms ----------
@@ -461,7 +461,7 @@ function DocsPage() {
               Arc Documentation
             </h1>
             <p className="mt-3 max-w-2xl text-[18px] leading-[1.6] text-slate-400">
-              Everything ArcPilot knows about <span className="font-semibold text-white">Arc</span> — Circle's
+              Everything ArcPilot knows about <span className="font-semibold text-white">Arc</span>, Circle's
               Layer-1 for programmable money. Ask the AI Chat anything from these topics.
             </p>
 
@@ -525,12 +525,12 @@ function DocsPage() {
             <Card className="mt-4 p-6">
               <p className="text-[16px] leading-[1.7] text-slate-300">
                 Arc is an <b className="text-white">open, EVM-compatible Layer-1 blockchain</b> purpose-built for{" "}
-                <b className="text-white">stablecoin-native economic activity</b> — payments, FX, capital markets,
-                tokenized assets (RWAs), lending, and the agentic (AI) economy. Unlike general-purpose chains, Arc
+                <b className="text-white">stablecoin-native economic activity</b>. It targets payments, FX, capital markets,
+                tokenized assets (RWAs), lending, and the agentic AI economy. Unlike general-purpose chains, Arc
                 is optimized for real-world money movement with <b className="text-white">USDC as the native gas token</b>.
               </p>
               <p className="mt-3 text-[15px] italic text-slate-400">
-                "The Economic OS for the internet." — Built by <b className="text-white not-italic">Circle</b>, the issuer of USDC.
+                "The Economic OS for the internet." Built by <b className="text-white not-italic">Circle</b>, the issuer of USDC.
               </p>
             </Card>
           </Section>
@@ -540,18 +540,18 @@ function DocsPage() {
             <SectionHeading id="what-is">What is Arc?</SectionHeading>
             <div className="mt-4 space-y-4 text-[16px] leading-[1.7] text-slate-300">
               <p>
-                Arc is a stablecoin-native Layer-1 that turns dollars into a first-class primitive. USDC is not
-                just a token on the chain — it's the fuel. Every transaction, every contract deployment, every
-                agent action pays for itself in stable, dollar-denominated value.
+                Arc is a stablecoin-native Layer-1 that treats dollars as a first-class primitive. USDC is not
+                just a token on the chain, it is the fuel. Every transaction, contract deployment, and agent action
+                pays for itself in stable, dollar-denominated value.
               </p>
               <p>
                 Where general-purpose chains treat payments as one workload among many, Arc treats them as the
                 workload. Consensus, gas mechanics, FX, and privacy are all designed around the assumption that
-                money is moving — and that it needs to settle deterministically, cheaply, and compliantly.
+                money is moving and that it needs to settle deterministically, cheaply, and compliantly.
               </p>
               <p>
                 The chain is <b className="text-white">EVM-compatible</b>, so existing Solidity contracts, Foundry
-                pipelines, and wagmi/viem frontends work today. What's new is what surrounds them: native USDC
+                pipelines, and wagmi and viem frontends work today. What is new is what surrounds them: native USDC
                 gas, sub-second finality, an onchain FX engine, opt-in privacy, and deep integration with Circle's
                 CCTP and Gateway.
               </p>
@@ -613,9 +613,9 @@ function DocsPage() {
               </div>
               <p className="text-[16px] leading-[1.7] text-slate-200">
                 Arc makes <b className="text-white">stablecoins the native medium</b> and gives builders
-                enterprise-grade reliability plus composability across chains via Circle's stack. Predictable
-                USDC-denominated fees, deterministic sub-second finality, native cross-chain USDC through CCTP,
-                and opt-in configurable privacy — all on an EVM-compatible base that ships with Solidity today.
+                enterprise-grade reliability plus composability across chains through Circle's stack. That means
+                predictable USDC-denominated fees, deterministic sub-second finality, native cross-chain USDC via
+                CCTP, and opt-in configurable privacy, all on an EVM-compatible base that ships with Solidity today.
               </p>
             </div>
           </Section>
@@ -745,7 +745,7 @@ function DocsPage() {
                 ))}
               </div>
               <p className="mt-3 text-[13px] text-slate-500">
-                <b className="text-slate-300">Presale (May 2026)</b>: raised $222M at a $3B FDV, led by a16z crypto.
+                <b className="text-slate-300">Presale (May 2026):</b> raised $222M at a $3B FDV, led by a16z crypto.
               </p>
             </div>
           </Section>
