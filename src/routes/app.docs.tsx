@@ -94,32 +94,32 @@ const HIGHLIGHTS = [
   {
     icon: Coins,
     title: "USDC Native Gas",
-    desc: "No ETH, no volatile token. Fees are stable, low, and dollar-denominated — often under $0.01–0.05 per transaction on testnet.",
+    desc: "No ETH. No volatile gas token. Fees are stable and dollar-denominated, typically well under a cent on testnet.",
   },
   {
     icon: Gauge,
     title: "Deterministic Finality",
-    desc: "True sub-second settlement. Transactions are final in under 1 second — not 'probably safe' after N confirmations.",
+    desc: "Sub-second settlement with no confirmation guessing. Once a transaction lands, it is final.",
   },
   {
     icon: DollarSign,
     title: "Built-in FX Engine",
-    desc: "Real-time onchain FX with transparent pricing, instant settlement, and predictable, dollar-denominated fees.",
+    desc: "Onchain foreign exchange with transparent pricing, instant settlement, and predictable dollar fees.",
   },
   {
     icon: Blocks,
     title: "EVM Compatible",
-    desc: "Deploy Solidity with Foundry, Hardhat, or Remix. Build frontends with wagmi + viem or ethers — same tooling, new economics.",
+    desc: "Ship Solidity with Foundry, Hardhat, or Remix. Build frontends with wagmi and viem or ethers. Same tools, new economics.",
   },
   {
     icon: Network,
     title: "Deep Circle Integration",
-    desc: "Native USDC, EURC, CCTP for cross-chain USDC, Gateway, Circle Wallets, and institutional on/off-ramps built in.",
+    desc: "Native USDC and EURC, CCTP for cross-chain USDC, Gateway, Circle Wallets, and institutional on and off ramps.",
   },
   {
     icon: Eye,
     title: "Privacy Controls",
-    desc: "Opt-in configurable privacy hides balances and history while staying auditable for compliance. Post-quantum security on the roadmap.",
+    desc: "Opt-in configurable privacy hides balances and history while staying auditable for compliance. Post-quantum security is on the roadmap.",
   },
 ];
 
