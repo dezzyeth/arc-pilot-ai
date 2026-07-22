@@ -140,19 +140,19 @@ const NETWORK_ROWS: { label: string; value: string; copy?: string }[] = [
 ];
 
 const TIMELINE = [
-  { title: "Public Testnet Live", desc: "Millions of transactions per week — testnet is active and growing.", status: "done" as const },
-  { title: "Builder Programs", desc: "Arc House, Architects program, and Circle × Arc hackathons drive adoption.", status: "done" as const },
-  { title: "Mainnet Launch", desc: "Targeted for 2026. Initial validator set is permissioned at launch.", status: "current" as const },
+  { title: "Public Testnet Live", desc: "Millions of transactions per week. The testnet is active and growing.", status: "done" as const },
+  { title: "Builder Programs", desc: "Arc House, the Architects program, and Circle x Arc hackathons are driving adoption.", status: "done" as const },
+  { title: "Mainnet Launch", desc: "Targeted for 2026. The initial validator set is permissioned at launch.", status: "current" as const },
   { title: "Open PoS Roadmap", desc: "Progressive decentralization toward an open, staked validator set.", status: "future" as const },
 ];
 
 const ECOSYSTEM = ["USDC", "EURC", "CCTP", "Gateway", "Circle Wallets", "On/Off Ramps", "App Kit", "Unified Balance"];
 
 const FOUNDERS = [
-  { name: "Jeremy Allaire", role: "Co-founder, Chairman & CEO", org: "Circle", note: "Main visionary — has pushed internet-native money for a decade." },
-  { name: "Nikhil Chandhok", role: "Chief Product & Technology Officer", org: "Circle", note: "Deeply involved in Arc's product and technology decisions." },
+  { name: "Jeremy Allaire", role: "Co-founder, Chairman & CEO", org: "Circle", note: "The main visionary behind Arc. Has been pushing internet-native money for over a decade." },
+  { name: "Nikhil Chandhok", role: "Chief Product & Technology Officer", org: "Circle", note: "Deeply involved in Arc's product and technology direction." },
   { name: "Sean Neville", role: "Co-founder", org: "Circle / Catena Labs", note: "Focused on AI-native finance at Catena Labs." },
-  { name: "Malachite Team", role: "BFT Consensus Engineers", org: "ex-Informal Systems", note: "Joined Circle to build Arc's high-performance Tendermint-lineage consensus." },
+  { name: "Malachite Team", role: "BFT Consensus Engineers", org: "ex-Informal Systems", note: "Joined Circle to build Arc's high-performance consensus in the Tendermint lineage." },
 ];
 
 const BACKERS = ["a16z crypto", "BlackRock", "Apollo", "NYSE (ICE)", "ARK Invest"];
