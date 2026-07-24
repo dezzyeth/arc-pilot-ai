@@ -14,8 +14,11 @@ import {
 } from "wagmi";
 
 import { Button } from "@/components/ui/button";
+import { AgentWalletCard, useAgentWallet } from "@/components/agent-wallet-card";
 import { ExplorerLink } from "@/components/explorer-link";
 import { Input } from "@/components/ui/input";
+import { WalletBadge } from "@/components/wallet-badge";
+import { X402JobForm } from "@/components/x402-job-form";
 import { supabase } from "@/integrations/supabase/client";
 import { ARC_CHAIN_ID } from "@/lib/chains";
 import { ensureArcChain } from "@/lib/ensure-arc-chain";
