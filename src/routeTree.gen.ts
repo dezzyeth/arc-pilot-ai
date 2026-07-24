@@ -23,6 +23,9 @@ import { Route as AppBudgetsRouteImport } from './routes/app.budgets'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as ApiPaidRiskRouteImport } from './routes/api/paid/risk'
+import { Route as ApiPaidReportsRouteImport } from './routes/api/paid/reports'
+import { Route as ApiPaidInsightRouteImport } from './routes/api/paid/insight'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 
 const McpRoute = McpRouteImport.update({
@@ -97,6 +100,21 @@ const Char91DotmcpChar93ListToolsRoute =
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPaidRiskRoute = ApiPaidRiskRouteImport.update({
+  id: '/api/paid/risk',
+  path: '/api/paid/risk',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPaidReportsRoute = ApiPaidReportsRouteImport.update({
+  id: '/api/paid/reports',
+  path: '/api/paid/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPaidInsightRoute = ApiPaidInsightRouteImport.update({
+  id: '/api/paid/insight',
+  path: '/api/paid/insight',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
     id: '/.mcp/invoke-tool/$tool',
@@ -120,6 +138,9 @@ export interface FileRoutesByFullPath {
   '/app/reports': typeof AppReportsRoute
   '/app/': typeof AppIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/api/paid/insight': typeof ApiPaidInsightRoute
+  '/api/paid/reports': typeof ApiPaidReportsRoute
+  '/api/paid/risk': typeof ApiPaidRiskRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -136,6 +157,9 @@ export interface FileRoutesByTo {
   '/app/reports': typeof AppReportsRoute
   '/app': typeof AppIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/api/paid/insight': typeof ApiPaidInsightRoute
+  '/api/paid/reports': typeof ApiPaidReportsRoute
+  '/api/paid/risk': typeof ApiPaidRiskRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -154,6 +178,9 @@ export interface FileRoutesById {
   '/app/reports': typeof AppReportsRoute
   '/app/': typeof AppIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/api/paid/insight': typeof ApiPaidInsightRoute
+  '/api/paid/reports': typeof ApiPaidReportsRoute
+  '/api/paid/risk': typeof ApiPaidRiskRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -173,6 +200,9 @@ export interface FileRouteTypes {
     | '/app/reports'
     | '/app/'
     | '/.mcp/invoke-tool/$tool'
+    | '/api/paid/insight'
+    | '/api/paid/reports'
+    | '/api/paid/risk'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -189,6 +219,9 @@ export interface FileRouteTypes {
     | '/app/reports'
     | '/app'
     | '/.mcp/invoke-tool/$tool'
+    | '/api/paid/insight'
+    | '/api/paid/reports'
+    | '/api/paid/risk'
   id:
     | '__root__'
     | '/'
@@ -206,6 +239,9 @@ export interface FileRouteTypes {
     | '/app/reports'
     | '/app/'
     | '/.mcp/invoke-tool/$tool'
+    | '/api/paid/insight'
+    | '/api/paid/reports'
+    | '/api/paid/risk'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -216,6 +252,9 @@ export interface RootRouteChildren {
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ApiChatRoute: typeof ApiChatRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
+  ApiPaidInsightRoute: typeof ApiPaidInsightRoute
+  ApiPaidReportsRoute: typeof ApiPaidReportsRoute
+  ApiPaidRiskRoute: typeof ApiPaidRiskRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -318,6 +357,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/paid/risk': {
+      id: '/api/paid/risk'
+      path: '/api/paid/risk'
+      fullPath: '/api/paid/risk'
+      preLoaderRoute: typeof ApiPaidRiskRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/paid/reports': {
+      id: '/api/paid/reports'
+      path: '/api/paid/reports'
+      fullPath: '/api/paid/reports'
+      preLoaderRoute: typeof ApiPaidReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/paid/insight': {
+      id: '/api/paid/insight'
+      path: '/api/paid/insight'
+      fullPath: '/api/paid/insight'
+      preLoaderRoute: typeof ApiPaidInsightRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/.mcp/invoke-tool/$tool': {
       id: '/.mcp/invoke-tool/$tool'
       path: '/.mcp/invoke-tool/$tool'
@@ -361,6 +421,9 @@ const rootRouteChildren: RootRouteChildren = {
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ApiChatRoute: ApiChatRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
+  ApiPaidInsightRoute: ApiPaidInsightRoute,
+  ApiPaidReportsRoute: ApiPaidReportsRoute,
+  ApiPaidRiskRoute: ApiPaidRiskRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
