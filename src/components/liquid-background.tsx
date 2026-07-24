@@ -220,8 +220,10 @@ export function LiquidBackground() {
     document.addEventListener("visibilitychange", onVis);
 
     const start = performance.now();
-    const FRAME_MS = 1000 / 30; // cap to 30fps
     let lastDraw = 0;
+    // adaptive sampling
+    let sampleStart = performance.now();
+    let sampleFrames = 0;
     const tick = (now: number) => {
       if (hidden) return;
       raf = requestAnimationFrame(tick);
@@ -234,9 +236,28 @@ export function LiquidBackground() {
       gl.uniform1f(uMouseA, mouseCurr.a);
       gl.uniform1f(uTime, (now - start) * 0.001);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+      // adaptive quality — only when in auto mode
+      if (override === "auto") {
+        sampleFrames++;
+        const dt = now - sampleStart;
+        if (dt >= 2000) {
+          const fps = (sampleFrames * 1000) / dt;
+          const target = PRESETS[quality].fps;
+          if (fps < target * 0.7 && quality !== "low") {
+            applyQuality(quality === "high" ? "medium" : "low");
+          } else if (fps > target * 0.95 && quality !== "high") {
+            applyQuality(quality === "low" ? "medium" : "high");
+          }
+          sampleStart = now;
+          sampleFrames = 0;
+        }
+      }
+
       if (reduced) cancelAnimationFrame(raf);
     };
     raf = requestAnimationFrame(tick);
+
 
 
     return () => {
