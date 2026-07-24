@@ -155,11 +155,21 @@ function Dashboard() {
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.18 }}
+            className="mt-6"
+          >
+            <AgentWalletCard />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
             className="mt-6"
           >
             <EarningsCard />
           </motion.div>
+
 
           <motion.div
             initial={{ opacity: 0, y: 12 }}
