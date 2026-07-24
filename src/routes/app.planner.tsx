@@ -629,6 +629,7 @@ function PlannerPage() {
           )}
         </div>
       </div>
+      </>}
     </div>
   );
 }
