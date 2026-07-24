@@ -45,10 +45,10 @@ export function LiquidBackground() {
       }
 
       float field(vec2 p){
-        float t = u_time * 0.18;
+        float t = u_time * 0.035;
         vec2 q = vec2(fbm(p + vec2(0.0, t)), fbm(p + vec2(5.2, -t)));
-        vec2 r = vec2(fbm(p + 3.0*q + vec2(1.7,9.2) + t*0.8),
-                      fbm(p + 3.0*q + vec2(8.3,2.8) - t*0.7));
+        vec2 r = vec2(fbm(p + 3.0*q + vec2(1.7,9.2) + t*0.16),
+                      fbm(p + 3.0*q + vec2(8.3,2.8) - t*0.14));
         return fbm(p + 2.5*r);
       }
 
