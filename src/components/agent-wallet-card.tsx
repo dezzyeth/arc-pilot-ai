@@ -144,14 +144,12 @@ export function AgentWalletCard() {
       });
       // Optimistically credit the on-record Gateway balance so the UI
       // reflects the deposit immediately.
-      await supabase
-        .from("nanopayments_agent_wallet")
-        .update({
-          gateway_balance_usdc:
-            Number(row.gateway_balance_usdc) + Number(fundAmt),
-          updated_at: new Date().toISOString(),
-        })
-        .eq("owner_wallet", row.owner_wallet);
+      await creditFn({
+        data: {
+          ownerWallet: row.owner_wallet,
+          amountUsdc: Number(fundAmt),
+        },
+      });
       if (address) {
         await supabase.from("tx_log").insert({
           wallet: address.toLowerCase(),
