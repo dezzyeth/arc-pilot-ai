@@ -57,6 +57,7 @@ export function AgentWalletCard() {
   const { row, refresh } = useAgentWallet();
   const createFn = useServerFn(createAgentWallet);
   const updateFn = useServerFn(updateAgentCaps);
+  const creditFn = useServerFn(creditAgentBalance);
   const { sendTransactionAsync } = useSendTransaction();
 
   const [cap, setCap] = useState("0.05");
