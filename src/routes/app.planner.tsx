@@ -409,7 +409,13 @@ function PlannerPage() {
         </button>
       </div>
 
+      {tab === "x402" && (
+        <div className="mt-4">
+          <X402JobForm agentAddress={agentRow?.agent_address ?? null} />
+        </div>
+      )}
 
+      {tab === "onchain" && <>
       {/* Session key card */}
       <div className="glass mt-4 rounded-2xl p-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
