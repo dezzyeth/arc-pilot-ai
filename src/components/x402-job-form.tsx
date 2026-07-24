@@ -36,7 +36,7 @@ export function X402JobForm({ agentAddress }: { agentAddress: string | null }) {
   const { address } = useAccount();
   const { payFee, paying } = useActionFee();
 
-  const [url, setUrl] = useState("/api/paid/insight");
+  const [url, setUrl] = useState("/api/public/paid/insight");
   const [maxPrice, setMaxPrice] = useState("0.005");
   const [interval, setInterval] = useState(120);
   const [budget, setBudget] = useState("");
