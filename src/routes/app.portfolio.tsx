@@ -1,11 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { PieChart as PieIcon, TrendingUp, Wallet } from "lucide-react";
+import { PieChart as PieIcon, Radio, TrendingUp, Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
 import { formatUnits } from "viem";
 import { useAccount, useBalance, useChainId } from "wagmi";
 
+import { AgentWalletCard } from "@/components/agent-wallet-card";
 import { ExplorerLink } from "@/components/explorer-link";
+import { WalletBadge } from "@/components/wallet-badge";
 import { supabase } from "@/integrations/supabase/client";
 import { ARC_CHAIN_ID } from "@/lib/chains";
 import { cn } from "@/lib/utils";
