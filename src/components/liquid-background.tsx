@@ -45,10 +45,10 @@ export function LiquidBackground() {
       }
 
       float field(vec2 p){
-        float t = u_time * 0.18;
+        float t = u_time * 0.035;
         vec2 q = vec2(fbm(p + vec2(0.0, t)), fbm(p + vec2(5.2, -t)));
-        vec2 r = vec2(fbm(p + 3.0*q + vec2(1.7,9.2) + t*0.8),
-                      fbm(p + 3.0*q + vec2(8.3,2.8) - t*0.7));
+        vec2 r = vec2(fbm(p + 3.0*q + vec2(1.7,9.2) + t*0.16),
+                      fbm(p + 3.0*q + vec2(8.3,2.8) - t*0.14));
         return fbm(p + 2.5*r);
       }
 
@@ -68,7 +68,7 @@ export function LiquidBackground() {
         vec3 hiCol  = vec3(0.55, 0.85, 1.0);
         vec3 deep   = vec3(0.01, 0.02, 0.06);
 
-        float bands = 0.5 + 0.5*sin(n.x*6.2831 + n.y*3.0 + u_time*0.3);
+        float bands = 0.5 + 0.5*sin(n.x*6.2831 + n.y*3.0 + u_time*0.06);
         float spec  = pow(clamp(n.z, 0.0, 1.0), 8.0);
         float rim   = pow(1.0 - clamp(n.z, 0.0, 1.0), 2.5);
 
