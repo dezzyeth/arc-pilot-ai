@@ -45,9 +45,9 @@ const productLinks: { label: string; to: "/app" | "/app/chat" | "/app/portfolio"
 
 export default function Landing() {
   return (
-    <div className="relative min-h-screen w-full bg-[#050816] text-white selection:bg-[#956af7]/30 selection:text-white">
+    <div className="relative min-h-screen w-full text-white selection:bg-[#956af7]/30 selection:text-white">
       {/* Nav */}
-      <nav className="sticky top-0 z-50 flex items-center justify-between border-b border-white/5 bg-[#050816]/80 px-6 py-4 backdrop-blur-xl">
+      <nav className="sticky top-0 z-50 flex items-center justify-between border-b border-white/5 bg-[#050816]/50 px-6 py-4 backdrop-blur-xl">
         <Link to="/" className="flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#956af7]">
           <div className="grid h-8 w-8 place-items-center overflow-hidden rounded-lg bg-gradient-to-br from-[#956af7] to-[#4F8CFF]">
             <img src={arcLogo} alt="Arc" className="h-full w-full object-cover" draggable={false} />
