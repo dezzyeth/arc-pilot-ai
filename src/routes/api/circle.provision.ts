@@ -245,7 +245,7 @@ async function encryptEntitySecret(
   const encrypted = await crypto.subtle.encrypt(
     { name: "RSA-OAEP" },
     key,
-    secretBytes,
+    secretBytes.buffer.slice(secretBytes.byteOffset, secretBytes.byteOffset + secretBytes.byteLength) as ArrayBuffer,
   );
   return arrayBufferToBase64(encrypted);
 }
