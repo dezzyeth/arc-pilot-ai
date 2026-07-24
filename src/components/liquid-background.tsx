@@ -41,8 +41,8 @@ export function LiquidBackground() {
     let running = false;
 
     const tick = () => {
-      cx += (tx - cx) * 0.06;
-      cy += (ty - cy) * 0.06;
+      cx += (tx - cx) * 0.045;
+      cy += (ty - cy) * 0.045;
       el.style.setProperty("--px", `${cx.toFixed(2)}px`);
       el.style.setProperty("--py", `${cy.toFixed(2)}px`);
       if (Math.abs(tx - cx) < 0.1 && Math.abs(ty - cy) < 0.1) {
@@ -55,13 +55,14 @@ export function LiquidBackground() {
     const onMove = (e: MouseEvent) => {
       const nx = (e.clientX / window.innerWidth - 0.5) * 2;
       const ny = (e.clientY / window.innerHeight - 0.5) * 2;
-      tx = nx * 24;
-      ty = ny * 24;
+      tx = nx * 18;
+      ty = ny * 18;
       if (!running) {
         running = true;
         raf = requestAnimationFrame(tick);
       }
     };
+
 
     window.addEventListener("mousemove", onMove, { passive: true });
     return () => {
