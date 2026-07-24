@@ -1,6 +1,3 @@
-
-# ArcPilot AI
-
 # ArcPilot AI
 
 > **An AI-powered financial copilot built exclusively for Arc Testnet.**
