@@ -188,7 +188,7 @@ export default function Landing() {
             {steps.map((s, i) => {
               const accent = i === 0 ? "group-hover:text-[#956af7]/40" : i === 1 ? "group-hover:text-[#4F8CFF]/40" : "group-hover:text-white/30";
               return (
-                <div key={s.n} className="group flex flex-col gap-8 bg-[#050816] p-10 transition-colors hover:bg-white/[0.02]">
+                <div key={s.n} className="group flex flex-col gap-8 bg-[#050816]/60 p-10 backdrop-blur-sm transition-colors hover:bg-white/[0.02]">
                   <div className={`text-5xl font-black text-white/10 transition-colors ${accent}`}>{s.n}</div>
                   <div>
                     <h3 className="mb-3 text-xl font-bold">{s.t}</h3>
@@ -210,7 +210,7 @@ export default function Landing() {
           </div>
           <div className="grid gap-px overflow-hidden rounded-3xl border border-white/5 bg-white/5 md:grid-cols-2 lg:grid-cols-4">
             {features.map((f) => (
-              <div key={f.title} className="group flex flex-col gap-6 bg-[#050816] p-8 transition-colors hover:bg-white/[0.02]">
+              <div key={f.title} className="group flex flex-col gap-6 bg-[#050816]/60 p-8 backdrop-blur-sm transition-colors hover:bg-white/[0.02]">
                 <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-[#956af7] to-[#4F8CFF]">
                   <f.icon className="h-5 w-5 text-white" />
                 </div>
@@ -237,7 +237,7 @@ export default function Landing() {
               <Link
                 key={l.to}
                 to={l.to}
-                className="group flex items-center justify-between bg-[#050816] px-6 py-8 transition-colors hover:bg-white/[0.02] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#956af7]"
+                className="group flex items-center justify-between bg-[#050816]/60 px-6 py-8 backdrop-blur-sm transition-colors hover:bg-white/[0.02] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#956af7]"
               >
                 <span className="text-base font-bold tracking-tight">{l.label}</span>
                 <ArrowRight className="h-4 w-4 text-white/30 transition-all group-hover:translate-x-1 group-hover:text-[#956af7]" />
