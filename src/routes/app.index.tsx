@@ -15,6 +15,7 @@ import { formatUnits } from "viem";
 import { useAccount, useBalance, useChainId } from "wagmi";
 
 import { Button } from "@/components/ui/button";
+import { CircleWalletCard } from "@/components/circle-wallet-card";
 import { ARC_CHAIN_ID, arcTestnet } from "@/lib/chains";
 import { cn } from "@/lib/utils";
 
