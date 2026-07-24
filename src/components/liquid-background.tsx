@@ -86,6 +86,8 @@ export function LiquidBackground() {
         <div className="lm-bloom lm-bloom-bc" style={{ animationPlayState: playState }} />
         <div className="lm-bloom lm-bloom-fr" style={{ animationPlayState: playState }} />
       </div>
+      <div className="lm-reflect" style={{ animationPlayState: playState }} />
+
       <div className="lm-mesh" style={{ animationPlayState: playState }} />
       <div className="lm-grain" style={{ animationPlayState: playState }} />
       <div className="lm-vignette" />
