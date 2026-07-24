@@ -143,6 +143,10 @@ function Dashboard() {
             </motion.div>
           </div>
 
+          <div className="mt-6">
+            <CircleWalletCard />
+          </div>
+
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
