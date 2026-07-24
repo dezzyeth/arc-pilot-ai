@@ -84,17 +84,26 @@ function PortfolioPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-8">
-      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-semibold tracking-tight">Portfolio</h1>
-        <p className="text-sm text-muted-foreground">
-          Live holdings, allocation and lifetime activity on Arc Testnet.
-        </p>
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Portfolio</h1>
+          <p className="text-sm text-muted-foreground">
+            Live holdings, allocation and lifetime activity across your main wallet and Nanopayments agent.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <WalletBadge kind="main" address={address} />
+        </div>
       </motion.div>
 
       <div className="mt-6 grid gap-4 md:grid-cols-3">
-        <StatCard label="Total holdings" value={`${balUsdc.toFixed(4)} USDC`} icon={Wallet} highlight />
+        <StatCard label="Main wallet" value={`${balUsdc.toFixed(4)} USDC`} icon={Wallet} highlight />
         <StatCard label="Lifetime sent" value={`${spent.toFixed(4)} USDC`} icon={TrendingUp} />
         <StatCard label="Transactions" value={String(rows.length)} icon={PieIcon} />
+      </div>
+
+      <div className="mt-6">
+        <AgentWalletCard />
       </div>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-3">
@@ -106,27 +115,38 @@ function PortfolioPage() {
             </div>
           ) : (
             <ul className="mt-4 divide-y divide-border/60">
-              {rows.slice(0, 20).map((r) => (
-                <li key={r.id} className="flex items-center justify-between gap-3 py-3 text-sm">
-                  <div className="min-w-0">
-                    <div className="truncate font-medium">
-                      {r.category || "transfer"} · {r.to_addr ? `${r.to_addr.slice(0, 6)}…${r.to_addr.slice(-4)}` : "—"}
+              {rows.slice(0, 20).map((r) => {
+                const isNano = r.category === "nanopayment";
+                return (
+                  <li key={r.id} className="flex items-center justify-between gap-3 py-3 text-sm">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 truncate font-medium">
+                        {isNano && (
+                          <span className="inline-flex items-center gap-1 rounded-full border border-purple-400/30 bg-purple-500/10 px-1.5 py-0.5 text-[10px] text-purple-200">
+                            <Radio className="h-2.5 w-2.5" /> Nanopayment
+                          </span>
+                        )}
+                        <span className="truncate">
+                          {r.category || "transfer"} · {r.to_addr ? `${r.to_addr.slice(0, 6)}…${r.to_addr.slice(-4)}` : "—"}
+                        </span>
+                      </div>
+                      <div className="truncate text-xs text-muted-foreground">
+                        {new Date(r.created_at).toLocaleString()} {r.memo ? `· ${r.memo}` : ""}
+                      </div>
                     </div>
-                    <div className="truncate text-xs text-muted-foreground">
-                      {new Date(r.created_at).toLocaleString()} {r.memo ? `· ${r.memo}` : ""}
+                    <div className="flex items-center gap-3">
+                      <span className="font-mono text-sm">{Number(r.amount_usdc).toFixed(4)} USDC</span>
+                      {r.hash && r.hash.startsWith("0x") && (
+                        <ExplorerLink value={r.hash} kind="tx" variant="icon" />
+                      )}
                     </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="font-mono text-sm">{Number(r.amount_usdc).toFixed(4)} USDC</span>
-                    {r.hash && (
-                      <ExplorerLink value={r.hash} kind="tx" variant="icon" />
-                    )}
-                  </div>
-                </li>
-              ))}
+                  </li>
+                );
+              })}
             </ul>
           )}
         </div>
+
 
         <div className="glass rounded-2xl p-6">
           <h2 className="text-sm font-medium text-muted-foreground">Allocation by category</h2>
