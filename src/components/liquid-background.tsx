@@ -92,32 +92,33 @@ export function LiquidBackground() {
         float cy = field(p + vec2(0.0,e));
         vec3 n = normalize(vec3((cx-c)/e, (cy-c)/e, 1.2));
 
-        // dark palette
-        vec3 deep    = vec3(0.002, 0.005, 0.014);
-        vec3 midCol  = vec3(0.012, 0.028, 0.075);
-        vec3 cyanHi  = vec3(0.12,  0.32,  0.52);
-        vec3 whiteHi = vec3(0.55,  0.70,  0.85);
+        // metallic chrome palette — brighter, slight blue tint
+        vec3 deep    = vec3(0.06, 0.08, 0.11);
+        vec3 midCol  = vec3(0.28, 0.34, 0.42);
+        vec3 cyanHi  = vec3(0.62, 0.78, 0.92);
+        vec3 whiteHi = vec3(0.96, 0.98, 1.00);
 
         float ang = atan(n.y, n.x);
         float wave = 0.5 + 0.5*sin(ang*1.6 + c*4.0 + u_time*0.04);
-        wave = smoothstep(0.15, 0.95, wave);
+        wave = smoothstep(0.12, 0.95, wave);
 
-        float spec = pow(clamp(n.z, 0.0, 1.0), 4.0);
-        float glint = pow(1.0 - clamp(n.z, 0.0, 1.0), 4.0);
+        float spec = pow(clamp(n.z, 0.0, 1.0), 3.2);
+        float glint = pow(1.0 - clamp(n.z, 0.0, 1.0), 3.5);
 
         vec3 col = mix(deep, midCol, wave);
-        col = mix(col, cyanHi, glint * 0.45);
-        col += whiteHi * spec * 0.18;
+        col = mix(col, cyanHi, glint * 0.65);
+        col += whiteHi * spec * 0.35;
 
         // subtle cursor halo — soft cool glow follows the pointer
         float mr = length(p - u_mouse);
         float halo = u_mouseA * exp(-mr*mr*6.0);
-        col += cyanHi * halo * 0.12;
+        col += cyanHi * halo * 0.15;
 
-        col = pow(col, vec3(1.05));
+        col = pow(col, vec3(0.95));
 
-        float v = smoothstep(1.6, 0.15, length(uv));
-        col *= mix(0.55, 0.9, v);
+        float v = smoothstep(1.7, 0.15, length(uv));
+        col *= mix(0.75, 1.05, v);
+
 
         gl_FragColor = vec4(col, 1.0);
       }
@@ -151,19 +152,53 @@ export function LiquidBackground() {
     const uMouse = gl.getUniformLocation(prog, "u_mouse");
     const uMouseA = gl.getUniformLocation(prog, "u_mouseA");
 
-    // Render at reduced resolution for GPU savings; CSS scales it back up.
-    const dpr = Math.min(window.devicePixelRatio || 1, 1) * 0.65;
+    // Adaptive quality: manual override via localStorage 'liquid-quality' =
+    // 'low' | 'medium' | 'high' | 'auto'. Also exposed as window.setLiquidQuality().
+    type Q = "low" | "medium" | "high";
+    const PRESETS: Record<Q, { scale: number; fps: number }> = {
+      low:    { scale: 0.45, fps: 24 },
+      medium: { scale: 0.65, fps: 30 },
+      high:   { scale: 0.9,  fps: 60 },
+    };
+    const readOverride = (): Q | "auto" => {
+      try {
+        const v = localStorage.getItem("liquid-quality");
+        if (v === "low" || v === "medium" || v === "high" || v === "auto") return v;
+      } catch {}
+      return "auto";
+    };
+    let override = readOverride();
+    let quality: Q = override === "auto" ? "medium" : override;
+    const baseDpr = Math.min(window.devicePixelRatio || 1, 1.25);
+    let scale = PRESETS[quality].scale;
+    let FRAME_MS = 1000 / PRESETS[quality].fps;
+
     const resize = () => {
-      const w = Math.max(1, Math.floor(window.innerWidth * dpr));
-      const h = Math.max(1, Math.floor(window.innerHeight * dpr));
+      const w = Math.max(1, Math.floor(window.innerWidth * baseDpr * scale));
+      const h = Math.max(1, Math.floor(window.innerHeight * baseDpr * scale));
       if (canvas.width !== w || canvas.height !== h) {
         canvas.width = w; canvas.height = h;
         gl.viewport(0, 0, w, h);
         gl.uniform2f(uRes, w, h);
       }
     };
+    const applyQuality = (q: Q) => {
+      quality = q;
+      scale = PRESETS[q].scale;
+      FRAME_MS = 1000 / PRESETS[q].fps;
+      resize();
+    };
     resize();
     window.addEventListener("resize", resize);
+
+    // Expose manual API
+    (window as any).setLiquidQuality = (q: Q | "auto") => {
+      try { localStorage.setItem("liquid-quality", q); } catch {}
+      override = q;
+      if (q !== "auto") applyQuality(q);
+    };
+    (window as any).getLiquidQuality = () => ({ override, active: quality });
+
 
 
     // Cursor tracking — convert to shader uv space (aspect-corrected, y flipped)
@@ -185,8 +220,10 @@ export function LiquidBackground() {
     document.addEventListener("visibilitychange", onVis);
 
     const start = performance.now();
-    const FRAME_MS = 1000 / 30; // cap to 30fps
     let lastDraw = 0;
+    // adaptive sampling
+    let sampleStart = performance.now();
+    let sampleFrames = 0;
     const tick = (now: number) => {
       if (hidden) return;
       raf = requestAnimationFrame(tick);
@@ -199,9 +236,28 @@ export function LiquidBackground() {
       gl.uniform1f(uMouseA, mouseCurr.a);
       gl.uniform1f(uTime, (now - start) * 0.001);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+      // adaptive quality — only when in auto mode
+      if (override === "auto") {
+        sampleFrames++;
+        const dt = now - sampleStart;
+        if (dt >= 2000) {
+          const fps = (sampleFrames * 1000) / dt;
+          const target = PRESETS[quality].fps;
+          if (fps < target * 0.7 && quality !== "low") {
+            applyQuality(quality === "high" ? "medium" : "low");
+          } else if (fps > target * 0.95 && quality !== "high") {
+            applyQuality(quality === "low" ? "medium" : "high");
+          }
+          sampleStart = now;
+          sampleFrames = 0;
+        }
+      }
+
       if (reduced) cancelAnimationFrame(raf);
     };
     raf = requestAnimationFrame(tick);
+
 
 
     return () => {
