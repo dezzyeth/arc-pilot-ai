@@ -12,7 +12,7 @@ import { WalletBadge } from "@/components/wallet-badge";
 import { supabase } from "@/integrations/supabase/client";
 import { ARC_CHAIN_ID } from "@/lib/chains";
 import { ensureArcChain } from "@/lib/ensure-arc-chain";
-import { createAgentWallet, updateAgentCaps } from "@/lib/agent-wallet.functions";
+import { createAgentWallet, creditAgentBalance, updateAgentCaps } from "@/lib/agent-wallet.functions";
 
 export type AgentWalletRow = {
   owner_wallet: string;
@@ -34,11 +34,11 @@ export function useAgentWallet() {
     if (!address) return setRow(null);
     setLoading(true);
     const { data } = await supabase
-      .from("nanopayments_agent_wallet")
+      .from("nanopayments_agent_wallet_public" as never)
       .select("*")
       .eq("owner_wallet", address.toLowerCase())
       .maybeSingle();
-    setRow((data as AgentWalletRow) ?? null);
+    setRow(((data as unknown) as AgentWalletRow) ?? null);
     setLoading(false);
   }
 
@@ -57,6 +57,7 @@ export function AgentWalletCard() {
   const { row, refresh } = useAgentWallet();
   const createFn = useServerFn(createAgentWallet);
   const updateFn = useServerFn(updateAgentCaps);
+  const creditFn = useServerFn(creditAgentBalance);
   const { sendTransactionAsync } = useSendTransaction();
 
   const [cap, setCap] = useState("0.05");
@@ -144,14 +145,12 @@ export function AgentWalletCard() {
       });
       // Optimistically credit the on-record Gateway balance so the UI
       // reflects the deposit immediately.
-      await supabase
-        .from("nanopayments_agent_wallet")
-        .update({
-          gateway_balance_usdc:
-            Number(row.gateway_balance_usdc) + Number(fundAmt),
-          updated_at: new Date().toISOString(),
-        })
-        .eq("owner_wallet", row.owner_wallet);
+      await creditFn({
+        data: {
+          ownerWallet: row.owner_wallet,
+          amountUsdc: Number(fundAmt),
+        },
+      });
       if (address) {
         await supabase.from("tx_log").insert({
           wallet: address.toLowerCase(),

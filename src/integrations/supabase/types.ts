@@ -376,7 +376,48 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      nanopayments_agent_wallet_public: {
+        Row: {
+          agent_address: string | null
+          cap_period: string | null
+          created_at: string | null
+          expiry: string | null
+          gateway_balance_usdc: number | null
+          id: string | null
+          owner_wallet: string | null
+          period_started_at: string | null
+          spending_cap_usdc: number | null
+          spent_in_period_usdc: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          agent_address?: string | null
+          cap_period?: string | null
+          created_at?: string | null
+          expiry?: string | null
+          gateway_balance_usdc?: number | null
+          id?: string | null
+          owner_wallet?: string | null
+          period_started_at?: string | null
+          spending_cap_usdc?: number | null
+          spent_in_period_usdc?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          agent_address?: string | null
+          cap_period?: string | null
+          created_at?: string | null
+          expiry?: string | null
+          gateway_balance_usdc?: number | null
+          id?: string | null
+          owner_wallet?: string | null
+          period_started_at?: string | null
+          spending_cap_usdc?: number | null
+          spent_in_period_usdc?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never
