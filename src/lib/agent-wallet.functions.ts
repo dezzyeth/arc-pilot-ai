@@ -88,3 +88,32 @@ export const updateAgentCaps = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+// Credit the agent's on-record Gateway balance after the user funds it
+// from MetaMask. Writes to the base table are restricted to server-side
+// (service_role) — the client cannot update this column directly.
+export const creditAgentBalance = createServerFn({ method: "POST" })
+  .inputValidator(
+    (data: { ownerWallet: string; amountUsdc: number }) => data,
+  )
+  .handler(async ({ data }) => {
+    if (!Number.isFinite(data.amountUsdc) || data.amountUsdc <= 0) {
+      throw new Error("Invalid amount");
+    }
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const owner = data.ownerWallet.toLowerCase();
+    const { data: row, error: readErr } = await supabaseAdmin
+      .from("nanopayments_agent_wallet")
+      .select("gateway_balance_usdc")
+      .eq("owner_wallet", owner)
+      .maybeSingle();
+    if (readErr) throw new Error(readErr.message);
+    if (!row) throw new Error("Agent wallet not found");
+    const next = Number(row.gateway_balance_usdc) + Number(data.amountUsdc);
+    const { error } = await supabaseAdmin
+      .from("nanopayments_agent_wallet")
+      .update({ gateway_balance_usdc: next, updated_at: new Date().toISOString() })
+      .eq("owner_wallet", owner);
+    if (error) throw new Error(error.message);
+    return { ok: true, balance: next };
+  });
