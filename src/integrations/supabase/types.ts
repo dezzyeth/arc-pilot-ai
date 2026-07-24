@@ -188,6 +188,36 @@ export type Database = {
         }
         Relationships: []
       }
+      user_wallets: {
+        Row: {
+          blockchain: string
+          circle_wallet_address: string | null
+          circle_wallet_id: string | null
+          circle_wallet_set_id: string | null
+          created_at: string
+          evm_address: string
+          id: string
+        }
+        Insert: {
+          blockchain?: string
+          circle_wallet_address?: string | null
+          circle_wallet_id?: string | null
+          circle_wallet_set_id?: string | null
+          created_at?: string
+          evm_address: string
+          id?: string
+        }
+        Update: {
+          blockchain?: string
+          circle_wallet_address?: string | null
+          circle_wallet_id?: string | null
+          circle_wallet_set_id?: string | null
+          created_at?: string
+          evm_address?: string
+          id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
