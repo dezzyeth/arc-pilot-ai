@@ -45,45 +45,52 @@ export function LiquidBackground() {
       }
 
       float field(vec2 p){
-        float t = u_time * 0.035;
+        float t = u_time * 0.06;
         vec2 q = vec2(fbm(p + vec2(0.0, t)), fbm(p + vec2(5.2, -t)));
-        vec2 r = vec2(fbm(p + 3.0*q + vec2(1.7,9.2) + t*0.16),
-                      fbm(p + 3.0*q + vec2(8.3,2.8) - t*0.14));
-        return fbm(p + 2.5*r);
+        vec2 r = vec2(fbm(p + 2.2*q + vec2(1.7,9.2) + t*0.20),
+                      fbm(p + 2.2*q + vec2(8.3,2.8) - t*0.18));
+        return fbm(p + 2.0*r);
       }
 
       void main(){
         vec2 uv = (gl_FragCoord.xy - 0.5*u_res) / u_res.y;
-        vec2 p = uv * 0.75;
+        vec2 p = uv * 1.1;
 
-        float e = 0.0025;
+        float e = 0.004;
         float c  = field(p);
         float cx = field(p + vec2(e,0.0));
         float cy = field(p + vec2(0.0,e));
-        vec3 n = normalize(vec3((cx-c)/e, (cy-c)/e, 1.0));
+        vec3 n = normalize(vec3((cx-c)/e, (cy-c)/e, 1.2));
 
-        // fake env: vertical bands + highlights driven by normal
-        vec3 base   = vec3(0.02, 0.05, 0.12);
-        vec3 midCol = vec3(0.05, 0.18, 0.45);
-        vec3 hiCol  = vec3(0.55, 0.85, 1.0);
-        vec3 deep   = vec3(0.01, 0.02, 0.06);
+        // smooth chrome env: multi-lobe cosine reflection driven by normals
+        vec3 deep    = vec3(0.005, 0.015, 0.05);
+        vec3 midCol  = vec3(0.03,  0.12,  0.38);
+        vec3 cyanHi  = vec3(0.35,  0.85,  1.00);
+        vec3 whiteHi = vec3(0.90,  0.97,  1.00);
 
-        float bands = 0.5 + 0.5*sin(n.x*6.2831 + n.y*3.0 + u_time*0.06);
-        float spec  = pow(clamp(n.z, 0.0, 1.0), 8.0);
-        float rim   = pow(1.0 - clamp(n.z, 0.0, 1.0), 2.5);
+        float ang = atan(n.y, n.x);
+        // wide smooth bands (no hard stripes)
+        float wave = 0.5 + 0.5*sin(ang*1.6 + c*4.0 + u_time*0.15);
+        wave = smoothstep(0.15, 0.95, wave);
 
-        vec3 col = mix(deep, midCol, bands);
-        col = mix(col, hiCol, spec*0.9);
-        col += rim * vec3(0.15, 0.35, 0.7);
-        col = mix(base, col, 0.9);
+        float spec = pow(clamp(n.z, 0.0, 1.0), 3.5);
+        float glint = pow(1.0 - clamp(n.z, 0.0, 1.0), 4.0);
+
+        vec3 col = mix(deep, midCol, wave);
+        col = mix(col, cyanHi, glint * 0.75);
+        col += whiteHi * spec * 0.35;
+
+        // gentle contrast lift
+        col = pow(col, vec3(0.95));
 
         // subtle vignette
-        float v = smoothstep(1.4, 0.2, length(uv));
-        col *= mix(0.65, 1.0, v);
+        float v = smoothstep(1.6, 0.15, length(uv));
+        col *= mix(0.7, 1.05, v);
 
         gl_FragColor = vec4(col, 1.0);
       }
     `;
+
 
     const compile = (type: number, src: string) => {
       const s = gl.createShader(type)!;
