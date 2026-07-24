@@ -7,17 +7,23 @@
 
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 
-function getKey(): Uint8Array {
+function getKeyBytes(): ArrayBuffer {
   const raw = process.env.AGENT_WALLET_ENCRYPTION_KEY;
   if (!raw) throw new Error("AGENT_WALLET_ENCRYPTION_KEY not configured");
-  // Derive 32 bytes deterministically from the secret string via SHA-256.
-  // Using WebCrypto so it works in the Worker runtime.
-  return new TextEncoder().encode(raw);
+  const arr = new TextEncoder().encode(raw);
+  const buf = new ArrayBuffer(arr.byteLength);
+  new Uint8Array(buf).set(arr);
+  return buf;
+}
+
+function u8ToBuf(u8: Uint8Array): ArrayBuffer {
+  const buf = new ArrayBuffer(u8.byteLength);
+  new Uint8Array(buf).set(u8);
+  return buf;
 }
 
 async function deriveAesKey(): Promise<CryptoKey> {
-  const raw = getKey();
-  const hash = await crypto.subtle.digest("SHA-256", raw);
+  const hash = await crypto.subtle.digest("SHA-256", getKeyBytes());
   return crypto.subtle.importKey("raw", hash, { name: "AES-GCM" }, false, [
     "encrypt",
     "decrypt",
@@ -39,12 +45,9 @@ function b64decode(s: string): Uint8Array {
 export async function sealPrivateKey(pk: `0x${string}`): Promise<string> {
   const key = await deriveAesKey();
   const iv = crypto.getRandomValues(new Uint8Array(12));
+  const plaintext = u8ToBuf(new TextEncoder().encode(pk));
   const ct = new Uint8Array(
-    await crypto.subtle.encrypt(
-      { name: "AES-GCM", iv },
-      key,
-      new TextEncoder().encode(pk),
-    ),
+    await crypto.subtle.encrypt({ name: "AES-GCM", iv: u8ToBuf(iv) }, key, plaintext),
   );
   return `${b64encode(iv)}.${b64encode(ct)}`;
 }
@@ -54,9 +57,9 @@ export async function openPrivateKey(cipher: string): Promise<`0x${string}`> {
   if (!ivB || !ctB) throw new Error("Malformed agent key ciphertext");
   const key = await deriveAesKey();
   const pt = await crypto.subtle.decrypt(
-    { name: "AES-GCM", iv: b64decode(ivB) },
+    { name: "AES-GCM", iv: u8ToBuf(b64decode(ivB)) },
     key,
-    b64decode(ctB),
+    u8ToBuf(b64decode(ctB)),
   );
   return new TextDecoder().decode(pt) as `0x${string}`;
 }
