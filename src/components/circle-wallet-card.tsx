@@ -170,7 +170,7 @@ export function CircleWalletCard() {
             </div>
             <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4">
               <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
-                Circle wallet · {lookup.data?.blockchain}
+                Circle wallet · Arc Testnet
               </div>
               <div className="mt-2 flex items-center gap-2 font-mono text-sm">
                 {short(circleAddress)}
