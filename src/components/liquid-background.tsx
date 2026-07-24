@@ -152,19 +152,53 @@ export function LiquidBackground() {
     const uMouse = gl.getUniformLocation(prog, "u_mouse");
     const uMouseA = gl.getUniformLocation(prog, "u_mouseA");
 
-    // Render at reduced resolution for GPU savings; CSS scales it back up.
-    const dpr = Math.min(window.devicePixelRatio || 1, 1) * 0.65;
+    // Adaptive quality: manual override via localStorage 'liquid-quality' =
+    // 'low' | 'medium' | 'high' | 'auto'. Also exposed as window.setLiquidQuality().
+    type Q = "low" | "medium" | "high";
+    const PRESETS: Record<Q, { scale: number; fps: number }> = {
+      low:    { scale: 0.45, fps: 24 },
+      medium: { scale: 0.65, fps: 30 },
+      high:   { scale: 0.9,  fps: 60 },
+    };
+    const readOverride = (): Q | "auto" => {
+      try {
+        const v = localStorage.getItem("liquid-quality");
+        if (v === "low" || v === "medium" || v === "high" || v === "auto") return v;
+      } catch {}
+      return "auto";
+    };
+    let override = readOverride();
+    let quality: Q = override === "auto" ? "medium" : override;
+    const baseDpr = Math.min(window.devicePixelRatio || 1, 1.25);
+    let scale = PRESETS[quality].scale;
+    let FRAME_MS = 1000 / PRESETS[quality].fps;
+
     const resize = () => {
-      const w = Math.max(1, Math.floor(window.innerWidth * dpr));
-      const h = Math.max(1, Math.floor(window.innerHeight * dpr));
+      const w = Math.max(1, Math.floor(window.innerWidth * baseDpr * scale));
+      const h = Math.max(1, Math.floor(window.innerHeight * baseDpr * scale));
       if (canvas.width !== w || canvas.height !== h) {
         canvas.width = w; canvas.height = h;
         gl.viewport(0, 0, w, h);
         gl.uniform2f(uRes, w, h);
       }
     };
+    const applyQuality = (q: Q) => {
+      quality = q;
+      scale = PRESETS[q].scale;
+      FRAME_MS = 1000 / PRESETS[q].fps;
+      resize();
+    };
     resize();
     window.addEventListener("resize", resize);
+
+    // Expose manual API
+    (window as any).setLiquidQuality = (q: Q | "auto") => {
+      try { localStorage.setItem("liquid-quality", q); } catch {}
+      override = q;
+      if (q !== "auto") applyQuality(q);
+    };
+    (window as any).getLiquidQuality = () => ({ override, active: quality });
+
 
 
     // Cursor tracking — convert to shader uv space (aspect-corrected, y flipped)
