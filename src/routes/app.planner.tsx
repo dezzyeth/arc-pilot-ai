@@ -158,6 +158,7 @@ function PlannerPage() {
   const suggestFn = useServerFn(generatePlannerSuggestion);
   const [suggestion, setSuggestion] = useState<string>("");
   const [suggesting, setSuggesting] = useState(false);
+  const { row: agentRow } = useAgentWallet();
 
   async function askForSuggestion() {
     if (!address) return toast.error("Connect wallet");
