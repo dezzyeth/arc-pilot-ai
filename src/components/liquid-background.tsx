@@ -56,11 +56,11 @@ export function LiquidBackground() {
         return 130.0 * dot(m, g);
       }
 
-      // rotated fbm — rotate between octaves to further kill any alignment
+      // rotated fbm — fewer octaves for GPU cost, rotation kills alignment
       float fbm(vec2 p){
         float v = 0.0; float a = 0.5;
         mat2 R = mat2(0.8, -0.6, 0.6, 0.8);
-        for(int i=0;i<5;i++){
+        for(int i=0;i<3;i++){
           v += a * snoise(p);
           p = R * p * 2.03;
           a *= 0.5;
@@ -69,11 +69,11 @@ export function LiquidBackground() {
       }
 
       float field(vec2 p){
-        float t = u_time * 0.06;
+        float t = u_time * 0.015;
         // cursor-driven radial warp — pulls the flow toward the pointer
         vec2 md = p - u_mouse;
-        float mr = length(md);
-        float infl = u_mouseA * exp(-mr*mr*3.0);
+        float mr2 = dot(md, md);
+        float infl = u_mouseA * exp(-mr2*3.0);
         p += normalize(md + 1e-4) * infl * 0.35;
 
         vec2 q = vec2(fbm(p + vec2(0.0, t)), fbm(p + vec2(5.2, -t)));
@@ -84,43 +84,45 @@ export function LiquidBackground() {
 
       void main(){
         vec2 uv = (gl_FragCoord.xy - 0.5*u_res) / u_res.y;
-        vec2 p = uv * 1.1;
+        vec2 p = uv * 0.35; // strongly zoomed in
 
-        float e = 0.004;
+        float e = 0.006;
         float c  = field(p);
         float cx = field(p + vec2(e,0.0));
         float cy = field(p + vec2(0.0,e));
         vec3 n = normalize(vec3((cx-c)/e, (cy-c)/e, 1.2));
 
-        vec3 deep    = vec3(0.005, 0.015, 0.05);
-        vec3 midCol  = vec3(0.03,  0.12,  0.38);
-        vec3 cyanHi  = vec3(0.35,  0.85,  1.00);
-        vec3 whiteHi = vec3(0.90,  0.97,  1.00);
+        // dark palette
+        vec3 deep    = vec3(0.002, 0.005, 0.014);
+        vec3 midCol  = vec3(0.012, 0.028, 0.075);
+        vec3 cyanHi  = vec3(0.12,  0.32,  0.52);
+        vec3 whiteHi = vec3(0.55,  0.70,  0.85);
 
         float ang = atan(n.y, n.x);
-        float wave = 0.5 + 0.5*sin(ang*1.6 + c*4.0 + u_time*0.15);
+        float wave = 0.5 + 0.5*sin(ang*1.6 + c*4.0 + u_time*0.04);
         wave = smoothstep(0.15, 0.95, wave);
 
-        float spec = pow(clamp(n.z, 0.0, 1.0), 3.5);
+        float spec = pow(clamp(n.z, 0.0, 1.0), 4.0);
         float glint = pow(1.0 - clamp(n.z, 0.0, 1.0), 4.0);
 
         vec3 col = mix(deep, midCol, wave);
-        col = mix(col, cyanHi, glint * 0.75);
-        col += whiteHi * spec * 0.35;
+        col = mix(col, cyanHi, glint * 0.45);
+        col += whiteHi * spec * 0.18;
 
-        // subtle cursor halo — soft cyan glow follows the pointer
+        // subtle cursor halo — soft cool glow follows the pointer
         float mr = length(p - u_mouse);
         float halo = u_mouseA * exp(-mr*mr*6.0);
-        col += cyanHi * halo * 0.18;
+        col += cyanHi * halo * 0.12;
 
-        col = pow(col, vec3(0.95));
+        col = pow(col, vec3(1.05));
 
         float v = smoothstep(1.6, 0.15, length(uv));
-        col *= mix(0.7, 1.05, v);
+        col *= mix(0.55, 0.9, v);
 
         gl_FragColor = vec4(col, 1.0);
       }
     `;
+
 
 
     const compile = (type: number, src: string) => {
