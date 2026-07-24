@@ -38,7 +38,7 @@ export function useAgentWallet() {
       .select("*")
       .eq("owner_wallet", address.toLowerCase())
       .maybeSingle();
-    setRow((data as AgentWalletRow) ?? null);
+    setRow(((data as unknown) as AgentWalletRow) ?? null);
     setLoading(false);
   }
 
