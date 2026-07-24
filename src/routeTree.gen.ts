@@ -27,6 +27,9 @@ import { Route as ApiPaidRiskRouteImport } from './routes/api/paid/risk'
 import { Route as ApiPaidReportsRouteImport } from './routes/api/paid/reports'
 import { Route as ApiPaidInsightRouteImport } from './routes/api/paid/insight'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as ApiPublicPaidRiskRouteImport } from './routes/api/public/paid/risk'
+import { Route as ApiPublicPaidReportsRouteImport } from './routes/api/public/paid/reports'
+import { Route as ApiPublicPaidInsightRouteImport } from './routes/api/public/paid/insight'
 import { Route as ApiPublicHooksX402RunnerRouteImport } from './routes/api/public/hooks/x402-runner'
 
 const McpRoute = McpRouteImport.update({
@@ -122,6 +125,21 @@ const Char91DotmcpChar93InvokeToolToolRoute =
     path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicPaidRiskRoute = ApiPublicPaidRiskRouteImport.update({
+  id: '/api/public/paid/risk',
+  path: '/api/public/paid/risk',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicPaidReportsRoute = ApiPublicPaidReportsRouteImport.update({
+  id: '/api/public/paid/reports',
+  path: '/api/public/paid/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicPaidInsightRoute = ApiPublicPaidInsightRouteImport.update({
+  id: '/api/public/paid/insight',
+  path: '/api/public/paid/insight',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicHooksX402RunnerRoute =
   ApiPublicHooksX402RunnerRouteImport.update({
     id: '/api/public/hooks/x402-runner',
@@ -149,6 +167,9 @@ export interface FileRoutesByFullPath {
   '/api/paid/reports': typeof ApiPaidReportsRoute
   '/api/paid/risk': typeof ApiPaidRiskRoute
   '/api/public/hooks/x402-runner': typeof ApiPublicHooksX402RunnerRoute
+  '/api/public/paid/insight': typeof ApiPublicPaidInsightRoute
+  '/api/public/paid/reports': typeof ApiPublicPaidReportsRoute
+  '/api/public/paid/risk': typeof ApiPublicPaidRiskRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -169,6 +190,9 @@ export interface FileRoutesByTo {
   '/api/paid/reports': typeof ApiPaidReportsRoute
   '/api/paid/risk': typeof ApiPaidRiskRoute
   '/api/public/hooks/x402-runner': typeof ApiPublicHooksX402RunnerRoute
+  '/api/public/paid/insight': typeof ApiPublicPaidInsightRoute
+  '/api/public/paid/reports': typeof ApiPublicPaidReportsRoute
+  '/api/public/paid/risk': typeof ApiPublicPaidRiskRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -191,6 +215,9 @@ export interface FileRoutesById {
   '/api/paid/reports': typeof ApiPaidReportsRoute
   '/api/paid/risk': typeof ApiPaidRiskRoute
   '/api/public/hooks/x402-runner': typeof ApiPublicHooksX402RunnerRoute
+  '/api/public/paid/insight': typeof ApiPublicPaidInsightRoute
+  '/api/public/paid/reports': typeof ApiPublicPaidReportsRoute
+  '/api/public/paid/risk': typeof ApiPublicPaidRiskRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -214,6 +241,9 @@ export interface FileRouteTypes {
     | '/api/paid/reports'
     | '/api/paid/risk'
     | '/api/public/hooks/x402-runner'
+    | '/api/public/paid/insight'
+    | '/api/public/paid/reports'
+    | '/api/public/paid/risk'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -234,6 +264,9 @@ export interface FileRouteTypes {
     | '/api/paid/reports'
     | '/api/paid/risk'
     | '/api/public/hooks/x402-runner'
+    | '/api/public/paid/insight'
+    | '/api/public/paid/reports'
+    | '/api/public/paid/risk'
   id:
     | '__root__'
     | '/'
@@ -255,6 +288,9 @@ export interface FileRouteTypes {
     | '/api/paid/reports'
     | '/api/paid/risk'
     | '/api/public/hooks/x402-runner'
+    | '/api/public/paid/insight'
+    | '/api/public/paid/reports'
+    | '/api/public/paid/risk'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -269,6 +305,9 @@ export interface RootRouteChildren {
   ApiPaidReportsRoute: typeof ApiPaidReportsRoute
   ApiPaidRiskRoute: typeof ApiPaidRiskRoute
   ApiPublicHooksX402RunnerRoute: typeof ApiPublicHooksX402RunnerRoute
+  ApiPublicPaidInsightRoute: typeof ApiPublicPaidInsightRoute
+  ApiPublicPaidReportsRoute: typeof ApiPublicPaidReportsRoute
+  ApiPublicPaidRiskRoute: typeof ApiPublicPaidRiskRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -399,6 +438,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/paid/risk': {
+      id: '/api/public/paid/risk'
+      path: '/api/public/paid/risk'
+      fullPath: '/api/public/paid/risk'
+      preLoaderRoute: typeof ApiPublicPaidRiskRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/paid/reports': {
+      id: '/api/public/paid/reports'
+      path: '/api/public/paid/reports'
+      fullPath: '/api/public/paid/reports'
+      preLoaderRoute: typeof ApiPublicPaidReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/paid/insight': {
+      id: '/api/public/paid/insight'
+      path: '/api/public/paid/insight'
+      fullPath: '/api/public/paid/insight'
+      preLoaderRoute: typeof ApiPublicPaidInsightRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/x402-runner': {
       id: '/api/public/hooks/x402-runner'
       path: '/api/public/hooks/x402-runner'
@@ -446,6 +506,9 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPaidReportsRoute: ApiPaidReportsRoute,
   ApiPaidRiskRoute: ApiPaidRiskRoute,
   ApiPublicHooksX402RunnerRoute: ApiPublicHooksX402RunnerRoute,
+  ApiPublicPaidInsightRoute: ApiPublicPaidInsightRoute,
+  ApiPublicPaidReportsRoute: ApiPublicPaidReportsRoute,
+  ApiPublicPaidRiskRoute: ApiPublicPaidRiskRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

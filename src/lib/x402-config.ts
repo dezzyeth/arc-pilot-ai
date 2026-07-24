@@ -36,11 +36,23 @@ export const PAID_ROUTES = {
     priceUsdc: 0.003,
     description: "AI-drafted financial insight for a wallet or scenario.",
   },
+  "/api/public/paid/insight": {
+    priceUsdc: 0.003,
+    description: "AI-drafted financial insight for a wallet or scenario.",
+  },
   "/api/paid/risk": {
     priceUsdc: 0.001,
     description: "Risk-engine simulation for a proposed transaction.",
   },
+  "/api/public/paid/risk": {
+    priceUsdc: 0.001,
+    description: "Risk-engine simulation for a proposed transaction.",
+  },
   "/api/paid/reports": {
+    priceUsdc: 0.01,
+    description: "AI-generated spending & activity report summary.",
+  },
+  "/api/public/paid/reports": {
     priceUsdc: 0.01,
     description: "AI-generated spending & activity report summary.",
   },
