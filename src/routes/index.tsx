@@ -919,7 +919,7 @@ function Stats() {
             <Reveal key={s.label} delay={i * 0.08}>
               <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-8 backdrop-blur-xl">
                 <div
-                  className="text-4xl font-semibold tracking-tight md:text-5xl"
+                  className="truncate text-3xl font-semibold tracking-tight md:text-4xl"
                   style={{ fontFamily: "'Space Grotesk', Inter, sans-serif" }}
                 >
                   <span className="bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
@@ -927,6 +927,7 @@ function Stats() {
                     {s.suffix}
                   </span>
                 </div>
+
                 <div className="mt-2 text-sm text-white/50">{s.label}</div>
               </div>
             </Reveal>
