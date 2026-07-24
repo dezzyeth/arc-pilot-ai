@@ -146,4 +146,7 @@ Portfolio & Reports Update Automatically
 
 Built for development, experimentation, and educational use on **Arc Testnet**.
 ````
+## if u are having any issue in Arcpilotai 
+fill this form 
 
+https://docs.google.com/forms/d/e/1FAIpQLSfgFPBVQEnYHANNIhmGRIbOPkgvy94HNJnj947O7k3YpY4igg/viewform?usp=publish-editor
