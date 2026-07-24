@@ -66,6 +66,7 @@ function PlannerPage() {
   const [busyId, setBusyId] = useState<string | null>(null);
 
   // form state
+  const [tab, setTab] = useState<"onchain" | "x402">("onchain");
   const [kind, setKind] = useState<"scheduled" | "conditional">("scheduled");
   const [to, setTo] = useState("");
   const [amount, setAmount] = useState("");
