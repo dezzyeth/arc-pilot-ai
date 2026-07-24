@@ -151,10 +151,11 @@ export function LiquidBackground() {
     const uMouse = gl.getUniformLocation(prog, "u_mouse");
     const uMouseA = gl.getUniformLocation(prog, "u_mouseA");
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
+    // Render at reduced resolution for GPU savings; CSS scales it back up.
+    const dpr = Math.min(window.devicePixelRatio || 1, 1) * 0.65;
     const resize = () => {
-      const w = Math.floor(window.innerWidth * dpr);
-      const h = Math.floor(window.innerHeight * dpr);
+      const w = Math.max(1, Math.floor(window.innerWidth * dpr));
+      const h = Math.max(1, Math.floor(window.innerHeight * dpr));
       if (canvas.width !== w || canvas.height !== h) {
         canvas.width = w; canvas.height = h;
         gl.viewport(0, 0, w, h);
@@ -163,6 +164,7 @@ export function LiquidBackground() {
     };
     resize();
     window.addEventListener("resize", resize);
+
 
     // Cursor tracking — convert to shader uv space (aspect-corrected, y flipped)
     const mouseTarget = { x: 0, y: 0, a: 0 };
