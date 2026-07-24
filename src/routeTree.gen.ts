@@ -27,6 +27,7 @@ import { Route as ApiPaidRiskRouteImport } from './routes/api/paid/risk'
 import { Route as ApiPaidReportsRouteImport } from './routes/api/paid/reports'
 import { Route as ApiPaidInsightRouteImport } from './routes/api/paid/insight'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as ApiPublicHooksX402RunnerRouteImport } from './routes/api/public/hooks/x402-runner'
 
 const McpRoute = McpRouteImport.update({
   id: '/mcp',
@@ -121,6 +122,12 @@ const Char91DotmcpChar93InvokeToolToolRoute =
     path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksX402RunnerRoute =
+  ApiPublicHooksX402RunnerRouteImport.update({
+    id: '/api/public/hooks/x402-runner',
+    path: '/api/public/hooks/x402-runner',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -141,6 +148,7 @@ export interface FileRoutesByFullPath {
   '/api/paid/insight': typeof ApiPaidInsightRoute
   '/api/paid/reports': typeof ApiPaidReportsRoute
   '/api/paid/risk': typeof ApiPaidRiskRoute
+  '/api/public/hooks/x402-runner': typeof ApiPublicHooksX402RunnerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -160,6 +168,7 @@ export interface FileRoutesByTo {
   '/api/paid/insight': typeof ApiPaidInsightRoute
   '/api/paid/reports': typeof ApiPaidReportsRoute
   '/api/paid/risk': typeof ApiPaidRiskRoute
+  '/api/public/hooks/x402-runner': typeof ApiPublicHooksX402RunnerRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -181,6 +190,7 @@ export interface FileRoutesById {
   '/api/paid/insight': typeof ApiPaidInsightRoute
   '/api/paid/reports': typeof ApiPaidReportsRoute
   '/api/paid/risk': typeof ApiPaidRiskRoute
+  '/api/public/hooks/x402-runner': typeof ApiPublicHooksX402RunnerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -203,6 +213,7 @@ export interface FileRouteTypes {
     | '/api/paid/insight'
     | '/api/paid/reports'
     | '/api/paid/risk'
+    | '/api/public/hooks/x402-runner'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -222,6 +233,7 @@ export interface FileRouteTypes {
     | '/api/paid/insight'
     | '/api/paid/reports'
     | '/api/paid/risk'
+    | '/api/public/hooks/x402-runner'
   id:
     | '__root__'
     | '/'
@@ -242,6 +254,7 @@ export interface FileRouteTypes {
     | '/api/paid/insight'
     | '/api/paid/reports'
     | '/api/paid/risk'
+    | '/api/public/hooks/x402-runner'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -255,6 +268,7 @@ export interface RootRouteChildren {
   ApiPaidInsightRoute: typeof ApiPaidInsightRoute
   ApiPaidReportsRoute: typeof ApiPaidReportsRoute
   ApiPaidRiskRoute: typeof ApiPaidRiskRoute
+  ApiPublicHooksX402RunnerRoute: typeof ApiPublicHooksX402RunnerRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -385,6 +399,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/x402-runner': {
+      id: '/api/public/hooks/x402-runner'
+      path: '/api/public/hooks/x402-runner'
+      fullPath: '/api/public/hooks/x402-runner'
+      preLoaderRoute: typeof ApiPublicHooksX402RunnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -424,6 +445,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPaidInsightRoute: ApiPaidInsightRoute,
   ApiPaidReportsRoute: ApiPaidReportsRoute,
   ApiPaidRiskRoute: ApiPaidRiskRoute,
+  ApiPublicHooksX402RunnerRoute: ApiPublicHooksX402RunnerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
