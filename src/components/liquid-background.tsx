@@ -92,32 +92,33 @@ export function LiquidBackground() {
         float cy = field(p + vec2(0.0,e));
         vec3 n = normalize(vec3((cx-c)/e, (cy-c)/e, 1.2));
 
-        // dark palette
-        vec3 deep    = vec3(0.002, 0.005, 0.014);
-        vec3 midCol  = vec3(0.012, 0.028, 0.075);
-        vec3 cyanHi  = vec3(0.12,  0.32,  0.52);
-        vec3 whiteHi = vec3(0.55,  0.70,  0.85);
+        // metallic chrome palette — brighter, slight blue tint
+        vec3 deep    = vec3(0.06, 0.08, 0.11);
+        vec3 midCol  = vec3(0.28, 0.34, 0.42);
+        vec3 cyanHi  = vec3(0.62, 0.78, 0.92);
+        vec3 whiteHi = vec3(0.96, 0.98, 1.00);
 
         float ang = atan(n.y, n.x);
         float wave = 0.5 + 0.5*sin(ang*1.6 + c*4.0 + u_time*0.04);
-        wave = smoothstep(0.15, 0.95, wave);
+        wave = smoothstep(0.12, 0.95, wave);
 
-        float spec = pow(clamp(n.z, 0.0, 1.0), 4.0);
-        float glint = pow(1.0 - clamp(n.z, 0.0, 1.0), 4.0);
+        float spec = pow(clamp(n.z, 0.0, 1.0), 3.2);
+        float glint = pow(1.0 - clamp(n.z, 0.0, 1.0), 3.5);
 
         vec3 col = mix(deep, midCol, wave);
-        col = mix(col, cyanHi, glint * 0.45);
-        col += whiteHi * spec * 0.18;
+        col = mix(col, cyanHi, glint * 0.65);
+        col += whiteHi * spec * 0.35;
 
         // subtle cursor halo — soft cool glow follows the pointer
         float mr = length(p - u_mouse);
         float halo = u_mouseA * exp(-mr*mr*6.0);
-        col += cyanHi * halo * 0.12;
+        col += cyanHi * halo * 0.15;
 
-        col = pow(col, vec3(1.05));
+        col = pow(col, vec3(0.95));
 
-        float v = smoothstep(1.6, 0.15, length(uv));
-        col *= mix(0.55, 0.9, v);
+        float v = smoothstep(1.7, 0.15, length(uv));
+        col *= mix(0.75, 1.05, v);
+
 
         gl_FragColor = vec4(col, 1.0);
       }
