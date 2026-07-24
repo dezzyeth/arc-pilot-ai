@@ -15,7 +15,6 @@ import { formatUnits } from "viem";
 import { useAccount, useBalance, useChainId } from "wagmi";
 
 import { Button } from "@/components/ui/button";
-import { CircleWalletCard } from "@/components/circle-wallet-card";
 import { ARC_CHAIN_ID, arcTestnet } from "@/lib/chains";
 import { cn } from "@/lib/utils";
 
@@ -141,10 +140,6 @@ function Dashboard() {
                 <Insight>Every transaction is simulated before you sign.</Insight>
               </ul>
             </motion.div>
-          </div>
-
-          <div className="mt-6">
-            <CircleWalletCard />
           </div>
 
           <motion.div
