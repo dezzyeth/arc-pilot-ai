@@ -146,6 +146,8 @@ export function LiquidBackground() {
 
     const uRes = gl.getUniformLocation(prog, "u_res");
     const uTime = gl.getUniformLocation(prog, "u_time");
+    const uMouse = gl.getUniformLocation(prog, "u_mouse");
+    const uMouseA = gl.getUniformLocation(prog, "u_mouseA");
 
     const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
     const resize = () => {
@@ -160,6 +162,19 @@ export function LiquidBackground() {
     resize();
     window.addEventListener("resize", resize);
 
+    // Cursor tracking — convert to shader uv space (aspect-corrected, y flipped)
+    const mouseTarget = { x: 0, y: 0, a: 0 };
+    const mouseCurr = { x: 0, y: 0, a: 0 };
+    const onMove = (e: MouseEvent) => {
+      const w = window.innerWidth, h = window.innerHeight;
+      mouseTarget.x = ((e.clientX - w * 0.5) / h) * 1.1;
+      mouseTarget.y = ((h * 0.5 - e.clientY) / h) * 1.1;
+      mouseTarget.a = 1;
+    };
+    const onLeave = () => { mouseTarget.a = 0; };
+    window.addEventListener("mousemove", onMove, { passive: true });
+    window.addEventListener("mouseout", onLeave);
+
     let raf = 0;
     let hidden = document.hidden;
     const onVis = () => { hidden = document.hidden; if (!hidden) tick(performance.now()); };
@@ -168,6 +183,12 @@ export function LiquidBackground() {
     const start = performance.now();
     const tick = (now: number) => {
       if (hidden) return;
+      // ease cursor for smooth liquid response
+      mouseCurr.x += (mouseTarget.x - mouseCurr.x) * 0.08;
+      mouseCurr.y += (mouseTarget.y - mouseCurr.y) * 0.08;
+      mouseCurr.a += (mouseTarget.a - mouseCurr.a) * 0.06;
+      gl.uniform2f(uMouse, mouseCurr.x, mouseCurr.y);
+      gl.uniform1f(uMouseA, mouseCurr.a);
       gl.uniform1f(uTime, (now - start) * 0.001);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       if (!reduced) raf = requestAnimationFrame(tick);
@@ -177,6 +198,8 @@ export function LiquidBackground() {
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseout", onLeave);
       document.removeEventListener("visibilitychange", onVis);
     };
   }, []);
