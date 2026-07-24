@@ -128,7 +128,7 @@ html {
   z-index: -1;
   pointer-events: none;
   overflow: hidden;
-  background-color: #030612;
+  background-color: #0a0518;
   contain: strict;
   isolation: isolate;
 }
