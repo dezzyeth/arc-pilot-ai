@@ -14,8 +14,11 @@ import {
 } from "wagmi";
 
 import { Button } from "@/components/ui/button";
+import { AgentWalletCard, useAgentWallet } from "@/components/agent-wallet-card";
 import { ExplorerLink } from "@/components/explorer-link";
 import { Input } from "@/components/ui/input";
+import { WalletBadge } from "@/components/wallet-badge";
+import { X402JobForm } from "@/components/x402-job-form";
 import { supabase } from "@/integrations/supabase/client";
 import { ARC_CHAIN_ID } from "@/lib/chains";
 import { ensureArcChain } from "@/lib/ensure-arc-chain";
@@ -63,6 +66,7 @@ function PlannerPage() {
   const [busyId, setBusyId] = useState<string | null>(null);
 
   // form state
+  const [tab, setTab] = useState<"onchain" | "x402">("onchain");
   const [kind, setKind] = useState<"scheduled" | "conditional">("scheduled");
   const [to, setTo] = useState("");
   const [amount, setAmount] = useState("");
@@ -154,6 +158,7 @@ function PlannerPage() {
   const suggestFn = useServerFn(generatePlannerSuggestion);
   const [suggestion, setSuggestion] = useState<string>("");
   const [suggesting, setSuggesting] = useState(false);
+  const { row: agentRow } = useAgentWallet();
 
   async function askForSuggestion() {
     if (!address) return toast.error("Connect wallet");
@@ -351,13 +356,66 @@ function PlannerPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-8">
-      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-semibold tracking-tight">Planner</h1>
-        <p className="text-sm text-muted-foreground">
-          Plans auto-execute the moment they're due or their condition is met — keep this tab open.
-        </p>
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Planner</h1>
+          <p className="text-sm text-muted-foreground">
+            Plans auto-execute the moment they're due — on-chain via session key, or via the Nanopayments agent for x402 endpoints.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <WalletBadge kind="main" address={address} />
+          <WalletBadge kind="agent" address={agentRow?.agent_address} />
+        </div>
       </motion.div>
 
+      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+        <AgentWalletCard />
+        <div className="glass rounded-2xl p-6">
+          <h2 className="text-sm font-medium">Two ways to schedule</h2>
+          <ul className="mt-3 space-y-2 text-xs text-muted-foreground">
+            <li>
+              <b className="text-foreground">On-chain plans</b> — send USDC to
+              a wallet at a time or when a balance condition triggers.
+              Signs from your MetaMask (or the session-key burner).
+            </li>
+            <li>
+              <b className="text-foreground">Pay x402 endpoint</b> — the
+              Nanopayments agent autonomously calls a paid API, handles the
+              402 challenge, and pays within your cap. Runs server-side.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="mt-6 inline-flex rounded-full glass p-1">
+        <button
+          onClick={() => setTab("onchain")}
+          className={cn(
+            "rounded-full px-4 py-1.5 text-xs",
+            tab === "onchain" ? "bg-[image:var(--gradient-brand)] text-primary-foreground" : "hover:bg-accent/60",
+          )}
+        >
+          On-chain plans
+        </button>
+        <button
+          onClick={() => setTab("x402")}
+          className={cn(
+            "rounded-full px-4 py-1.5 text-xs",
+            tab === "x402" ? "bg-purple-500/30 text-purple-100" : "hover:bg-accent/60",
+          )}
+        >
+          x402 nanopayment jobs
+        </button>
+      </div>
+
+      {tab === "x402" && (
+        <div className="mt-4">
+          <X402JobForm agentAddress={agentRow?.agent_address ?? null} />
+        </div>
+      )}
+
+      {tab === "onchain" && <>
       {/* Session key card */}
       <div className="glass mt-4 rounded-2xl p-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
@@ -571,6 +629,7 @@ function PlannerPage() {
           )}
         </div>
       </div>
+      </>}
     </div>
   );
 }

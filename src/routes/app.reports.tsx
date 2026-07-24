@@ -156,9 +156,13 @@ Recent memos: ${rows.slice(0, 10).map((r) => r.memo).filter(Boolean).join(" | ")
         </Button>
       </div>
 
-      <div className="mt-6 grid gap-4 md:grid-cols-3">
+      <div className="mt-6 grid gap-4 md:grid-cols-4">
         <Stat label="Total sent" value={`${total.toFixed(4)} USDC`} highlight />
         <Stat label="Transactions" value={String(rows.length)} />
+        <Stat
+          label="Nanopayment spend"
+          value={`${(byCat["nanopayment"] ?? 0).toFixed(4)} USDC`}
+        />
         <Stat label="Top category" value={Object.entries(byCat).sort((a, b) => b[1] - a[1])[0]?.[0] || "—"} />
       </div>
 

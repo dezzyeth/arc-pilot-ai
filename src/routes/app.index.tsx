@@ -15,7 +15,9 @@ import { formatUnits } from "viem";
 import { useAccount, useBalance, useChainId } from "wagmi";
 
 import { Button } from "@/components/ui/button";
+import { AgentWalletCard } from "@/components/agent-wallet-card";
 import { EarningsCard } from "@/components/earnings-card";
+import { WalletBadge } from "@/components/wallet-badge";
 import { ARC_CHAIN_ID, arcTestnet } from "@/lib/chains";
 import { cn } from "@/lib/utils";
 
@@ -54,13 +56,20 @@ function Dashboard() {
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6"
+            className="mb-6 flex flex-wrap items-start justify-between gap-3"
           >
-            <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
-            <p className="text-sm text-muted-foreground">
-              Here's a snapshot of your Arc Testnet activity.
-            </p>
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
+              <p className="text-sm text-muted-foreground">
+                Here's a snapshot of your Arc Testnet activity.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <WalletBadge kind="main" address={address} />
+              <WalletBadge kind="agent" />
+            </div>
           </motion.div>
+
 
           <div className="grid gap-4 md:grid-cols-3">
             <StatCard
@@ -146,11 +155,21 @@ function Dashboard() {
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.18 }}
+            className="mt-6"
+          >
+            <AgentWalletCard />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
             className="mt-6"
           >
             <EarningsCard />
           </motion.div>
+
 
           <motion.div
             initial={{ opacity: 0, y: 12 }}

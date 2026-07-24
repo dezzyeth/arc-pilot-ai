@@ -107,36 +107,159 @@ export type Database = {
         }
         Relationships: []
       }
+      nanopayments_agent_wallet: {
+        Row: {
+          agent_address: string
+          agent_privkey_ciphertext: string
+          cap_period: string
+          created_at: string
+          expiry: string | null
+          gateway_balance_usdc: number
+          id: string
+          owner_wallet: string
+          period_started_at: string
+          spending_cap_usdc: number
+          spent_in_period_usdc: number
+          updated_at: string
+        }
+        Insert: {
+          agent_address: string
+          agent_privkey_ciphertext: string
+          cap_period?: string
+          created_at?: string
+          expiry?: string | null
+          gateway_balance_usdc?: number
+          id?: string
+          owner_wallet: string
+          period_started_at?: string
+          spending_cap_usdc?: number
+          spent_in_period_usdc?: number
+          updated_at?: string
+        }
+        Update: {
+          agent_address?: string
+          agent_privkey_ciphertext?: string
+          cap_period?: string
+          created_at?: string
+          expiry?: string | null
+          gateway_balance_usdc?: number
+          id?: string
+          owner_wallet?: string
+          period_started_at?: string
+          spending_cap_usdc?: number
+          spent_in_period_usdc?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       payment_events: {
         Row: {
           amount_usdc: number
+          counterparty_address: string | null
           created_at: string
+          direction: string
+          endpoint: string | null
           id: string
+          job_id: string | null
           network: string
           payer_addr: string | null
+          response_snippet: string | null
           route: string
           seller_addr: string
+          status: string
           tx_ref: string | null
         }
         Insert: {
           amount_usdc: number
+          counterparty_address?: string | null
           created_at?: string
+          direction?: string
+          endpoint?: string | null
           id?: string
+          job_id?: string | null
           network?: string
           payer_addr?: string | null
+          response_snippet?: string | null
           route: string
           seller_addr: string
+          status?: string
           tx_ref?: string | null
         }
         Update: {
           amount_usdc?: number
+          counterparty_address?: string | null
           created_at?: string
+          direction?: string
+          endpoint?: string | null
           id?: string
+          job_id?: string | null
           network?: string
           payer_addr?: string | null
+          response_snippet?: string | null
           route?: string
           seller_addr?: string
+          status?: string
           tx_ref?: string | null
+        }
+        Relationships: []
+      }
+      planner_x402_jobs: {
+        Row: {
+          agent_address: string
+          condition: string | null
+          created_at: string
+          expected_price_usdc: number | null
+          id: string
+          interval_seconds: number | null
+          last_error: string | null
+          last_run_at: string | null
+          max_price_usdc: number
+          next_run_at: string | null
+          owner_wallet: string
+          schedule_cron: string | null
+          spent_to_date_usdc: number
+          status: string
+          target_url: string
+          total_budget_usdc: number | null
+          updated_at: string
+        }
+        Insert: {
+          agent_address: string
+          condition?: string | null
+          created_at?: string
+          expected_price_usdc?: number | null
+          id?: string
+          interval_seconds?: number | null
+          last_error?: string | null
+          last_run_at?: string | null
+          max_price_usdc: number
+          next_run_at?: string | null
+          owner_wallet: string
+          schedule_cron?: string | null
+          spent_to_date_usdc?: number
+          status?: string
+          target_url: string
+          total_budget_usdc?: number | null
+          updated_at?: string
+        }
+        Update: {
+          agent_address?: string
+          condition?: string | null
+          created_at?: string
+          expected_price_usdc?: number | null
+          id?: string
+          interval_seconds?: number | null
+          last_error?: string | null
+          last_run_at?: string | null
+          max_price_usdc?: number
+          next_run_at?: string | null
+          owner_wallet?: string
+          schedule_cron?: string | null
+          spent_to_date_usdc?: number
+          status?: string
+          target_url?: string
+          total_budget_usdc?: number | null
+          updated_at?: string
         }
         Relationships: []
       }
