@@ -34,7 +34,7 @@ export function useAgentWallet() {
     if (!address) return setRow(null);
     setLoading(true);
     const { data } = await supabase
-      .from("nanopayments_agent_wallet")
+      .from("nanopayments_agent_wallet_public" as never)
       .select("*")
       .eq("owner_wallet", address.toLowerCase())
       .maybeSingle();
