@@ -12,7 +12,7 @@ import { WalletBadge } from "@/components/wallet-badge";
 import { supabase } from "@/integrations/supabase/client";
 import { ARC_CHAIN_ID } from "@/lib/chains";
 import { ensureArcChain } from "@/lib/ensure-arc-chain";
-import { createAgentWallet, updateAgentCaps } from "@/lib/agent-wallet.functions";
+import { createAgentWallet, creditAgentBalance, updateAgentCaps } from "@/lib/agent-wallet.functions";
 
 export type AgentWalletRow = {
   owner_wallet: string;
