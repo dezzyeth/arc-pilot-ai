@@ -35,8 +35,8 @@ function AppLayout() {
   const activeLabel = nav.find((n) => (n.exact ? pathname === n.to : pathname.startsWith(n.to)))?.label ?? "";
 
   return (
-    <div className="relative flex min-h-screen bg-[#050816] text-white selection:bg-[#956af7]/30">
-      <aside className="hidden w-64 shrink-0 border-r border-white/5 bg-[#050816]/80 backdrop-blur-xl md:flex md:flex-col">
+    <div className="relative flex min-h-screen text-white selection:bg-[#956af7]/30">
+      <aside className="hidden w-64 shrink-0 border-r border-white/5 bg-[#050816]/40 backdrop-blur-xl md:flex md:flex-col">
         <Link to="/" className="flex h-16 items-center gap-2 border-b border-white/5 px-6 focus-visible:outline-none">
           <div className="grid h-8 w-8 place-items-center overflow-hidden rounded-lg bg-gradient-to-br from-[#956af7] to-[#4F8CFF]">
             <img src={arcLogo} alt="Arc" className="h-full w-full object-cover" draggable={false} />
@@ -86,7 +86,7 @@ function AppLayout() {
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-white/5 bg-[#050816]/80 px-6 backdrop-blur-xl">
+        <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-white/5 bg-[#050816]/40 px-6 backdrop-blur-xl">
           <div className="flex items-center gap-3 md:hidden">
             <div className="grid h-8 w-8 place-items-center overflow-hidden rounded-lg bg-gradient-to-br from-[#956af7] to-[#4F8CFF]">
               <img src={arcLogo} alt="Arc" className="h-full w-full object-cover" draggable={false} />
