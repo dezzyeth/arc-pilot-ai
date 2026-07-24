@@ -107,6 +107,39 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_events: {
+        Row: {
+          amount_usdc: number
+          created_at: string
+          id: string
+          network: string
+          payer_addr: string | null
+          route: string
+          seller_addr: string
+          tx_ref: string | null
+        }
+        Insert: {
+          amount_usdc: number
+          created_at?: string
+          id?: string
+          network?: string
+          payer_addr?: string | null
+          route: string
+          seller_addr: string
+          tx_ref?: string | null
+        }
+        Update: {
+          amount_usdc?: number
+          created_at?: string
+          id?: string
+          network?: string
+          payer_addr?: string | null
+          route?: string
+          seller_addr?: string
+          tx_ref?: string | null
+        }
+        Relationships: []
+      }
       scheduled_tx: {
         Row: {
           amount_usdc: number
