@@ -68,7 +68,7 @@ export function LiquidBackground() {
         vec3 hiCol  = vec3(0.55, 0.85, 1.0);
         vec3 deep   = vec3(0.01, 0.02, 0.06);
 
-        float bands = 0.5 + 0.5*sin(n.x*6.2831 + n.y*3.0 + u_time*0.3);
+        float bands = 0.5 + 0.5*sin(n.x*6.2831 + n.y*3.0 + u_time*0.06);
         float spec  = pow(clamp(n.z, 0.0, 1.0), 8.0);
         float rim   = pow(1.0 - clamp(n.z, 0.0, 1.0), 2.5);
 
