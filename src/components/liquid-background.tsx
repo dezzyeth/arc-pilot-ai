@@ -185,9 +185,13 @@ export function LiquidBackground() {
     document.addEventListener("visibilitychange", onVis);
 
     const start = performance.now();
+    const FRAME_MS = 1000 / 30; // cap to 30fps
+    let lastDraw = 0;
     const tick = (now: number) => {
       if (hidden) return;
-      // ease cursor for smooth liquid response
+      raf = requestAnimationFrame(tick);
+      if (now - lastDraw < FRAME_MS) return;
+      lastDraw = now;
       mouseCurr.x += (mouseTarget.x - mouseCurr.x) * 0.08;
       mouseCurr.y += (mouseTarget.y - mouseCurr.y) * 0.08;
       mouseCurr.a += (mouseTarget.a - mouseCurr.a) * 0.06;
@@ -195,9 +199,10 @@ export function LiquidBackground() {
       gl.uniform1f(uMouseA, mouseCurr.a);
       gl.uniform1f(uTime, (now - start) * 0.001);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      if (!reduced) raf = requestAnimationFrame(tick);
+      if (reduced) cancelAnimationFrame(raf);
     };
     raf = requestAnimationFrame(tick);
+
 
     return () => {
       cancelAnimationFrame(raf);
