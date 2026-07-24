@@ -45,16 +45,16 @@ export function LiquidBackground() {
       }
 
       float field(vec2 p){
-        float t = u_time * 0.08;
+        float t = u_time * 0.18;
         vec2 q = vec2(fbm(p + vec2(0.0, t)), fbm(p + vec2(5.2, -t)));
-        vec2 r = vec2(fbm(p + 3.0*q + vec2(1.7,9.2) + t*0.5),
-                      fbm(p + 3.0*q + vec2(8.3,2.8) - t*0.4));
+        vec2 r = vec2(fbm(p + 3.0*q + vec2(1.7,9.2) + t*0.8),
+                      fbm(p + 3.0*q + vec2(8.3,2.8) - t*0.7));
         return fbm(p + 2.5*r);
       }
 
       void main(){
         vec2 uv = (gl_FragCoord.xy - 0.5*u_res) / u_res.y;
-        vec2 p = uv * 2.2;
+        vec2 p = uv * 0.75;
 
         float e = 0.0025;
         float c  = field(p);
