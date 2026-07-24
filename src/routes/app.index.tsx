@@ -56,13 +56,20 @@ function Dashboard() {
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6"
+            className="mb-6 flex flex-wrap items-start justify-between gap-3"
           >
-            <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
-            <p className="text-sm text-muted-foreground">
-              Here's a snapshot of your Arc Testnet activity.
-            </p>
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
+              <p className="text-sm text-muted-foreground">
+                Here's a snapshot of your Arc Testnet activity.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <WalletBadge kind="main" address={address} />
+              <WalletBadge kind="agent" />
+            </div>
           </motion.div>
+
 
           <div className="grid gap-4 md:grid-cols-3">
             <StatCard
