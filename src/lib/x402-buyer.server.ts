@@ -68,10 +68,19 @@ export async function payX402Endpoint(args: {
     expectedPriceUsdc,
   } = args;
 
-  // 1. Initial call — expect 402.
+  // 1. Initial call — expect 402. Paid routes are POST handlers, so
+  //    the unpaid probe must also be POST or TanStack falls through to
+  //    the SPA HTML (which looks like a "free endpoint" to the buyer).
+  const callInit: RequestInit = {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      prompt: `Nanopayment automated call from agent ${agentAddress}. Provide a concise insight.`,
+    }),
+  };
   let res: Response;
   try {
-    res = await fetch(targetUrl, { method: "GET" });
+    res = await fetch(targetUrl, callInit);
   } catch (e) {
     return { ok: false, reason: `fetch failed: ${e instanceof Error ? e.message : "unknown"}` };
   }
