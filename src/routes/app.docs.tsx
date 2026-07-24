@@ -69,6 +69,7 @@ const LANGUAGES: { code: string; label: string; native: string }[] = [
   { code: "Turkish", label: "Turkish", native: "Türkçe" },
   { code: "Urdu", label: "Urdu", native: "اردو" },
   { code: "Persian", label: "Persian", native: "فارسی" },
+  { code: "Bengali", label: "Bangla", native: "বাংলা" },
 ];
 
 const RTL = new Set(["Arabic", "Urdu", "Persian"]);
