@@ -1,6 +1,32 @@
 import { arcTestnet, ARC_CHAIN_ID } from "./chains";
 
 /**
+ * Makes sure the injected wallet has at least one authorized account for this
+ * site, prompting MetaMask to unlock / re-grant access when it doesn't.
+ */
+export async function ensureArcAccount(eth?: any): Promise<string> {
+  const provider =
+    eth ?? (typeof window !== "undefined" ? (window as any).ethereum : undefined);
+  if (!provider?.request) throw new Error("MetaMask not detected");
+
+  let accounts: string[] = [];
+  try {
+    accounts = (await provider.request({ method: "eth_accounts" })) ?? [];
+  } catch {
+    accounts = [];
+  }
+
+  if (accounts.length === 0) {
+    accounts = (await provider.request({ method: "eth_requestAccounts" })) ?? [];
+  }
+
+  if (accounts.length === 0) {
+    throw new Error("Unlock MetaMask and connect an account to continue");
+  }
+  return accounts[0] as string;
+}
+
+/**
  * Ensures the injected wallet (MetaMask) is on Arc Testnet.
  * - Calls `wallet_switchEthereumChain`
  * - Falls back to `wallet_addEthereumChain` if the chain is unknown (4902)
