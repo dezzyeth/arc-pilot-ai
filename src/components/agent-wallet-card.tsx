@@ -135,10 +135,11 @@ export function AgentWalletCard() {
       return toast.error("Enter a positive amount");
     try {
       setBusy("fund");
-      await ensureArcChain();
+      const walletAccount = await ensureArcChain();
       // On Arc, USDC is the native gas token — a native value transfer
       // to the agent address funds the agent's Gateway balance.
       const hash = await sendTransactionAsync({
+        account: walletAccount,
         to: row.agent_address as `0x${string}`,
         value: parseUnits(fundAmt, 18),
         chainId: ARC_CHAIN_ID,

@@ -29,8 +29,9 @@ export function useActionFee() {
     }
     try {
       setPaying(true);
-      await ensureArcChain();
+      const walletAccount = await ensureArcChain();
       const hash = await writeContractAsync({
+        account: walletAccount,
         address: ARCPILOT_ADDRESS,
         abi: ARCPILOT_ABI,
         functionName: "pay",

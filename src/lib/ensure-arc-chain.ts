@@ -1,10 +1,12 @@
+import type { Address } from "viem";
+
 import { arcTestnet, ARC_CHAIN_ID } from "./chains";
 
 /**
  * Makes sure the injected wallet has at least one authorized account for this
  * site, prompting MetaMask to unlock / re-grant access when it doesn't.
  */
-export async function ensureArcAccount(eth?: any): Promise<string> {
+export async function ensureArcAccount(eth?: any): Promise<Address> {
   const provider =
     eth ?? (typeof window !== "undefined" ? (window as any).ethereum : undefined);
   if (!provider?.request) throw new Error("MetaMask not detected");
@@ -23,7 +25,7 @@ export async function ensureArcAccount(eth?: any): Promise<string> {
   if (accounts.length === 0) {
     throw new Error("Unlock MetaMask and connect an account to continue");
   }
-  return accounts[0] as string;
+  return accounts[0] as Address;
 }
 
 /**
@@ -34,7 +36,7 @@ export async function ensureArcAccount(eth?: any): Promise<string> {
  *
  * Throws on user rejection / timeout so callers can bail out of a tx.
  */
-export async function ensureArcChain(): Promise<void> {
+export async function ensureArcChain(): Promise<Address> {
   if (typeof window === "undefined") throw new Error("No window");
   const eth = (window as unknown as { ethereum?: any }).ethereum;
   if (!eth?.request) throw new Error("MetaMask not detected");
@@ -42,12 +44,12 @@ export async function ensureArcChain(): Promise<void> {
   // MetaMask can be locked or have the site's account permission revoked even
   // though wagmi still shows a cached address. Signing then fails with
   // "wallet must has at least one account". Re-request access first.
-  await ensureArcAccount(eth);
+  const account = await ensureArcAccount(eth);
 
   const targetHex = `0x${ARC_CHAIN_ID.toString(16)}`;
 
   const current: string = await eth.request({ method: "eth_chainId" });
-  if (current?.toLowerCase() === targetHex.toLowerCase()) return;
+  if (current?.toLowerCase() === targetHex.toLowerCase()) return account;
 
   try {
     await eth.request({
@@ -78,7 +80,7 @@ export async function ensureArcChain(): Promise<void> {
   // Poll until the wallet actually reports the target chain.
   for (let i = 0; i < 40; i++) {
     const now: string = await eth.request({ method: "eth_chainId" });
-    if (now?.toLowerCase() === targetHex.toLowerCase()) return;
+    if (now?.toLowerCase() === targetHex.toLowerCase()) return account;
     await new Promise((r) => setTimeout(r, 150));
   }
   throw new Error("Timed out switching to Arc Testnet");
