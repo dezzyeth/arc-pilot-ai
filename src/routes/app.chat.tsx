@@ -175,8 +175,9 @@ function ChatPage() {
 
   async function payChatFee() {
     if (!address) return;
+    let walletAccount: Address;
     try {
-      await ensureArcChain();
+      walletAccount = await ensureArcChain();
     } catch (e: any) {
       toast.error(
         e?.message ?? "Please switch MetaMask to Arc Testnet (chain 5042002).",
@@ -185,6 +186,7 @@ function ChatPage() {
     }
     payFee(
       {
+        account: walletAccount,
         address: ARCPILOT_ADDRESS,
         abi: ARCPILOT_ABI,
         functionName: "pay",
@@ -533,10 +535,18 @@ function TxPlanCard({ plan }: { plan: TxPlan }) {
 
   const canSign = isConnected && !wrongNetwork && value !== null && !notEnough;
 
-  function confirm() {
+  async function confirm() {
     if (!value) return;
+    let walletAccount: Address;
+    try {
+      walletAccount = await ensureArcChain();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Unlock and connect MetaMask");
+      return;
+    }
     sendTransaction(
       {
+        account: walletAccount,
         to: plan.to,
         value,
         chainId: ARC_CHAIN_ID,

@@ -127,8 +127,9 @@ function PlannerPage() {
       return toast.error("Enter a positive amount");
     }
     try {
-      await ensureArcChain();
+      const walletAccount = await ensureArcChain();
       const hash = await sendTransactionAsync({
+        account: walletAccount,
         to: sessionAddr,
         value: parseUnits(amountUsdc, 18),
         chainId: ARC_CHAIN_ID,
@@ -261,8 +262,9 @@ function PlannerPage() {
         });
       } else {
         // Fallback: prompt MetaMask.
-        await ensureArcChain();
+        const walletAccount = await ensureArcChain();
         hash = await sendTransactionAsync({
+          account: walletAccount,
           to: row.to_addr as Address,
           value: parseUnits(String(row.amount_usdc), 18),
           chainId: ARC_CHAIN_ID,
