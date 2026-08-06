@@ -13,6 +13,11 @@ export async function ensureArcChain(): Promise<void> {
   const eth = (window as unknown as { ethereum?: any }).ethereum;
   if (!eth?.request) throw new Error("MetaMask not detected");
 
+  // MetaMask can be locked or have the site's account permission revoked even
+  // though wagmi still shows a cached address. Signing then fails with
+  // "wallet must has at least one account". Re-request access first.
+  await ensureArcAccount(eth);
+
   const targetHex = `0x${ARC_CHAIN_ID.toString(16)}`;
 
   const current: string = await eth.request({ method: "eth_chainId" });
